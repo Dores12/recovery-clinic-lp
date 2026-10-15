@@ -174,6 +174,7 @@
   <symbol id="i-test-tube" viewBox="0 0 24 24"><path d="M14.5 2v17.5c0 1.4-1.1 2.5-2.5 2.5s-2.5-1.1-2.5-2.5V2"/><path d="M8.5 2h7"/><path d="M14.5 16h-5"/></symbol>
   <symbol id="i-badge-check" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol>
   <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
   <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
@@ -315,11 +316,11 @@
           TESTOVACÍ REŽIM – údaje sa nikam neposlali
         </p>
 
-        <p class="pill form-card__badge">Konzultácia zdarma</p>
-        <h2 class="h3">Poradíme vám s výberom infúzie</h2>
+        <p class="pill form-card__badge">Zľava <span data-discount>20</span> % na prvú infúziu</p>
+        <h2 class="h3">Získajte zľavu a vyberte si termín</h2>
         <p class="body-s muted form-card__intro">
-          Nechajte nám kontakt – do 24 hodín sa vám ozveme a spolu vyberieme vhodnú infúziu.
-          Zľavu <span data-discount>20</span> % na prvú infúziu máte tak či tak.
+          Nechajte nám kontakt a na prvú infúziu dostanete zľavu <span data-discount>20</span> %.
+          Potom si vyberiete termín online, alebo vám zavoláme a poradíme.
         </p>
 
         <form id="lead-form" novalidate>
@@ -345,6 +346,31 @@
               <p class="field__error" id="e-email"></p>
             </div>
           </div>
+
+          <!-- Ako chce človek pokračovať. Od tejto voľby závisí text tlačidla
+               aj to, ktorý stav Úspech sa po odoslaní zobrazí. -->
+          <fieldset class="segmented-wrap">
+            <legend class="field__label">Ako chcete pokračovať? <span class="field__req">*</span></legend>
+            <div class="segmented">
+              <span class="segment">
+                <input type="radio" id="p-online" name="lead_path" value="online"
+                       aria-describedby="e-path" required>
+                <label for="p-online">
+                  <svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg>
+                  <span>Vyberiem si termín online</span>
+                </label>
+              </span>
+              <span class="segment">
+                <input type="radio" id="p-call" name="lead_path" value="call"
+                       aria-describedby="e-path" required>
+                <label for="p-call">
+                  <svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>
+                  <span>Zavolajte mi</span>
+                </label>
+              </span>
+            </div>
+            <p class="field__error" id="e-path"></p>
+          </fieldset>
 
           <!-- Vybraná infúzia – naplní ju tlačidlo „Mám záujem" pri kartách.
                Hodnota ide len do Google Sheetu, nikdy do dataLayeru. -->
@@ -408,13 +434,14 @@
           <p class="visually-hidden" role="status" aria-live="polite" data-form-status></p>
 
           <button class="btn btn--primary btn--block" type="submit" data-submit>
-            <span data-submit-label>Chcem poradiť s výberom</span>
+            <span data-submit-label>Získať zľavu <span data-discount>20</span> %</span>
             <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
           </button>
 
           <p class="form-card__secure">
             <svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg>
-            <span>Údaje použijeme len na spätný kontakt. <span data-discount-terms></span></span>
+            <span>Údaje použijeme len na spätný kontakt a priradenie zľavy.
+              <span data-discount-terms></span></span>
           </p>
         </form>
 

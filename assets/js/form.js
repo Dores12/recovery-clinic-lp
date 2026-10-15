@@ -36,8 +36,19 @@
     name: document.getElementById('f-name'),
     phone: document.getElementById('f-phone'),
     email: document.getElementById('f-email'),
+    /* Voľba „Ako chcete pokračovať?" je skupina dvoch rádiobutonov.
+       V fields držíme prvý z nich – naň smeruje focus a aria-describedby. */
+    path: document.getElementById('p-online'),
     consent: document.getElementById('f-consent')
   };
+
+  var pathRadios = Array.prototype.slice.call(form.querySelectorAll('input[name="lead_path"]'));
+
+  /** Ktorú cestu si človek vybral: 'online', 'call' alebo prázdne. */
+  function selectedPath() {
+    var checked = form.querySelector('input[name="lead_path"]:checked');
+    return checked ? checked.value : '';
+  }
 
 
   /* ======================================================================
@@ -50,13 +61,16 @@
   }
 
   function showError(input, message) {
-    input.setAttribute('aria-invalid', 'true');
+    /* Pri skupine rádiobutonov označíme obe možnosti, nielen prvú */
+    var ciel = input === fields.path ? pathRadios : [input];
+    ciel.forEach(function (el) { el.setAttribute('aria-invalid', 'true'); });
     var box = errorBoxFor(input);
     if (box) box.textContent = message;
   }
 
   function clearError(input) {
-    input.removeAttribute('aria-invalid');
+    var ciel = input === fields.path ? pathRadios : [input];
+    ciel.forEach(function (el) { el.removeAttribute('aria-invalid'); });
     var box = errorBoxFor(input);
     if (box) box.textContent = '';
     removeSuggestion();
@@ -245,6 +259,13 @@
     if (box && box.parentNode) box.parentNode.insertBefore(button, box.nextSibling);
   }
 
+  function validatePath() {
+    if (!selectedPath()) {
+      return { ok: false, message: 'Vyberte, ako chcete pokračovať.' };
+    }
+    return { ok: true, value: selectedPath() };
+  }
+
   function validateConsent() {
     if (!fields.consent.checked) {
       return { ok: false, message: 'Na odoslanie potrebujeme váš súhlas.' };
@@ -256,6 +277,7 @@
     name: validateName,
     phone: validatePhone,
     email: validateEmail,
+    path: validatePath,
     consent: validateConsent
   };
 
@@ -277,11 +299,25 @@
     return result;
   }
 
+  /** Text tlačidla sa mení podľa zvolenej cesty. */
+  function submitLabelText() {
+    var percent = (CONFIG.discount && CONFIG.discount.percent) || 20;
+    var path = selectedPath();
+    if (path === 'online') return 'Získať zľavu a vybrať termín';
+    if (path === 'call') return 'Získať zľavu a konzultáciu';
+    return 'Získať zľavu ' + percent + ' %';
+  }
+
+  function updateSubmitLabel() {
+    if (submitLabel) submitLabel.textContent = submitLabelText();
+  }
+
   /* Validácia pri opustení poľa; po prvej chybe aj počas písania */
   Object.keys(fields).forEach(function (key) {
     var input = fields[key];
-    var eventName = key === 'consent' ? 'change' : 'blur';
+    if (key === 'path') return;   // rádiobutony riešime nižšie
 
+    var eventName = key === 'consent' ? 'change' : 'blur';
     input.addEventListener(eventName, function () { checkField(key); });
 
     if (key !== 'consent') {
@@ -290,6 +326,14 @@
       });
     }
   });
+
+  pathRadios.forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      checkField('path');
+      updateSubmitLabel();
+    });
+  });
+  updateSubmitLabel();
 
 
   /* ======================================================================
@@ -386,6 +430,7 @@
       email: values.email,
       interest: collectInterests(),
       infusion: infusionField ? infusionField.value : '',
+      lead_path: selectedPath(),
       discount: (discount.percent || 20) + ' % prvá infúzia',
       lp_variant: (function () {
         try { return window.sessionStorage.getItem('lp_variant') || CONFIG.defaultVariant || 'a'; }
@@ -430,7 +475,7 @@
     } else {
       submitBtn.removeAttribute('aria-busy');
       submitBtn.disabled = false;
-      submitLabel.textContent = 'Chcem poradiť s výberom';
+      submitLabel.textContent = submitLabelText();
       var oldSpinner = submitBtn.querySelector('.spinner');
       if (oldSpinner) oldSpinner.remove();
       var arrow = submitBtn.querySelector('.ico');
@@ -451,9 +496,38 @@
      7. Stav Úspech – nahradí obsah karty
      ====================================================================== */
 
-  function showSuccess(firstName) {
+  function showSuccess(firstName, leadPath, leadId) {
     var percent = (CONFIG.discount && CONFIG.discount.percent) || 20;
     var booking = CONFIG.bookingUrl || '#';
+    var sipka = '<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>';
+
+    /* Poznámka je rovnaká pre obe cesty – bez nej by sme zľavu nevedeli priradiť */
+    var poznamka = '<p class="body-s muted form-success__note">Pri rezervácii použite rovnaký '
+      + 'e-mail alebo telefón, aby sme vám zľavu priradili. Zľavu uplatníte pri platbe '
+      + 'na prevádzke.</p>';
+
+    var telo;
+    if (leadPath === 'online') {
+      /* Človek si chce vybrať termín sám – rezervácia je hlavné tlačidlo */
+      telo = ''
+        + '<p class="body-m form-success__text">Zľavu ' + percent + ' % na prvú infúziu máte '
+        +   'zapísanú. Teraz si vyberte termín, ktorý vám vyhovuje.</p>'
+        + '<a class="btn btn--primary btn--block" href="' + booking + '" data-success-booking>'
+        +   '<span>Vybrať termín v rezervácii</span>' + sipka
+        + '</a>'
+        + poznamka;
+    } else {
+      /* Človek chce, aby sme zavolali – rezervácia je len doplnková možnosť */
+      telo = ''
+        + '<p class="body-m form-success__text">Zdravotník sa vám ozve do 24 hodín. Zľavu '
+        +   percent + ' % na prvú infúziu máte zapísanú – uplatníte ju pri platbe na prevádzke.</p>'
+        + '<div class="form-success__divider"></div>'
+        + '<p class="form-success__nudge">Nechcete čakať?</p>'
+        + '<a class="btn btn--secondary btn--block" href="' + booking + '" data-success-booking>'
+        +   '<span>Vybrať termín online</span>' + sipka
+        + '</a>'
+        + poznamka;
+    }
 
     card.innerHTML =
       '<div class="form-success">' +
@@ -461,21 +535,42 @@
           '<svg class="ico"><use href="#i-check"/></svg>' +
         '</div>' +
         '<h3 tabindex="-1" data-success-heading>Ďakujeme, ' + firstName + '!</h3>' +
-        '<p class="body-m form-success__text">Zdravotník sa vám ozve do 24 hodín. ' +
-          'Na prvú infúziu máte zľavu ' + percent + ' % – odrátame vám ju pri platbe na prevádzke.</p>' +
-        '<div class="form-success__divider"></div>' +
-        '<p class="form-success__nudge">Nechcete čakať? Vyberte si termín online – zľava platí aj tak.</p>' +
-        '<a class="btn btn--primary btn--block" href="' + booking + '" ' +
-           'data-track="booking_click" data-location="success">' +
-          'Vybrať termín online' +
-          '<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>' +
-        '</a>' +
+        telo +
       '</div>';
 
     /* Focus na nadpis, nech čítačka oznámi zmenu. URL nemeníme – zdravotné
        údaje nesmú skončiť v adrese ani v pixeloch. */
     var heading = card.querySelector('[data-success-heading]');
     if (heading) heading.focus({ preventScroll: true });
+
+    initSuccessBooking(leadPath, leadId);
+  }
+
+  /**
+   * Klik na rezerváciu v stave Úspech.
+   *
+   * Okrem dataLayeru pošleme aj beacon na server, aby sa čas kliku zapísal
+   * do Sheetu. sendBeacon prehliadač doručí, aj keď medzitým odídeme
+   * zo stránky – bežný fetch by sa v tej chvíli zrušil.
+   */
+  function initSuccessBooking(leadPath, leadId) {
+    var odkaz = card.querySelector('[data-success-booking]');
+    if (!odkaz) return;
+
+    odkaz.addEventListener('click', function () {
+      pushEvent('booking_click', { link_location: 'success', lead_path: leadPath });
+
+      if (!CONFIG.formEndpoint || !navigator.sendBeacon) return;
+      try {
+        navigator.sendBeacon(
+          CONFIG.formEndpoint,
+          new Blob([JSON.stringify({ action: 'booking_click', lead_id: leadId })],
+                   { type: 'text/plain;charset=utf-8' })
+        );
+      } catch (e) {
+        if (CONFIG.debug) console.warn('[RC] beacon sa nepodaril', e);
+      }
+    });
   }
 
 
@@ -515,6 +610,7 @@
     var data = {
       event_id: leadId,
       lp_variant: payload.lp_variant,
+      lead_path: payload.lead_path,
       value: tracking.leadValue || 0,
       currency: tracking.currency || 'EUR'
     };
@@ -536,7 +632,7 @@
     errorBox.hidden = true;
 
     /* --- Validácia všetkých polí --- */
-    var order = ['name', 'phone', 'email', 'consent'];
+    var order = ['name', 'phone', 'email', 'path', 'consent'];
     var values = {};
     var firstInvalid = null;
     var errorCount = 0;
@@ -576,7 +672,7 @@
     if (!endpoint) {
       window.setTimeout(function () {
         pushEvent('generate_lead', leadEventData(leadId, payload, values, true));
-        showSuccess(values.name.split(' ')[0]);
+        showSuccess(values.name.split(' ')[0], payload.lead_path, leadId);
       }, 800);
       return;
     }
@@ -587,7 +683,7 @@
       /* Konverziu hlásime až teraz – po úspešnom zápise do Sheetu */
       pushEvent('generate_lead', leadEventData(leadId, payload, values, false));
 
-      showSuccess(values.name.split(' ')[0]);
+      showSuccess(values.name.split(' ')[0], payload.lead_path, leadId);
     }).catch(function (error) {
       isSubmitting = false;
       setBusy(false);

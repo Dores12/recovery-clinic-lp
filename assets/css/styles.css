@@ -1770,3 +1770,82 @@ p:last-child { margin-bottom: 0; }
 }
 .selected-infusion__clear:hover { background: rgba(20, 41, 71, .1); }
 .selected-infusion__clear .ico { width: 16px; height: 16px; }
+
+
+/* ==========================================================================
+   13. VOĽBA „AKO CHCETE POKRAČOVAŤ?"
+   Technicky dva rádiobutony, vizuálne dve veľké dlaždice vedľa seba.
+   Ovládateľné klávesnicou (šípky), focus je vidieť.
+   ========================================================================== */
+
+.segmented-wrap {
+  margin: 0 0 18px;
+  padding: 0;
+  border: 0;
+}
+.segmented-wrap legend {
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.segment { position: relative; }
+.segment input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+.segment label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  min-height: 84px;
+  padding: 14px 10px;
+  border: 1.5px solid var(--c-border-strong);
+  border-radius: var(--r-input);
+  background: var(--c-white);
+  font-size: var(--fs-body-s);
+  line-height: 1.4;
+  text-align: center;
+  color: var(--c-text);
+  cursor: pointer;
+  transition: background-color var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+}
+.segment label .ico {
+  width: 24px;
+  height: 24px;
+  color: var(--c-blue-dark);
+  transition: color var(--t-fast);
+}
+.segment label:hover { border-color: var(--c-blue); }
+
+.segment input:checked + label {
+  background: var(--c-cyan-light);
+  border-color: var(--c-blue);
+  border-width: 2px;
+  padding: 13.5px 10px;      /* kompenzuje hrubší rámik, nech nič neposkočí */
+  font-weight: 600;
+  color: var(--c-navy);
+}
+.segment input:checked + label .ico { color: var(--c-navy); }
+
+.segment input:focus-visible + label {
+  outline: 3px solid var(--c-blue);
+  outline-offset: 3px;
+}
+
+/* Chybný stav celej skupiny */
+.segment input[aria-invalid="true"] + label { border-color: var(--c-error); }
+
+/* Poznámka v stave Úspech (ako priradíme zľavu) */
+.form-success__note { margin-top: 14px; }
