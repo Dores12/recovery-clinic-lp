@@ -203,8 +203,9 @@
       </a>
 
       <!-- Len desktop – na mobile konverziu nesie sticky lišta dole -->
-      <a class="btn btn--primary btn--sm header__book" href="#" data-booking
-         data-track="booking_click" data-location="header">Rezervovať online</a>
+      <a class="btn btn--primary btn--sm header__book" href="#formular" data-scroll-form>
+        Získať zľavu <span data-discount>20</span> %
+      </a>
     </div>
   </div>
 </header>
@@ -234,11 +235,11 @@
       <h1 data-h1>Dobite si <span class="hl">imunitu aj energiu</span> – pohodlne v kresle, pod dohľadom lekára</h1>
 
       <p class="body-l hero__sub" data-sub>
-        <span class="is-desktop">Vitamínové IV infúzie v Bratislave. Na prvú infúziu máte zľavu
-          <span data-discount>20</span> % – či si termín rezervujete online, alebo nám necháte
-          kontakt a poradíme vám s výberom.</span>
-        <span class="is-mobile">Vitamínové IV infúzie v Bratislave. Nechajte nám kontakt –
-          zdravotník vám zavolá a pomôže vybrať vhodnú infúziu.</span>
+        <span class="is-desktop">Vitamínové IV infúzie v Bratislave. Nechajte nám kontakt
+          a na prvú infúziu dostanete zľavu <span data-discount>20</span> % – termín si vyberiete
+          online, alebo vám zavoláme a poradíme.</span>
+        <span class="is-mobile">Vitamínové IV infúzie v Bratislave. Nechajte nám kontakt
+          a na prvú infúziu dostanete zľavu <span data-discount>20</span> %.</span>
       </p>
 
       <!-- Zľava platí pre každého nového klienta, nie je podmienená formulárom -->
@@ -263,15 +264,20 @@
       </ul>
 
       <div class="hero__cta">
-        <a class="btn btn--primary" href="#" data-booking
-           data-track="booking_click" data-location="hero">
-          Rezervovať termín online
+        <!-- Desktop aj mobil vedú na formulár – do Apponia sa dá dostať až
+             zo stavu Úspech, aby každá rezervácia prešla cez lead. -->
+        <a class="btn btn--primary is-desktop-btn" href="#formular" data-scroll-form>
+          Získať zľavu <span data-discount>20</span> %
+          <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+        <a class="btn btn--primary is-mobile-btn" href="#formular" data-scroll-form>
+          Získať zľavu <span data-discount>20</span> % a termín
           <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
         </a>
 
-        <!-- Mobil: druhé tlačidlo vedie na formulár -->
-        <a class="btn btn--secondary is-mobile-btn" href="#formular" data-scroll-form>
-          Poradiť s výberom infúzie
+        <!-- Mobil: druhé tlačidlo vedie na ponuku infúzií -->
+        <a class="btn btn--secondary is-mobile-btn" href="#infuzie">
+          Pozrieť ponuku infúzií
         </a>
 
         <!-- Desktop: namiesto druhého tlačidla telefón -->
@@ -406,11 +412,6 @@
           </p>
         </noscript>
 
-        <p class="divider">alebo</p>
-        <a class="link-arrow" href="#" data-booking data-track="booking_click" data-location="form">
-          Rezervovať si termín online hneď
-          <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
-        </a>
       </div>
     </div>
 
@@ -474,11 +475,6 @@
         <span class="eyebrow">Najobľúbenejšie infúzie</span>
         <h2>Vyberte si podľa toho, čo potrebujete</h2>
       </div>
-      <a class="link-arrow is-desktop-link" href="#" data-booking
-         data-track="booking_click" data-location="all_infusions">
-        Celá ponuka (19 infúzií) v rezervácii
-        <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
-      </a>
     </div>
 
     <!-- Na mobile carousel so scroll-snap, na desktope mriežka 4 kariet -->
@@ -493,9 +489,8 @@
         <p class="body-s card-infusion__desc">Vitamín C, glutatión a vitamíny skupiny B na podporu obranyschopnosti a regenerácie.</p>
         <div class="card-infusion__foot">
           <span class="price">159 €</span>
-          <a class="link-arrow" href="#" data-booking data-track="booking_click"
-             data-location="card" data-item="Imunity Booster">
-            Rezervovať <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          <a class="link-arrow" href="#formular" data-interest data-item="Imunity Booster">
+            Mám záujem <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
           </a>
         </div>
       </article>
@@ -510,9 +505,8 @@
         <p class="body-s card-infusion__desc">Vitamín C, vitamíny skupiny B a vápnik pre silnú imunitu a hydratáciu.</p>
         <div class="card-infusion__foot">
           <span class="price">99 €</span>
-          <a class="link-arrow" href="#" data-booking data-track="booking_click"
-             data-location="card" data-item="Virus Killer">
-            Rezervovať <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          <a class="link-arrow" href="#formular" data-interest data-item="Virus Killer">
+            Mám záujem <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
           </a>
         </div>
       </article>
@@ -527,9 +521,8 @@
         <p class="body-s card-infusion__desc">Antioxidant glutatión s vitamínom C pre vitalitu, detox a zdravý vzhľad pleti.</p>
         <div class="card-infusion__foot">
           <span class="price">139 €</span>
-          <a class="link-arrow" href="#" data-booking data-track="booking_click"
-             data-location="card" data-item="Glutation">
-            Rezervovať <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          <a class="link-arrow" href="#formular" data-interest data-item="Glutation">
+            Mám záujem <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
           </a>
         </div>
       </article>
@@ -544,9 +537,8 @@
         <p class="body-s card-infusion__desc">Pri akútnej bolesti chrbta. Vždy po konzultácii so zdravotníkom.</p>
         <div class="card-infusion__foot">
           <span class="price">99 €</span>
-          <a class="link-arrow" href="#" data-booking data-track="booking_click"
-             data-location="card" data-item="Acute back pain">
-            Rezervovať <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          <a class="link-arrow" href="#formular" data-interest data-item="Acute back pain">
+            Mám záujem <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
           </a>
         </div>
       </article>
@@ -555,20 +547,13 @@
     <!-- Bodky carouselu (len mobil) – aktívnu rieši app.js vo fáze 2 -->
     <div class="dots" data-dots="infuzie" role="tablist" aria-label="Posun medzi infúziami"></div>
 
-    <!-- Na mobile je odkaz na celú ponuku až pod kartami -->
-    <p class="is-mobile-link">
-      <a class="link-arrow" href="#" data-booking data-track="booking_click" data-location="all_infusions">
-        Celá ponuka (19 infúzií) v rezervácii
-        <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
-      </a>
-    </p>
 
     <div class="choose-banner">
       <div>
         <h3 class="h4">Neviete si vybrať? Poradíme vám zdarma.</h3>
         <p class="body-m">Máme 19 druhov infúzií. Nechajte nám kontakt a zdravotník vám odporučí tú pravú.</p>
       </div>
-      <a class="btn btn--secondary" href="#formular" data-scroll-form>Chcem poradiť</a>
+      <a class="btn btn--secondary" href="#formular" data-scroll-form data-chip="neviem">Chcem poradiť</a>
     </div>
   </div>
 </section>
@@ -742,17 +727,17 @@
 
       <details class="faq-item">
         <summary><span>Je IV terapia bezpečná?</span></summary>
-        <div class="faq-item__body body-m">Infúzie podáva vyškolený zdravotnícky personál pod dohľadom lekára. Pred podaním sa vás opýtame na zdravotný stav a lieky, ktoré užívate.</div>
+        <div class="faq-item__body body-m">Infúzie podáva vyškolený zdravotnícky personál pod dohľadom lekára. Pred podaním sa vás opýtame na zdravotný stav.</div>
       </details>
 
       <details class="faq-item">
         <summary><span>Ako uplatním zľavu <span data-discount>20</span> %?</span></summary>
-        <div class="faq-item__body body-m">Zľava <span data-discount>20</span> % platí na prvú infúziu pre každého nového klienta. Nemusíte nič riešiť vopred – odrátame vám ju pri platbe na prevádzke.</div>
+        <div class="faq-item__body body-m">Vyplňte formulár na tejto stránke. Zľavu máte zapísanú na meno – pri rezervácii použite rovnaký e-mail alebo telefón a zľavu uplatníte pri platbe na prevádzke.</div>
       </details>
 
       <details class="faq-item">
         <summary><span>Potrebujem odporúčanie od lekára?</span></summary>
-        <div class="faq-item__body body-m">Nie. Stačí si rezervovať termín online alebo nám nechať kontakt – s výberom infúzie vám poradíme.</div>
+        <div class="faq-item__body body-m">Nie. Stačí nám nechať kontakt – termín si vyberiete online alebo vám s výberom poradíme telefonicky.</div>
       </details>
 
       <details class="faq-item">
@@ -762,7 +747,7 @@
 
       <details class="faq-item">
         <summary><span>Môžem infúziu niekomu darovať?</span></summary>
-        <div class="faq-item__body body-m">Áno. Ponúkame darčekové poukážky v hodnote 50 €, 100 € a 150 € – <a href="#" data-voucher target="_blank" rel="noopener">kúpite ich online</a>.</div>
+        <div class="faq-item__body body-m">Áno. Ponúkame darčekové poukážky v hodnote 50 €, 100 € a 150 €. Viac vám povieme telefonicky alebo na prevádzke.</div>
       </details>
     </div>
   </div>
@@ -777,16 +762,20 @@
     <img class="final__drop" src="assets/img/favicon.svg" alt="" aria-hidden="true" width="54" height="54" loading="lazy">
     <h2>Doprajte si chvíľu pre seba.<br>Telo sa vám poďakuje.</h2>
     <p class="body-l on-dark-soft final__sub">
-      Na prvú infúziu máte zľavu <span data-discount>20</span> %. Vyberte si termín online
-      alebo nám nechajte kontakt – radi poradíme.
+      Nechajte nám kontakt, získajte zľavu <span data-discount>20</span> % na prvú infúziu
+      a vyberte si termín, ktorý vám vyhovuje.
     </p>
 
     <div class="final__cta">
-      <a class="btn btn--on-dark" href="#" data-booking data-track="booking_click" data-location="final">
-        Rezervovať termín online
+      <a class="btn btn--on-dark" href="#formular" data-scroll-form>
+        Získať zľavu <span data-discount>20</span> %
         <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
       </a>
-      <a class="btn btn--outline-dark" href="#formular" data-scroll-form>Chcem poradiť</a>
+      <a class="btn btn--outline-dark" href="tel:+421948375871" data-phone-link
+         data-track="phone_click" data-location="final">
+        <svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>
+        Zavolať <span data-phone-display>+421 948 375 871</span>
+      </a>
     </div>
 
     <div class="final__info">
@@ -838,8 +827,9 @@
     <svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>
     Zavolať
   </a>
-  <a class="btn btn--primary sticky-bar__book" href="#" data-booking
-     data-track="booking_click" data-location="sticky">Rezervovať online</a>
+  <a class="btn btn--primary sticky-bar__book" href="#formular" data-scroll-form>
+    Získať zľavu <span data-discount>20</span> %
+  </a>
 </div>
 
 <!-- ==========================================================================

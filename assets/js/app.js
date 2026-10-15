@@ -284,6 +284,14 @@
       if (!form) return;
 
       event.preventDefault();
+
+      /* Tlačidlo môže rovno predvybrať chip, napr. „Chcem poradiť" → Neviem, poraďte */
+      var chipValue = trigger.getAttribute('data-chip');
+      if (chipValue) {
+        var chip = document.querySelector('.chip input[value="' + chipValue + '"]');
+        if (chip) chip.checked = true;
+      }
+
       form.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
 
       window.setTimeout(function () {

@@ -34,6 +34,8 @@ window.RC_CONFIG = {
 
   /* ----- Odkazy ----------------------------------------------------------- */
   bookingUrl: 'https://recoveryclinicbratislava.myapponio.com/#reservation',
+  /* Darčekové poukážky – zatiaľ sa na stránku nelinkujú (odkazy do Apponia
+     sú povolené až v stave Úspech), hodnotu držíme pre prípad potreby. */
   voucherUrl: 'https://recoveryclinicbratislava.myapponio.com/darcekove-poukazy',
   mapsUrl: 'https://www.google.com/maps?q=48.145988,17.138776',
   privacyUrl: 'https://bratislava.recovery-clinic.sk/podmienky-spracovania-osobnych-udajov/',

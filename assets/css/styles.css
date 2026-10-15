@@ -1381,8 +1381,9 @@ p:last-child { margin-bottom: 0; }
 .is-desktop { display: none; }
 .is-mobile { display: inline; }
 
-/* Sekundárne CTA v hero – len mobil (na desktope je namiesto neho telefón) */
+/* CTA v hero – mobil a desktop majú iné znenie, vždy je vidno práve jedno */
 .is-mobile-btn { display: flex; }
+.is-desktop-btn { display: none; }
 
 /* Odkaz „Celá ponuka" – na desktope v hlavičke sekcie, na mobile pod kartami */
 .is-desktop-link { display: none; }
@@ -1392,6 +1393,7 @@ p:last-child { margin-bottom: 0; }
   .is-desktop { display: inline; }
   .is-mobile { display: none; }
   .is-mobile-btn { display: none; }
+  .is-desktop-btn { display: inline-flex; }
   .is-desktop-link { display: inline-flex; }
   .is-mobile-link { display: none; }
 }
