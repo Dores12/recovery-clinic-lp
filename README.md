@@ -243,9 +243,9 @@ drôte 11 kB CSS a 16 kB JS, takže na výkon to vplyv nemá.
 
 ### Čaká na klienta
 
-- [ ] **Fotky** – lounge s masážnymi kreslami a MUDr. Žiaran. Teraz sú tam
-      placeholdery. Formát: WebP + JPG fallback cez `<picture>`, `srcset` 1×/2×,
-      povinné `width` a `height` (inak sa rozbije CLS)
+- [ ] **Fotka lounge** s masážnymi kreslami. Teraz je tam placeholder.
+      Formát: WebP + JPG fallback cez `<picture>`, `srcset` 1×/2×, povinné
+      `width` a `height` (inak sa rozbije CLS)
 - [ ] **`og-image.jpg` 1200×630** z Figmy. Dočasne sa používa fotka z WP webu
 - [ ] **Odkaz na Google Business Profile** → `googleReviewsUrl`. Kým je prázdny,
       odkaz „Ďalšie recenzie na Google" sa automaticky skryje

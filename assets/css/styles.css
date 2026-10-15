@@ -1217,31 +1217,18 @@ p:last-child { margin-bottom: 0; }
   }
 }
 
-/* Self-care lounge a Odborný garant – fotka + text */
+/* Self-care lounge – fotka + text */
 .split { display: grid; gap: 32px; }
 @media (min-width: 1024px) {
   .split { grid-template-columns: 520px 1fr; gap: 72px; align-items: center; }
-  .split--doctor { grid-template-columns: 440px 1fr; }
 }
 .split__photo { min-height: 240px; }
 @media (min-width: 1024px) {
   .split--lounge .split__photo { min-height: 640px; }
-  .split--doctor .split__photo { min-height: 500px; }
 }
 
 .usp-grid { display: grid; gap: 14px; margin-top: 28px; }
 @media (min-width: 768px) { .usp-grid { grid-template-columns: 1fr 1fr; } }
-
-/* Zoznam faktov s ikonou (Odborný garant) */
-.facts { margin: 24px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; }
-.facts li {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-size: var(--fs-body-m);
-  color: var(--c-text);
-}
-.facts svg { flex: none; width: 22px; height: 22px; margin-top: 2px; color: var(--c-blue-dark); }
 
 /* FAQ layout */
 .faq { display: grid; gap: 32px; }

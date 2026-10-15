@@ -135,7 +135,7 @@ Lighthouse, **mobil**, režim inkognito, **proti nasadenej stránke** (nie local
 - [ ] `config.js` → `siteUrl` je skutočná doména
 - [ ] `index.html` → doména doplnená v **canonical, og:url a JSON-LD**
 - [ ] `og-image.jpg` nahradil dočasnú fotku z WP webu
-- [ ] Fotky lounge a MUDr. Žiarana nahradili placeholdery
+- [ ] Fotka lounge nahradila placeholder
 - [ ] Doména je overená v Meta Business Manageri
 - [ ] Doména je v GA4 medzi cross-domain doménami
 - [ ] Stránka odoslaná z `dev` do `main` a Netlify ju nasadil

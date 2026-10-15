@@ -42,7 +42,7 @@ odlíšiť od WP webu.
 `success`, `final`, `all_infusions`, `faq`.
 
 **Hodnoty `section`:** `hero`, `formular`, `dovera`, `ako-to-prebieha`,
-`infuzie`, `lounge`, `garant`, `recenzie`, `faq`, `zaver`.
+`infuzie`, `lounge`, `recenzie`, `faq`, `zaver`.
 
 ### `generate_lead` – detaily
 
