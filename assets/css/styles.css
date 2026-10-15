@@ -1413,3 +1413,106 @@ p:last-child { margin-bottom: 0; }
   line-height: 1.467;
   color: var(--c-navy);
 }
+
+
+/* ==========================================================================
+   10. STAVY FORMULÁRA
+   Chyba validácie, odosielanie, zlyhanie, úspech a testovací režim.
+   ========================================================================== */
+
+/* ----- Testovací režim (kým nie je nasadený Apps Script) ----- */
+.form-testmode {
+  margin: 0 0 18px;
+  padding: 10px 14px;
+  border: 1.5px solid #E8C14A;
+  border-radius: var(--r-input);
+  background: #FDF6DF;
+  font-weight: 600;
+  font-size: var(--fs-body-s);
+  line-height: 1.5;
+  color: #6B5200;
+}
+.form-testmode[hidden] { display: none; }
+
+/* ----- Návrh opravy preklepu v e-maile ----- */
+.field__suggest {
+  margin-top: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: var(--fs-body-s);
+  line-height: 1.571;
+  color: var(--c-blue-dark);
+  text-align: left;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.field__suggest:hover { color: var(--c-navy); }
+
+/* ----- Tlačidlo počas odosielania ----- */
+.btn[aria-busy="true"] {
+  background: #55637A;
+  border-color: #55637A;
+  cursor: progress;
+}
+.btn[aria-busy="true"]:hover { background: #55637A; }
+
+/* Krúžiaci spinner namiesto šípky */
+.spinner {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border: 2px solid rgba(255, 255, 255, .45);
+  border-top-color: var(--c-white);
+  border-radius: 50%;
+  animation: rc-spin 700ms linear infinite;
+}
+@keyframes rc-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 2s; }
+}
+
+/* ----- Chyba odoslania (sieť alebo server) ----- */
+.form-error-box {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--c-error);
+  border-radius: var(--r-input);
+  background: #FDF0F0;
+  font-size: var(--fs-body-s);
+  line-height: 1.571;
+  color: #8E2626;
+}
+.form-error-box[hidden] { display: none; }
+.form-error-box a { color: #8E2626; font-weight: 600; }
+
+/* ----- Stav Úspech (nahradí obsah formulára) ----- */
+.form-success { text-align: center; }
+.form-success__icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: rgba(30, 158, 106, .12);
+  color: var(--c-success);
+}
+.form-success__icon svg { width: 30px; height: 30px; stroke-width: 2.4; }
+.form-success h3 { margin-bottom: 10px; }
+.form-success h3:focus-visible { outline: 3px solid var(--c-blue); outline-offset: 6px; }
+.form-success__text { margin-bottom: 24px; }
+.form-success__divider {
+  height: 1px;
+  margin: 0 0 20px;
+  background: var(--c-border);
+}
+.form-success__nudge {
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: var(--fs-label);
+  line-height: 1.467;
+  color: var(--c-navy);
+}

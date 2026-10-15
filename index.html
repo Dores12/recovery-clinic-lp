@@ -21,6 +21,7 @@
 
   <script src="assets/js/config.js"></script>
   <script src="assets/js/app.js" defer></script>
+  <script src="assets/js/form.js" defer></script>
 </head>
 <body>
 
@@ -175,7 +176,13 @@
 
     <!-- ===== FORMULÁR ===== -->
     <div class="hero__form" id="formular" data-section="formular">
-      <div class="form-card">
+      <div class="form-card" data-form-card>
+
+        <!-- Testovací režim: zobrazí sa, kým nie je v config.js vyplnený formEndpoint -->
+        <p class="form-testmode" hidden data-testmode>
+          TESTOVACÍ REŽIM – údaje sa nikam neposlali
+        </p>
+
         <p class="pill form-card__badge">Konzultácia zdarma</p>
         <h3>Poradíme vám s výberom infúzie</h3>
         <p class="body-s muted form-card__intro">
@@ -186,7 +193,7 @@
         <form id="lead-form" novalidate>
           <div class="field">
             <label class="field__label" for="f-name">Meno a priezvisko <span class="field__req">*</span></label>
-            <input class="input" type="text" id="f-name" name="name" autocomplete="name"
+            <input class="input" type="text" id="f-name" aria-describedby="e-name" name="name" autocomplete="name"
                    placeholder="Napr. Jana Nováková" required>
             <p class="field__error" id="e-name"></p>
           </div>
@@ -194,14 +201,14 @@
           <div class="field-row">
             <div class="field">
               <label class="field__label" for="f-phone">Telefón <span class="field__req">*</span></label>
-              <input class="input" type="tel" id="f-phone" name="phone" inputmode="tel"
+              <input class="input" type="tel" id="f-phone" aria-describedby="e-phone" name="phone" inputmode="tel"
                      autocomplete="tel" placeholder="09XX XXX XXX" required>
               <p class="field__error" id="e-phone"></p>
             </div>
 
             <div class="field">
               <label class="field__label" for="f-email">E-mail <span class="field__req">*</span></label>
-              <input class="input" type="email" id="f-email" name="email" autocomplete="email"
+              <input class="input" type="email" id="f-email" aria-describedby="e-email" name="email" autocomplete="email"
                      placeholder="vas@email.sk" required>
               <p class="field__error" id="e-email"></p>
             </div>
@@ -241,7 +248,7 @@
           </fieldset>
 
           <div class="consent">
-            <input type="checkbox" id="f-consent" name="consent" required>
+            <input type="checkbox" id="f-consent" name="consent" aria-describedby="e-consent" required>
             <label for="f-consent">
               Súhlasím so spracovaním osobných údajov na účel spätného kontaktu. <span class="field__req">*</span>
               <a href="#" data-privacy target="_blank" rel="noopener">Viac informácií</a>
@@ -255,8 +262,14 @@
             <input type="text" id="f-company" name="company" tabindex="-1" autocomplete="off">
           </div>
 
-          <button class="btn btn--primary btn--block" type="submit">
-            Chcem poradiť s výberom
+          <!-- Chyba odoslania (sieť / server). Doplní ju form.js. -->
+          <div class="form-error-box" hidden data-error-box role="alert"></div>
+
+          <!-- Súhrn chýb len pre čítačky obrazovky -->
+          <p class="visually-hidden" role="status" aria-live="polite" data-form-status></p>
+
+          <button class="btn btn--primary btn--block" type="submit" data-submit>
+            <span data-submit-label>Chcem poradiť s výberom</span>
             <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
           </button>
 
