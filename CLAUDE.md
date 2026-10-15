@@ -17,6 +17,22 @@ Pôvodné zadanie je v `MASTER_PROMPT.md`, návod pre Daniela v `README.md`.
 5. **Žiadne citlivé údaje v repozitári.** URL Apps Scriptu nie je tajomstvo, ale
    patrí do `config.js`.
 
+## Zmeny v2 (platia nad pôvodným zadaním)
+
+Pôvodné zadanie je v `MASTER_PROMPT.md`, na konci má sekciu „Zmeny v2".
+Kde si odporujú, **platí v2**. Štyri veci, ktoré z nej treba držať:
+
+1. **Do Apponia len zo stavu Úspech.** Nikde inde na stránke nesmie byť odkaz
+   na `myapponio.com` – každá rezervácia musí prejsť formulárom, inak sa
+   nezapočíta ako Lead v Meta. Všetky CTA vedú na `#formular`.
+2. **Žiadne zdravotné výrazy v súboroch pre web.** Meta pixel na tejto stránke
+   nie je v zdravotnej kategórii a názvy diagnóz by ju tam dostali. Kontrola je
+   v `docs/qa-checklist.md`, sekcia 2.
+3. **Ceny a texty infúzií len v `assets/js/infusions.js`.** Z neho sa vykreslia
+   karty aj zoznam; nikde inde ich neprepisuj.
+4. **Vlastný GTM kontajner**, nie zdieľaný s WP webom. Zatiaľ je všade
+   `GTM-XXXXXXX` ako TODO.
+
 ## Tri veci, ktoré sa ľahko pokazia
 
 ### Zdravotné údaje nesmú opustiť Google Sheet
@@ -31,8 +47,9 @@ na tlačidlo. V `form.js` to chráni príznak `isSubmitting` – zablokované tl
 nestačí, formulár sa dá odoslať aj Enterom v poli.
 
 ### Varianty `?v=` sú písmená, nie slová
-`a`–`e`, nie `imunita`/`bolest`. URL ide do Meta Pixelu a zdravotné slová v nej
-môžu spustiť obmedzenia. Figma ukazuje slovné kódy – tie sú zastarané.
+`a`–`d` (imunita, energia, šport, beauty), nie slovné kódy. URL ide do Meta
+Pixelu a zdravotné slová v nej môžu spustiť obmedzenia. Figma ukazuje slovné
+kódy – tie sú zastarané. Variant `e` vypadol spolu so zdravotnými textami.
 
 ## Zľava 20 % – zmena oproti pôvodnému zadaniu
 
@@ -49,6 +66,8 @@ dopĺňa z configu – nikdy ho nepíš do textu natvrdo.
 | Súbor | Obsah |
 |---|---|
 | `assets/js/config.js` | všetko, čo sa mení: kontakty, odkazy, zľava, varianty, `leadValue` |
+| `assets/js/infusions.js` | ceny a texty všetkých 12 infúzií – jediný zdroj |
+| `assets/js/infusions-ui.js` | vykreslenie kariet, filtrov a zoznamu (beží pred app.js) |
 | `assets/js/app.js` | UI: varianty, carousely, sticky lišta, scroll, dataLayer eventy |
 | `assets/js/form.js` | validácia, atribúcia, odoslanie, stav Úspech |
 | `assets/js/consent.js` | cookie lišta a Consent Mode v2 |
@@ -72,7 +91,13 @@ všetkým ostatným. GTM ID je natvrdo na troch miestach (head, noscript iframe,
 - **Na odkazy do Apponia nedávaj UTM parametre** – rozbilo by to session a
   atribúciu v GA4. Cross-domain nesie linker cez `_gl`.
 - **Žiadne menu v hlavičke.** Každý odkaz navyše je únik z konverzie. Na mobile
-  je v hlavičke len logo a telefón, rezerváciu nesie sticky lišta.
+  je v hlavičke len logo a telefón.
+- **Interné súbory nie sú verejné.** `netlify.toml` vracia 404 pre `docs/`,
+  `design/`, `google-apps-script/`, `_input/` a markdown súbory v koreni.
+  Keď pribudne ďalší interný priečinok, pridaj pravidlo.
+- **Texty tlačidiel patria do jedného `<span>`.** `.btn` je flex s `gap`,
+  takže samostatné textové uzly sa od seba odtrhnú – stalo sa to pri
+  „Získať zľavu 20 %".
 
 ## Testovanie
 

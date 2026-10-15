@@ -103,16 +103,24 @@ CLAUDE.md                   pamäť projektu pre ďalšie sedenia Claude Code
 
 ## Ako to funguje
 
-### Dve rovnocenné cesty ku konverzii
+### Všetko ide cez formulár
 
-1. **Formulár** – pre toho, kto nevie, ktorú infúziu chce. Nechá kontakt,
-   recepcia zavolá a poradí.
-2. **Priama rezervácia** – pre toho, kto už vie. Klik do Apponia.
+Na stránke **nie je žiadny priamy odkaz do Apponia**. Do rezervácie sa dá
+dostať až zo stavu Úspech po odoslaní formulára – vďaka tomu je každá
+rezervácia zároveň Lead v Meta.
 
-**Zľava 20 % platí pre každého nového klienta pri oboch cestách**, automaticky,
-bez kódu. Formulár preto nepredáva zľavu, ale **bezplatnú konzultáciu**. V GA4
-preto sleduj `generate_lead` aj `booking_click` vedľa seba – priama rezervácia
-nie je únik, je to lepší výsledok než lead.
+Vo formulári si človek vyberie, ako chce pokračovať:
+
+| Voľba | Čo sa stane |
+|---|---|
+| **Vyberiem si termín online** | v stave Úspech dostane tlačidlo do Apponia |
+| **Zavolajte mi** | ozve sa recepcia; rezervácia je len doplnková možnosť |
+
+Voľba ide do Sheetu ako `pokracovanie` a do dataLayeru ako `lead_path`.
+Stĺpec `booking_click_at` ukáže, kto na rezerváciu naozaj klikol.
+
+> Keby sa niekam vrátil priamy odkaz na Apponio, časť rezervácií prestane byť
+> meraná. Je to prvá vec v QA checkliste.
 
 ### Varianty H1 podľa `?v=`
 
@@ -122,7 +130,6 @@ nie je únik, je to lepší výsledok než lead.
 | `?v=b` | Únava |
 | `?v=c` | Šport |
 | `?v=d` | Beauty |
-| `?v=e` | Chrbát |
 
 Variant prepíše H1 a predvyberie chip vo formulári. Neznámy alebo chýbajúci
 parameter = `a`.
@@ -133,9 +140,22 @@ parameter = `a`.
 
 ### Čo sa nikdy neposiela do meraní
 
-Hodnoty z „Čo chcete riešiť?" sa môžu dotýkať údajov o zdraví. Idú **výhradne
-do Google Sheetu** – nikdy do dataLayeru, nikdy do URL. FAQ posiela poradové
-číslo otázky, nie jej text.
+Hodnoty z „Čo chcete riešiť?" a názov vybranej infúzie idú **výhradne do Google
+Sheetu** – nikdy do dataLayeru, nikdy do URL. FAQ posiela poradové číslo otázky,
+nie jej text.
+
+### Žiadne zdravotné výrazy
+
+Meta pixel na tejto stránke **nie je v zdravotnej kategórii** a musí to tak
+ostať. Preto na nej nie sú názvy ani popisy zdravotných ťažkostí – klinika
+takéto infúzie ponúka, ale odporučí ich zdravotník pri konzultácii. Kontrolný
+príkaz je v QA checkliste, sekcia 2.
+
+### Ponuka infúzií
+
+Ceny a texty všetkých 12 infúzií sú **len v `assets/js/infusions.js`**. Z neho
+sa vykreslia 4 hlavné karty aj rozbaliteľný zoznam s filtrami. Keď chceš zmeniť
+cenu alebo pridať infúziu, meníš len ten súbor.
 
 ---
 
@@ -240,6 +260,14 @@ drôte 11 kB CSS a 16 kB JS, takže na výkon to vplyv nemá.
 
 ### Čaká na teba
 
+- [ ] **Vytvoriť nový GTM kontajner** len pre túto LP a doplniť ID na troch
+      miestach (teraz `GTM-XXXXXXX`): snippet v `<head>`, `<noscript>` iframe
+      za `<body>` a `gtmId` v `config.js`
+- [ ] **Doplniť Meta PIXEL_ID** z Konverzky do tagov v GTM
+- [ ] **Nasadiť novú verziu Apps Scriptu** (nie nové nasadenie!) a spustiť
+      `setupSheet()`, nech sa doplnia stĺpce `pokracovanie`, `infuzia`
+      a `booking_click_at`
+- [ ] **Overiť ceny v Apponiu**, hlavne Double glutation
 - [ ] **Doména** → päť miest vyššie
 - [ ] **Nasadiť Apps Script** → `google-apps-script/README.md`
 - [ ] **Nastaviť GTM** → `docs/tracking-plan.md`

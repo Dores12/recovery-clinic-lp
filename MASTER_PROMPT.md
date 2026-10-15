@@ -686,3 +686,50 @@ Po každej fáze napíš: čo je hotové, ako to otestujem (konkrétne kroky), �
 - TODO: fotky (lounge, kreslá, MUDr. Žiaran, tím), `og-image.jpg` 1200×630.
 - TODO: rozšíriť Make scenár o voucher e-mail pre leady z karty `LP leady`.
 - TODO (fáza 2, mimo tohto zadania): nahrávanie stavu CONVERTED ako offline konverzií do Google Ads (gclid) a Mety (CAPI, `event_id`), aby sa kampane optimalizovali na rezervácie, nie na leady.
+
+---
+
+# Zmeny v2
+
+> Zapracované 15. 10. 2026. **Ak si niečo vyššie v tomto dokumente odporuje
+> s touto sekciou, platí táto sekcia.** Figma tieto zmeny neobsahuje.
+
+## A. Rezervácia v Apponiu až po odoslaní formulára
+Odkaz do Apponia (`bookingUrl`) sa smie objaviť **len v stave Úspech po odoslaní
+formulára**. Každý, kto ide rezervovať, musí prejsť formulárom (= Lead v Meta).
+Hlavička, hero, sticky lišta, karty infúzií, banner aj záverečná výzva vedú na
+`#formular`. Telefón (`tel:`) ostáva všade.
+
+## B. Ponuka infúzií – len 12 „wellness" infúzií
+Na stránke beží Meta pixel mimo zdravotnej kategórie, preto na nej nesmú byť
+názvy ani popisy zdravotných ťažkostí. Odstránené: karta Acute back pain, chip
+„Bolesť", variant `?v=e`. Ceny a texty sú v `assets/js/infusions.js` – jediný
+zdroj, z ktorého sa vykreslia 4 hlavné karty aj rozbaliteľný zoznam s filtrami.
+„Mám záujem" prenesie infúziu do formulára.
+
+## C. Formulár
+Nové povinné pole „Ako chcete pokračovať?" (`online` / `call`) za e-mailom. Text
+tlačidla sa mení podľa voľby. Stav Úspech má dve verzie – pri `online` je
+rezervácia hlavné tlačidlo, pri `call` sa ozve zdravotník. Payload pribral
+`lead_path` a `infusion`.
+
+## D. Google Sheet a Apps Script
+Nové stĺpce `pokracovanie`, `infuzia`, `booking_click_at`. Zápis podľa názvov
+stĺpcov, nie podľa poradia. `setupSheet()` dopĺňa chýbajúce stĺpce do
+existujúceho hárku. `doPost` prijíma `action: 'booking_click'`. Notifikácia pri
+`call` má predmet „📞 ZAVOLAŤ".
+
+## E. Tracking – nový GTM kontajner
+LP má **vlastný GTM kontajner**, nie zdieľaný `GTM-P8RKNPB4`. Zrušené: pravidlá
+na hostname, Meta event BookingClick, cross-domain požiadavky na Apponio. Nové
+udalosti `booking_click`, `infusion_interest`, `infusions_expand`;
+`generate_lead` pribral `lead_path`.
+
+## F. Netlify – nezverejňovať interné súbory
+`netlify.toml` vracia 404 pre `/docs/*`, `/design/*`, `/google-apps-script/*`,
+`/_input/*`, `MASTER_PROMPT.md`, `README.md` a `CLAUDE.md`.
+
+## G. QA
+`docs/qa-checklist.md` prepísaný – 16 sekcií vrátane kontroly, že pred
+formulárom nie je odkaz na Apponio a že v súboroch pre web nie sú zdravotné
+výrazy.
