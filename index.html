@@ -172,7 +172,6 @@
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
   <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
   <symbol id="i-cookie" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/></symbol>
-  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
 </svg>
 
 
@@ -580,12 +579,16 @@
      ========================================================================== -->
 <section class="section section--navy" id="lounge" data-section="lounge">
   <div class="container split split--lounge">
-    <!-- TODO: nahradiť fotkou od klienta (WebP + JPG fallback cez <picture>) -->
-    <div class="photo-ph split__photo">
-      <svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg>
-      <span class="photo-ph__label">FOTO: lounge s masážnymi kreslami</span>
-      <span class="photo-ph__note">nahradiť fotkou od klienta</span>
-    </div>
+    <!-- Fotka lounge. Pri výmene zachovaj pomer strán 13:16 (520×640, 1040×1280)
+         a obe prípony – WebP je hlavné, JPG je záloha pre staré prehliadače. -->
+    <picture class="split__photo">
+      <source type="image/webp"
+              srcset="assets/img/lounge-520.webp 1x, assets/img/lounge-1040.webp 2x">
+      <img src="assets/img/lounge-520.jpg"
+           srcset="assets/img/lounge-520.jpg 1x, assets/img/lounge-1040.jpg 2x"
+           width="520" height="640" loading="lazy" decoding="async"
+           alt="Lounge kliniky – dve béžové masážne kreslá pri drevenej stene s podsvieteným logom Recovery Clinic a stojanmi na infúzie">
+    </picture>
 
     <div>
       <span class="eyebrow eyebrow--on-dark">Self-care lounge</span>

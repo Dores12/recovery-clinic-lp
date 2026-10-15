@@ -143,7 +143,7 @@
   /* ----- Prechody ----- */
   --grad-hero: linear-gradient(180deg, #F5F8FA 0%, #D8F3FD 100%);   /* mobil */
   --grad-final: linear-gradient(90deg, #0B1A30 0%, #142947 100%);
-  --grad-photo: linear-gradient(180deg, #D8F3FD 0%, #EEF1F2 100%);  /* placeholder fotky */
+  --grad-photo: linear-gradient(180deg, #D8F3FD 0%, #EEF1F2 100%);  /* podklad pod fotkou */
 
   /* ----- Písma ----- */
   --font-head: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -835,21 +835,23 @@ p:last-child { margin-bottom: 0; }
 }
 .faq-item__body { padding: 0 56px 22px 0; }
 
-/* ----- 6.13 Placeholder fotky (kým klient nedodá fotky) ----- */
-.photo-ph {
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 10px;
-  padding: 32px;
+/* ----- 6.13 Fotka v sekcii -------------------------------------------------
+   Výška je pevná, nie min-height: vďaka tomu má prehliadač miesto
+   vyhradené ešte pred načítaním fotky a stránka nepodskočí (CLS = 0).
+   Orezanie rieši object-fit: cover. */
+.split__photo {
+  display: block;
+  height: 240px;
   border-radius: var(--r-form);
-  background: var(--grad-photo);
-  color: var(--c-text-muted);
-  text-align: center;
+  overflow: hidden;
+  background: var(--grad-photo);   /* vidno, kým sa fotka načíta */
 }
-.photo-ph svg { width: 32px; height: 32px; }
-.photo-ph__label { font-size: var(--fs-body-s); font-weight: 600; color: var(--c-navy); }
-.photo-ph__note { font-size: var(--fs-body-s); }
+.split__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* ----- 6.14 Carousel (mobil) – čisté CSS scroll-snap, žiadna knižnica ----- */
 .carousel {
@@ -1222,9 +1224,8 @@ p:last-child { margin-bottom: 0; }
 @media (min-width: 1024px) {
   .split { grid-template-columns: 520px 1fr; gap: 72px; align-items: center; }
 }
-.split__photo { min-height: 240px; }
 @media (min-width: 1024px) {
-  .split--lounge .split__photo { min-height: 640px; }
+  .split--lounge .split__photo { height: 640px; }
 }
 
 .usp-grid { display: grid; gap: 14px; margin-top: 28px; }

@@ -119,7 +119,7 @@ Otestuj šírky **320, 375, 390, 414, 768, 1024, 1280, 1440 px**.
 Lighthouse, **mobil**, režim inkognito, **proti nasadenej stránke** (nie localhost
 – lokálny `http.server` nevie gzip ani cache hlavičky a výsledok podhodnotí).
 
-- [ ] Performance ≥ 95
+- [ ] Performance ≥ 95 (kolíše 93–95 podľa GTM – pusti 3× a ber medián)
 - [ ] Accessibility ≥ 95
 - [ ] Best Practices ≥ 95
 - [ ] CLS < 0,05
@@ -135,7 +135,7 @@ Lighthouse, **mobil**, režim inkognito, **proti nasadenej stránke** (nie local
 - [ ] `config.js` → `siteUrl` je skutočná doména
 - [ ] `index.html` → doména doplnená v **canonical, og:url a JSON-LD**
 - [ ] `og-image.jpg` nahradil dočasnú fotku z WP webu
-- [ ] Fotka lounge nahradila placeholder
+- [ ] Fotka lounge sa načíta a nepodskočí layout (CLS 0)
 - [ ] Doména je overená v Meta Business Manageri
 - [ ] Doména je v GA4 medzi cross-domain doménami
 - [ ] Stránka odoslaná z `dev` do `main` a Netlify ju nasadil
