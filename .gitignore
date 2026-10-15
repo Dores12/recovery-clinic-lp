@@ -1,0 +1,13 @@
+# ===== macOS =====
+.DS_Store
+
+# ===== Node (nepoužívame build krok, ale pre istotu) =====
+node_modules/
+npm-debug.log*
+
+# ===== Zdrojové podklady, ktoré nepatria do repozitára =====
+_input/
+
+# ===== Logy a dočasné súbory =====
+*.log
+.cache/
