@@ -1,0 +1,35 @@
+# Nastavenie hostingu na Netlify
+# Stránka nemá build krok – súbory sa nahrávajú tak, ako sú v repozitári.
+
+[build]
+  publish = "."
+
+# ---------------------------------------------------------------------------
+# Bezpečnostné hlavičky
+#
+# Content-Security-Policy tu zámerne NIE JE. GTM načítava skripty podľa toho,
+# aké tagy sú v kontajneri, takže by CSP vyžadovala veľa výnimiek a pri každom
+# novom tagu by sa stránka tichodo rozbila. Keď bude kontajner ustálený,
+# oplatí sa ju doplniť – postup je v README.
+# ---------------------------------------------------------------------------
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    X-Frame-Options = "SAMEORIGIN"
+
+# Fonty majú v názve pevnú verziu obsahu, takže ich môže prehliadač
+# držať v cache rok.
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Obrázky sa menia zriedka – týždeň je rozumný kompromis.
+[[headers]]
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

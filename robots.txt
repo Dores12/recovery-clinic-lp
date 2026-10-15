@@ -1,0 +1,17 @@
+# Recovery Clinic LP
+#
+# Zámerne tu NIČ neblokujeme.
+#
+# Stránka sa z indexu drží cez <meta name="robots" content="noindex, follow">
+# priamo v index.html. Keby sme ju zakázali tu, Googlebot by stránku vôbec
+# nestiahol – a potom:
+#   - by sa nedozvedel o tom noindexe (zákaz v robots.txt ho neruší),
+#   - Google Ads by nevedel vyhodnotiť kvalitu vstupnej stránky.
+#
+# Takže: všetko povolené, indexovanie rieši meta tag.
+
+User-agent: *
+Allow: /
+
+# TODO: domena – po pripojení domény odkomentuj a doplň
+# Sitemap: https://TODO-domena.sk/sitemap.xml

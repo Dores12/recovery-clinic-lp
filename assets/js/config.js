@@ -17,7 +17,12 @@ window.RC_CONFIG = {
 
   /* ----- Google Tag Manager ----------------------------------------------
      Existujúci kontajner kliniky – beží aj na WP webe a v Apponiu.
-     Vďaka tomu máme jednu GA4 a funkčný cross-domain. */
+     Vďaka tomu máme jednu GA4 a funkčný cross-domain.
+
+     POZOR: toto je len evidencia. Skutočný snippet má ID natvrdo v
+     index.html (inak by config.js musel blokovať vykreslenie stránky).
+     Pri zmene kontajnera uprav ID na troch miestach: tu, v <head>
+     a v <noscript> iframe za <body>. */
   gtmId: 'GTM-P8RKNPB4',
 
   /* ----- Backend formulára -----------------------------------------------

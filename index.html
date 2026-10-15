@@ -7,11 +7,77 @@
   <title>IV infúzie Bratislava – zľava 20 % na prvú | Recovery Clinic</title>
   <meta name="description" content="Vitamínové IV infúzie v masážnom kresle, pod dohľadom lekára. Na prvú infúziu máte zľavu 20 % – pri rezervácii online aj cez formulár. Prievozská 4/A.">
 
-  <!-- TODO (fáza 5): canonical, robots, OG/Twitter, JSON-LD MedicalClinic, apple-touch-icon. -->
+  <!-- ===== SEO a zdieľanie ================================================
+       POZOR: meta tagy sa čítajú bez JavaScriptu, takže doménu sem treba
+       doplniť RUČNE – nedá sa načítať z config.js.
+       TODO: domena – nahraď https://TODO-domena.sk skutočnou doménou
+       na všetkých 4 miestach nižšie (canonical, og:url, og:image, JSON-LD). -->
 
-  <!-- config.js sa načítava synchrónne a ako prvý: GTM snippet nižšie z neho
-       berie ID kontajnera, takže sa mení len na jednom mieste. -->
-  <script src="assets/js/config.js"></script>
+  <!-- Stránka je čisto pre PPC. Organické pozície má vlastniť hlavný web
+       bratislava.recovery-clinic.sk – indexovaná LP by s ním súperila
+       o tie isté dopyty a varianty ?v= by vyrábali duplicity.
+       Reklamné systémy (Google AdsBot, Meta) stránku prečítajú aj tak.
+       Ak by sa klient rozhodol inak, zmeň na: content="index, follow". -->
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://TODO-domena.sk/">
+
+  <meta name="theme-color" content="#142947">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="sk_SK">
+  <meta property="og:site_name" content="Recovery Clinic Bratislava">
+  <meta property="og:title" content="Dobite si imunitu aj energiu – IV infúzie v Bratislave">
+  <meta property="og:description" content="Poradíme s výberom infúzie a na prvú máte zľavu 20 % – aj pri rezervácii online. Masážne kreslo, Netflix a lekársky dohľad.">
+  <meta property="og:url" content="https://TODO-domena.sk/">
+  <!-- TODO: vyexportovať og-image.jpg 1200×630 z Figmy do assets/img/
+       a prepnúť na https://TODO-domena.sk/assets/img/og-image.jpg
+       Dovtedy dočasne fotka z hlavného webu kliniky. -->
+  <meta property="og:image" content="https://bratislava.recovery-clinic.sk/wp-content/uploads/2024/02/WhatsApp-Image-2024-02-21-at-17.47.06-1.jpeg">
+  <meta property="og:image:alt" content="Recovery Clinic Bratislava – podávanie IV infúzie v masážnom kresle">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
+  <!-- Štruktúrované dáta pre vyhľadávače a mapy -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalClinic",
+    "name": "Recovery Clinic Bratislava",
+    "url": "https://TODO-domena.sk/",
+    "telephone": "+421948375871",
+    "email": "bratislava@recovery-clinic.sk",
+    "priceRange": "59 € – 199 €",
+    "image": "https://bratislava.recovery-clinic.sk/wp-content/uploads/2024/02/WhatsApp-Image-2024-02-21-at-17.47.06-1.jpeg",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Prievozská 4/A",
+      "addressLocality": "Bratislava",
+      "postalCode": "821 09",
+      "addressCountry": "SK"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 48.145988,
+      "longitude": 17.138776
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "10:00",
+        "closes": "18:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Saturday", "Sunday"],
+        "opens": "09:00",
+        "closes": "15:00"
+      }
+    ]
+  }
+  </script>
 
   <!-- ===== Consent Mode v2 – predvolený stav =============================
        Musí byť PRED GTM, inak by sa prvé hity odoslali bez súhlasu.
@@ -49,13 +115,18 @@
 
   <!-- ===== Google Tag Manager =============================================
        Existujúci kontajner kliniky (beží aj na WP webe a v Apponiu).
-       ID sa berie z config.js. Samotné tagy nastavuje Daniel v GTM
-       podľa docs/tracking-plan.md – v kóde stránky žiadne gtag ani fbq. -->
+       Tagy nastavuje Daniel v GTM podľa docs/tracking-plan.md –
+       v kóde stránky nie sú žiadne gtag ani fbq volania.
+
+       ID je tu natvrdo zámerne: keby sa čítalo z config.js, musel by sa
+       config.js načítať synchrónne a blokoval by vykreslenie stránky.
+       TODO: pri zmene kontajnera uprav ID na TROCH miestach – tu,
+       v <noscript> iframe hneď za <body> a v config.js (gtmId). -->
   <script>
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
     var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
     j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer',(window.RC_CONFIG||{}).gtmId);
+    })(window,document,'script','dataLayer','GTM-P8RKNPB4');
   </script>
 
   <!-- Fonty hostujeme lokálne (GDPR + rýchlosť). Preload len tie dva rezy,
@@ -64,17 +135,15 @@
   <link rel="preload" href="assets/fonts/dm-sans-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 
   <link rel="stylesheet" href="assets/css/styles.css">
-  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <meta name="theme-color" content="#142947">
 
+  <script src="assets/js/config.js" defer></script>
   <script src="assets/js/consent.js" defer></script>
   <script src="assets/js/app.js" defer></script>
   <script src="assets/js/form.js" defer></script>
 </head>
 <body>
 
-<!-- Google Tag Manager (noscript) – musí byť hneď za <body>.
-     TODO: pri zmene kontajnera uprav ID aj tu (iframe nevie čítať config.js). -->
+<!-- Google Tag Manager (noscript) – musí byť hneď za <body>. -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P8RKNPB4"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
@@ -236,7 +305,7 @@
         </p>
 
         <p class="pill form-card__badge">Konzultácia zdarma</p>
-        <h3>Poradíme vám s výberom infúzie</h3>
+        <h2 class="h3">Poradíme vám s výberom infúzie</h2>
         <p class="body-s muted form-card__intro">
           Nechajte nám kontakt – do 24 hodín sa vám ozveme a spolu vyberieme vhodnú infúziu.
           Zľavu <span data-discount>20</span> % na prvú infúziu máte tak či tak.
@@ -497,7 +566,7 @@
 
     <div class="choose-banner">
       <div>
-        <h4>Neviete si vybrať? Poradíme vám zdarma.</h4>
+        <h3 class="h4">Neviete si vybrať? Poradíme vám zdarma.</h3>
         <p class="body-m">Máme 19 druhov infúzií. Nechajte nám kontakt a zdravotník vám odporučí tú pravú.</p>
       </div>
       <a class="btn btn--secondary" href="#formular" data-scroll-form>Chcem poradiť</a>
@@ -529,32 +598,32 @@
       <div class="usp-grid">
         <div class="card-usp">
           <div class="card-usp__icon"><svg class="ico" aria-hidden="true"><use href="#i-shield-check"/></svg></div>
-          <h4>Lekársky tím</h4>
+          <h3 class="h4">Lekársky tím</h3>
           <p>Infúziu podáva vyškolený zdravotník pod dohľadom lekára.</p>
         </div>
         <div class="card-usp">
           <div class="card-usp__icon"><svg class="ico" aria-hidden="true"><use href="#i-armchair"/></svg></div>
-          <h4>Masážne kreslo RelaxPro 3D</h4>
+          <h3 class="h4">Masážne kreslo RelaxPro 3D</h3>
           <p>Zero gravity poloha a 8 masážnych programov.</p>
         </div>
         <div class="card-usp">
           <div class="card-usp__icon"><svg class="ico" aria-hidden="true"><use href="#i-tv"/></svg></div>
-          <h4>Netflix a občerstvenie</h4>
+          <h3 class="h4">Netflix a občerstvenie</h3>
           <p>Váš obľúbený seriál, nápoj a Wi-Fi zadarmo.</p>
         </div>
         <div class="card-usp">
           <div class="card-usp__icon"><svg class="ico" aria-hidden="true"><use href="#i-wind"/></svg></div>
-          <h4>Oxygenoterapia</h4>
+          <h3 class="h4">Oxygenoterapia</h3>
           <p>Doplnková kyslíková terapia s 90 – 95 % kyslíka.</p>
         </div>
         <div class="card-usp">
           <div class="card-usp__icon"><svg class="ico" aria-hidden="true"><use href="#i-test-tube"/></svg></div>
-          <h4>Biochémia krvi z kvapky</h4>
+          <h3 class="h4">Biochémia krvi z kvapky</h3>
           <p>Výsledok do 12 minút – zistíte, čo telu chýba.</p>
         </div>
         <div class="card-usp">
           <div class="card-usp__icon"><svg class="ico" aria-hidden="true"><use href="#i-square-parking"/></svg></div>
-          <h4>Parkovanie</h4>
+          <h3 class="h4">Parkovanie</h3>
           <p>Pohodlné parkovanie pre klientov kliniky.</p>
         </div>
       </div>
@@ -606,7 +675,7 @@
 
     <div class="carousel carousel--3" data-carousel="recenzie">
       <article class="card-review">
-        <div class="card-review__stars" aria-label="Hodnotenie 5 z 5">
+        <div class="card-review__stars" role="img" aria-label="Hodnotenie 5 z 5">
           <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
           <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
           <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
@@ -624,7 +693,7 @@
       </article>
 
       <article class="card-review">
-        <div class="card-review__stars" aria-label="Hodnotenie 5 z 5">
+        <div class="card-review__stars" role="img" aria-label="Hodnotenie 5 z 5">
           <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
           <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
           <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
@@ -642,7 +711,7 @@
       </article>
 
       <article class="card-review">
-        <div class="card-review__stars" aria-label="Hodnotenie 5 z 5">
+        <div class="card-review__stars" role="img" aria-label="Hodnotenie 5 z 5">
           <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
           <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
           <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
@@ -733,7 +802,7 @@
      ========================================================================== -->
 <section class="section final" id="zaver" data-section="zaver">
   <div class="container">
-    <img class="final__drop" src="assets/img/favicon.svg" alt="" aria-hidden="true" width="54" height="54">
+    <img class="final__drop" src="assets/img/favicon.svg" alt="" aria-hidden="true" width="54" height="54" loading="lazy">
     <h2>Doprajte si chvíľu pre seba.<br>Telo sa vám poďakuje.</h2>
     <p class="body-l on-dark-soft final__sub">
       Na prvú infúziu máte zľavu <span data-discount>20</span> %. Vyberte si termín online

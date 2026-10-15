@@ -119,7 +119,8 @@
   --c-navy: #142947;          /* hlavná farba, nadpisy, primárne tlačidlá */
   --c-navy-deep: #0B1A30;     /* pätička, tmavé prechody */
   --c-blue: #009BDF;          /* zvýraznenie v H1 (len text ≥ 24 px!), ikony, focus */
-  --c-blue-dark: #0072B1;     /* textové odkazy, eyebrow – spĺňa kontrast AA */
+  --c-blue-dark: #0072B1;     /* textové odkazy, eyebrow na bielej – AA (5,2:1) */
+  --c-blue-deep: #00649B;     /* text na cyan-light pozadí – #0072B1 tam mal len 4,49:1 */
   --c-cyan: #6DCFF6;          /* ikony na tmavom pozadí */
   --c-cyan-light: #D8F3FD;    /* štítky, vybraný chip, banner „Neviete si vybrať" */
 
@@ -498,6 +499,9 @@ p:last-child { margin-bottom: 0; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  /* Plocha na dotyk má 44 px na výšku; záporný margin drží pôvodný vzhľad */
+  padding-block: 11px;
+  margin-block: -11px;
   font-weight: 600;
   font-size: var(--fs-label);
   line-height: 1.467;
@@ -521,7 +525,7 @@ p:last-child { margin-bottom: 0; }
   padding: 8px 16px;
   border-radius: var(--r-pill);
   background: var(--c-cyan-light);
-  color: var(--c-blue-dark);
+  color: var(--c-blue-deep);
   font-weight: 600;
   font-size: var(--fs-eyebrow);
   line-height: 1.385;
@@ -543,7 +547,7 @@ p:last-child { margin-bottom: 0; }
   padding: 5px 12px;
   border-radius: var(--r-pill);
   background: var(--c-cyan-light);
-  color: var(--c-blue-dark);
+  color: var(--c-blue-deep);
   font-weight: 600;
   font-size: 11px;
   line-height: 1.5;
@@ -662,9 +666,9 @@ p:last-child { margin-bottom: 0; }
 }
 .consent input {
   flex: none;
-  width: 22px;
-  height: 22px;
-  margin: 2px 0 0;
+  width: 24px;
+  height: 24px;
+  margin: 1px 0 0;
   border-radius: 6px;
   accent-color: var(--c-navy);
   cursor: pointer;
@@ -738,7 +742,7 @@ p:last-child { margin-bottom: 0; }
   color: var(--c-cyan);
 }
 .card-usp__icon svg { width: 22px; height: 22px; }
-.card-usp h4 { margin-bottom: 6px; color: var(--c-white); }
+.card-usp h3 { margin-bottom: 6px; color: var(--c-white); }
 .card-usp p { font-size: var(--fs-body-s); line-height: 1.571; color: rgba(255, 255, 255, .78); }
 
 /* ----- 6.10 Karta recenzie ----- */
@@ -870,20 +874,29 @@ p:last-child { margin-bottom: 0; }
 .dots {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin-top: 20px;
+  gap: 0;
+  margin-top: 8px;
 }
 .dots button {
-  width: 8px;
-  height: 8px;
+  display: grid;
+  place-items: center;
+  width: 44px;         /* dotyková plocha – samotná bodka je menšia */
+  height: 44px;
   padding: 0;
   border: 0;
+  background: none;
+  cursor: pointer;
+}
+.dots button::before {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
   border-radius: var(--r-pill);
   background: var(--c-border-strong);
-  cursor: pointer;
   transition: width var(--t-base), background-color var(--t-base);
 }
-.dots button[aria-current="true"] {
+.dots button[aria-current="true"]::before {
   width: 20px;
   background: var(--c-navy);
 }
@@ -1194,7 +1207,7 @@ p:last-child { margin-bottom: 0; }
   display: grid;
   gap: 18px;
 }
-.choose-banner h4 { margin-bottom: 6px; }
+.choose-banner h3 { margin-bottom: 6px; }
 @media (min-width: 1024px) {
   .choose-banner {
     grid-template-columns: 1fr auto;
