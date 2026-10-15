@@ -487,7 +487,8 @@
     var phone = CONFIG.phone || '';
     var display = CONFIG.phoneDisplay || phone;
     errorBox.innerHTML = 'Formulár sa nepodarilo odoslať. Skúste to prosím znova alebo nám zavolajte na '
-      + '<a href="tel:' + phone + '">' + display + '</a>.';
+      + '<a href="tel:' + phone + '" data-track="phone_click" data-location="form_error">'
+      + display + '</a>.';
     errorBox.hidden = false;
   }
 

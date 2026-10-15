@@ -114,19 +114,23 @@
   </script>
 
   <!-- ===== Google Tag Manager =============================================
-       Existujúci kontajner kliniky (beží aj na WP webe a v Apponiu).
+       VLASTNÝ kontajner len pre túto landing page – zámerne nie ten,
+       ktorý beží na WP webe a v Apponiu. Meta pixel na tejto stránke
+       nesmie byť v zdravotnej kategórii, preto ju držíme oddelene.
+
        Tagy nastavuje Daniel v GTM podľa docs/tracking-plan.md –
        v kóde stránky nie sú žiadne gtag ani fbq volania.
 
        ID je tu natvrdo zámerne: keby sa čítalo z config.js, musel by sa
        config.js načítať synchrónne a blokoval by vykreslenie stránky.
-       TODO: pri zmene kontajnera uprav ID na TROCH miestach – tu,
-       v <noscript> iframe hneď za <body> a v config.js (gtmId). -->
+
+       TODO: nové GTM ID – nahraď GTM-XXXXXXX na TROCH miestach:
+       tu, v <noscript> iframe hneď za <body> a v config.js (gtmId). -->
   <script>
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
     var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
     j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-P8RKNPB4');
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');
   </script>
 
   <!-- Fonty hostujeme lokálne (GDPR + rýchlosť). Preload len tie dva rezy,
@@ -147,8 +151,9 @@
 </head>
 <body>
 
-<!-- Google Tag Manager (noscript) – musí byť hneď za <body>. -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P8RKNPB4"
+<!-- Google Tag Manager (noscript) – musí byť hneď za <body>.
+     TODO: nové GTM ID -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <a class="skip-link" href="#formular">Preskočiť na formulár</a>

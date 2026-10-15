@@ -356,23 +356,18 @@
   }
 
   /**
-   * Kliky na rezerváciu a telefón.
-   * Riešime delegovane cez data-track, žiadne inline onclick.
+   * Kliky na telefón. Riešime delegovane cez data-track, žiadne inline onclick.
    */
   function trackClicks() {
     document.addEventListener('click', function (event) {
       var target = event.target.closest('[data-track]');
       if (!target) return;
 
-      var type = target.getAttribute('data-track');
-      var data = { link_location: target.getAttribute('data-location') || '' };
-
-      if (type === 'booking_click') {
-        data.lp_variant = currentVariant;
-        var item = target.getAttribute('data-item');
-        if (item) data.item_name = item;
-      }
-      pushEvent(type, data);
+      /* Dnes sú to len kliky na telefón – booking_click posiela form.js
+         zo stavu Úspech, kde je jediný odkaz do Apponia. */
+      pushEvent(target.getAttribute('data-track'), {
+        link_location: target.getAttribute('data-location') || ''
+      });
     });
   }
 

@@ -10,7 +10,7 @@ Súbory sa nahrajú na hosting a stránka beží.
 | **Vetvy** | `main` = produkcia · `dev` = vývoj |
 | **Hosting** | Netlify (postup nižšie) |
 | **Backend formulára** | Google Sheets + Apps Script |
-| **Meranie** | GTM `GTM-P8RKNPB4` (zdieľaný s WP webom a Apponiom) |
+| **Meranie** | vlastný GTM kontajner len pre LP – **TODO: doplniť ID** (teraz `GTM-XXXXXXX`) |
 
 ---
 

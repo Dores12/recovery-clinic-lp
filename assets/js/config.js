@@ -16,14 +16,15 @@ window.RC_CONFIG = {
   siteUrl: 'https://TODO-domena.sk',
 
   /* ----- Google Tag Manager ----------------------------------------------
-     Existujúci kontajner kliniky – beží aj na WP webe a v Apponiu.
-     Vďaka tomu máme jednu GA4 a funkčný cross-domain.
+     VLASTNÝ kontajner len pre túto landing page. Zámerne NIE ten, ktorý
+     beží na WP webe a v Apponiu: Meta pixel na tejto stránke nesmie byť
+     v zdravotnej kategórii, preto je meranie oddelené.
 
-     POZOR: toto je len evidencia. Skutočný snippet má ID natvrdo v
-     index.html (inak by config.js musel blokovať vykreslenie stránky).
-     Pri zmene kontajnera uprav ID na troch miestach: tu, v <head>
+     POZOR: toto je len evidencia. Skutočný snippet má ID natvrdo
+     v index.html (inak by config.js musel blokovať vykreslenie stránky).
+     TODO: nové GTM ID – uprav na troch miestach: tu, v <head>
      a v <noscript> iframe za <body>. */
-  gtmId: 'GTM-P8RKNPB4',
+  gtmId: 'GTM-XXXXXXX',
 
   /* ----- Backend formulára -----------------------------------------------
      URL nasadeného Google Apps Script web appu (končí na /exec).
