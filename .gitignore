@@ -14,3 +14,6 @@ _input/
 
 # Lokálne nastavenia Claude Code (nepatria do repozitára)
 .claude/
+
+# Local Netlify folder
+.netlify
