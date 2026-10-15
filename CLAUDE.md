@@ -86,8 +86,12 @@ všetkým ostatným. GTM ID je natvrdo na troch miestach (head, noscript iframe,
 - **Fonty lokálne**, nikdy z `fonts.googleapis.com` (GDPR). Subsety `latin`
   **aj** `latin-ext` – bez druhého nefungujú č, ľ, ť, ž, ô.
 - **Preload fontov pomáha** – overené meraním, bez neho stúpne FCP o 0,3 s.
-- **CSS 45 kB a JS 46 kB** prekračujú limity zo zadania. Daniel sa rozhodol
-  nechať komentáre tak – po gzipe ide po drôte 11 + 16 kB.
+- **CSS 45 kB a JS 46 kB** prekračujú limity zo zadania. Komentáre ostávajú:
+  zmeraná minifikovaná verzia dala rovnaké Lighthouse skóre (96 vs 96),
+  takže by sa za ňu platilo čitateľnosťou bez protihodnoty.
+- **Fotka lounge má `fetchpriority="low"` a zámerne nie `loading="lazy"`.**
+  Lazy sa nespustí pri skoku na sekciu, eager bez nízkej priority zasa
+  zdržuje prvé vykreslenie o 3 body. Táto kombinácia je odmeraná.
 - **Na odkazy do Apponia nedávaj UTM parametre** – rozbilo by to session a
   atribúciu v GA4. Cross-domain nesie linker cez `_gl`.
 - **Žiadne menu v hlavičke.** Každý odkaz navyše je únik z konverzie. Na mobile

@@ -230,11 +230,14 @@ Lighthouse, mobil, proti hostingu s gzipom a cache hlavičkami:
 
 | | Nameraný | Cieľ |
 |---|---|---|
-| Performance | **95** (medián zo 4 behov) | ≥ 95 ✅ |
+| Performance | **96** (medián z 3 behov, bez GTM) | ≥ 95 ✅ |
 | Accessibility | **100** | ≥ 95 ✅ |
 | Best Practices | **100** | ≥ 95 ✅ |
 | CLS | **0** | < 0,05 ✅ |
-| LCP | **2,3 s** | < 2,0 s ❌ |
+| LCP | **2,5 s** | < 2,0 s ❌ |
+
+S reálnym GTM kontajnerom počítaj asi o 2 body menej – zatiaľ je v kóde
+neexistujúce `GTM-XXXXXXX`, takže sa nič tretej strany nenačíta.
 
 **SEO skóre bude okolo 69 a je to správne** – stránka má zámerne `noindex`.
 
@@ -252,8 +255,13 @@ Lighthouse, mobil, proti hostingu s gzipom a cache hlavičkami:
 - **GTM stojí 2 body** Performance a 140 ms blokovania. Necháva sa – meranie je
   dôležitejšie než skóre.
 - **Preload fontov pomáha** – bez neho stúpne prvé vykreslenie z 2,0 s na 2,3 s.
-- **Fotka lounge výkon nezhoršila** – obrázkové audity prechádzajú bez výhrad,
-  načítava sa odložene a je pod ohybom.
+- **Fotka lounge má `fetchpriority="low"`.** Bez toho sa jej 80 kB sťahovalo
+  súbežne s CSS a fontmi a LCP stúplo z 2,5 s na 2,9 s – stálo to 3 body.
+  Nechaj to tak.
+- **Minifikácia nemá zmysel.** Postavil som minifikovanú verziu (esbuild
+  na CSS aj JS, komentáre preč z HTML) a zmeral ju proti súčasnej: **96 vs 96**.
+  Po gzipe je úspora asi 9 kB, čo sa na skóre neprejaví. Preto je kód
+  v repozitári naďalej komentovaný a čitateľný.
 - **LCP 2,3 s** zaostáva o 0,3 s. Meria sa pri simulovanom pomalom 4G so 4×
   spomaleným procesorom; na reálnom mobile je to výrazne lepšie. Ak by to
   prekážalo, najväčšia rezerva je v 45 kB CSS.
