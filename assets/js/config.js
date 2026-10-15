@@ -76,8 +76,7 @@ window.RC_CONFIG = {
      Message match s reklamou: text stránky sedí s textom inzerátu.
 
      Kódy sú zámerne neutrálne písmená. URL sa posiela do Meta Pixelu
-     a zdravotné slová v URL (napr. „bolest") môžu spustiť obmedzenia
-     pre zdravotných inzerentov.
+     a zdravotné slová v URL by mohli spustiť obmedzenia pre inzerenta.
 
      h1      – časti v <b> sa zobrazia modrou (trieda .hl)
      sub     – voliteľný vlastný podnadpis; ak chýba, použije sa ten v HTML
@@ -105,11 +104,6 @@ window.RC_CONFIG = {
     d: {
       h1: '<b>Žiarivá pleť</b> zvnútra – glutatión a vitamín C v infúzii',
       chip: 'beauty'
-    },
-    // Chrbát
-    e: {
-      h1: 'Akútna <b>bolesť chrbta</b>? Infúzia po konzultácii so zdravotníkom',
-      chip: 'bolest'
     }
   },
 

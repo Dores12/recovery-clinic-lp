@@ -136,8 +136,12 @@
 
   <link rel="stylesheet" href="assets/css/styles.css">
 
+  <!-- Poradie je dôležité: infusions-ui.js musí vykresliť karty skôr,
+       než na ne app.js napojí bodky carouselu. -->
   <script src="assets/js/config.js" defer></script>
+  <script src="assets/js/infusions.js" defer></script>
   <script src="assets/js/consent.js" defer></script>
+  <script src="assets/js/infusions-ui.js" defer></script>
   <script src="assets/js/app.js" defer></script>
   <script src="assets/js/form.js" defer></script>
 </head>
@@ -169,6 +173,8 @@
   <symbol id="i-wind" viewBox="0 0 24 24"><path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/></symbol>
   <symbol id="i-test-tube" viewBox="0 0 24 24"><path d="M14.5 2v17.5c0 1.4-1.1 2.5-2.5 2.5s-2.5-1.1-2.5-2.5V2"/><path d="M8.5 2h7"/><path d="M14.5 16h-5"/></symbol>
   <symbol id="i-badge-check" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
   <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
   <symbol id="i-cookie" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/></symbol>
@@ -204,7 +210,7 @@
 
       <!-- Len desktop – na mobile konverziu nesie sticky lišta dole -->
       <a class="btn btn--primary btn--sm header__book" href="#formular" data-scroll-form>
-        Získať zľavu <span data-discount>20</span> %
+        <span>Získať zľavu <span data-discount>20</span> %</span>
       </a>
     </div>
   </div>
@@ -267,11 +273,11 @@
         <!-- Desktop aj mobil vedú na formulár – do Apponia sa dá dostať až
              zo stavu Úspech, aby každá rezervácia prešla cez lead. -->
         <a class="btn btn--primary is-desktop-btn" href="#formular" data-scroll-form>
-          Získať zľavu <span data-discount>20</span> %
+          <span>Získať zľavu <span data-discount>20</span> %</span>
           <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
         </a>
         <a class="btn btn--primary is-mobile-btn" href="#formular" data-scroll-form>
-          Získať zľavu <span data-discount>20</span> % a termín
+          <span>Získať zľavu <span data-discount>20</span> % a termín</span>
           <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
         </a>
 
@@ -340,6 +346,17 @@
             </div>
           </div>
 
+          <!-- Vybraná infúzia – naplní ju tlačidlo „Mám záujem" pri kartách.
+               Hodnota ide len do Google Sheetu, nikdy do dataLayeru. -->
+          <input type="hidden" name="infusion" id="f-infusion" value="">
+          <p class="selected-infusion" hidden data-selected-infusion>
+            <span>Vybraná infúzia: <b data-selected-infusion-name></b></span>
+            <button type="button" class="selected-infusion__clear" data-clear-infusion
+                    aria-label="Zrušiť výber infúzie">
+              <svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>
+            </button>
+          </p>
+
           <!-- Chipy sú obyčajné checkboxy – fungujú klávesnicou aj bez JS.
                Hodnoty sa posielajú LEN do Google Sheetu, nikdy do dataLayeru
                ani do URL (zdravotné údaje). -->
@@ -361,10 +378,6 @@
               <span class="chip">
                 <input type="checkbox" id="c-beauty" name="interest" value="beauty">
                 <label for="c-beauty"><svg class="ico chip__check" aria-hidden="true"><use href="#i-check"/></svg>Pleť a detox</label>
-              </span>
-              <span class="chip">
-                <input type="checkbox" id="c-bolest" name="interest" value="bolest">
-                <label for="c-bolest"><svg class="ico chip__check" aria-hidden="true"><use href="#i-check"/></svg>Bolesť</label>
               </span>
               <span class="chip">
                 <input type="checkbox" id="c-neviem" name="interest" value="neviem">
@@ -470,88 +483,47 @@
      ========================================================================== -->
 <section class="section" id="infuzie" data-section="infuzie">
   <div class="container">
-    <div class="section-head section-head--split">
-      <div>
-        <span class="eyebrow">Najobľúbenejšie infúzie</span>
-        <h2>Vyberte si podľa toho, čo potrebujete</h2>
-      </div>
+    <div class="section-head">
+      <span class="eyebrow">Ponuka infúzií</span>
+      <h2>Vyberte si podľa toho, čo potrebujete</h2>
     </div>
 
-    <!-- Na mobile carousel so scroll-snap, na desktope mriežka 4 kariet -->
-    <div class="carousel carousel--4" data-carousel="infuzie">
-      <article class="card-infusion">
-        <div class="card-infusion__top">
-          <span class="tag">Imunita</span>
-          <svg class="ico card-infusion__drop" aria-hidden="true"><use href="#i-droplet"/></svg>
-        </div>
-        <h3 class="card-infusion__name">Imunity Booster</h3>
-        <p class="body-s muted card-infusion__volume">500 ml</p>
-        <p class="body-s card-infusion__desc">Vitamín C, glutatión a vitamíny skupiny B na podporu obranyschopnosti a regenerácie.</p>
-        <div class="card-infusion__foot">
-          <span class="price">159 €</span>
-          <a class="link-arrow" href="#formular" data-interest data-item="Imunity Booster">
-            Mám záujem <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
-          </a>
-        </div>
-      </article>
-
-      <article class="card-infusion">
-        <div class="card-infusion__top">
-          <span class="tag">Imunita</span>
-          <svg class="ico card-infusion__drop" aria-hidden="true"><use href="#i-droplet"/></svg>
-        </div>
-        <h3 class="card-infusion__name">Virus Killer</h3>
-        <p class="body-s muted card-infusion__volume">500 ml</p>
-        <p class="body-s card-infusion__desc">Vitamín C, vitamíny skupiny B a vápnik pre silnú imunitu a hydratáciu.</p>
-        <div class="card-infusion__foot">
-          <span class="price">99 €</span>
-          <a class="link-arrow" href="#formular" data-interest data-item="Virus Killer">
-            Mám záujem <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
-          </a>
-        </div>
-      </article>
-
-      <article class="card-infusion">
-        <div class="card-infusion__top">
-          <span class="tag">Beauty</span>
-          <svg class="ico card-infusion__drop" aria-hidden="true"><use href="#i-droplet"/></svg>
-        </div>
-        <h3 class="card-infusion__name">Glutation</h3>
-        <p class="body-s muted card-infusion__volume">250 ml · bežne <s>179 €</s></p>
-        <p class="body-s card-infusion__desc">Antioxidant glutatión s vitamínom C pre vitalitu, detox a zdravý vzhľad pleti.</p>
-        <div class="card-infusion__foot">
-          <span class="price">139 €</span>
-          <a class="link-arrow" href="#formular" data-interest data-item="Glutation">
-            Mám záujem <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
-          </a>
-        </div>
-      </article>
-
-      <article class="card-infusion">
-        <div class="card-infusion__top">
-          <span class="tag">No pain</span>
-          <svg class="ico card-infusion__drop" aria-hidden="true"><use href="#i-droplet"/></svg>
-        </div>
-        <h3 class="card-infusion__name">Acute back pain</h3>
-        <p class="body-s muted card-infusion__volume">500 ml</p>
-        <p class="body-s card-infusion__desc">Pri akútnej bolesti chrbta. Vždy po konzultácii so zdravotníkom.</p>
-        <div class="card-infusion__foot">
-          <span class="price">99 €</span>
-          <a class="link-arrow" href="#formular" data-interest data-item="Acute back pain">
-            Mám záujem <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
-          </a>
-        </div>
-      </article>
-    </div>
-
-    <!-- Bodky carouselu (len mobil) – aktívnu rieši app.js vo fáze 2 -->
+    <!-- Karty aj zoznam nižšie vykresľuje app.js z assets/js/infusions.js.
+         Ceny ani názvy nemeň tu, ale v tom súbore. -->
+    <div class="carousel carousel--4" data-carousel="infuzie" data-main-cards></div>
     <div class="dots" data-dots="infuzie" role="tablist" aria-label="Posun medzi infúziami"></div>
 
+    <noscript>
+      <p class="body-m" style="margin-top:24px">
+        Zobrazenie ponuky vyžaduje JavaScript. Zavolajte nám prosím na
+        <a href="tel:+421948375871">+421 948 375 871</a> a ponuku vám povieme.
+      </p>
+    </noscript>
+
+    <p class="infusions-toggle">
+      <button class="btn btn--secondary" type="button" data-infusions-toggle
+              aria-expanded="false" aria-controls="vsetky-infuzie">
+        <span data-infusions-toggle-label>Zobraziť všetky infúzie (12)</span>
+        <svg class="ico infusions-toggle__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+      </button>
+    </p>
+
+    <div class="infusions-all" id="vsetky-infuzie" hidden>
+      <div class="filters" role="group" aria-label="Filter infúzií podľa kategórie" data-filters></div>
+      <div class="infusion-list" data-infusion-list></div>
+
+      <p class="body-s muted infusions-note">
+        Ďalšie špecializované infúzie vám odporučí zdravotník pri konzultácii.
+        <a class="link-arrow" href="#formular" data-scroll-form data-chip="neviem">
+          Poradiť sa <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </p>
+    </div>
 
     <div class="choose-banner">
       <div>
         <h3 class="h4">Neviete si vybrať? Poradíme vám zdarma.</h3>
-        <p class="body-m">Máme 19 druhov infúzií. Nechajte nám kontakt a zdravotník vám odporučí tú pravú.</p>
+        <p class="body-m">Nechajte nám kontakt a zdravotník vám odporučí tú pravú infúziu.</p>
       </div>
       <a class="btn btn--secondary" href="#formular" data-scroll-form data-chip="neviem">Chcem poradiť</a>
     </div>
@@ -768,13 +740,13 @@
 
     <div class="final__cta">
       <a class="btn btn--on-dark" href="#formular" data-scroll-form>
-        Získať zľavu <span data-discount>20</span> %
+        <span>Získať zľavu <span data-discount>20</span> %</span>
         <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
       </a>
       <a class="btn btn--outline-dark" href="tel:+421948375871" data-phone-link
          data-track="phone_click" data-location="final">
         <svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>
-        Zavolať <span data-phone-display>+421 948 375 871</span>
+        <span>Zavolať <span data-phone-display>+421 948 375 871</span></span>
       </a>
     </div>
 
@@ -828,7 +800,7 @@
     Zavolať
   </a>
   <a class="btn btn--primary sticky-bar__book" href="#formular" data-scroll-form>
-    Získať zľavu <span data-discount>20</span> %
+    <span>Získať zľavu <span data-discount>20</span> %</span>
   </a>
 </div>
 

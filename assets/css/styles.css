@@ -1598,3 +1598,175 @@ p:last-child { margin-bottom: 0; }
     bottom: calc(96px + env(safe-area-inset-bottom));
   }
 }
+
+
+/* ==========================================================================
+   12. PONUKA INFÚZIÍ – rozbalenie, filtre, kompaktný zoznam
+   Karty aj zoznam vykresľuje app.js z assets/js/infusions.js.
+   ========================================================================== */
+
+/* ----- Tlačidlo „Zobraziť všetky infúzie" ----- */
+.infusions-toggle { margin: 28px 0 0; text-align: center; }
+.infusions-toggle__chevron { transition: transform var(--t-base); }
+[aria-expanded="true"] .infusions-toggle__chevron { transform: rotate(180deg); }
+.infusions-toggle .btn:hover .infusions-toggle__chevron { transform: none; }
+[aria-expanded="true"]:hover .infusions-toggle__chevron { transform: rotate(180deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .infusions-toggle__chevron { transition: none; }
+}
+
+/* ----- Rozbalený blok ----- */
+.infusions-all { margin-top: 28px; }
+.infusions-all[hidden] { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .infusions-all:not([hidden]) {
+    animation: rc-rozbal 260ms ease;
+  }
+  @keyframes rc-rozbal {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+/* ----- Filtre ----- */
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  /* Na mobile sa dajú posunúť do strany namiesto zalamovania */
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: var(--gutter);
+}
+.filters::-webkit-scrollbar { display: none; }
+.filters button {
+  flex: none;
+  min-height: 40px;
+  padding: 9px 16px;
+  border: 1.5px solid var(--c-border-strong);
+  border-radius: var(--r-pill);
+  background: var(--c-white);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--fs-body-s);
+  color: var(--c-text);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+}
+.filters button:hover { border-color: var(--c-blue); }
+.filters button[aria-pressed="true"] {
+  background: var(--c-navy);
+  border-color: var(--c-navy);
+  color: var(--c-white);
+}
+
+@media (min-width: 768px) {
+  .filters { flex-wrap: wrap; overflow: visible; margin-inline: 0; padding-inline: 0; }
+}
+
+/* ----- Kompaktný zoznam ----- */
+.infusion-list {
+  display: grid;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-card);
+  background: var(--c-white);
+  overflow: hidden;
+}
+@media (min-width: 1024px) {
+  .infusion-list { grid-template-columns: 1fr 1fr; }
+}
+
+.infusion-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--c-border);
+}
+/* Posledný riadok v stĺpci nepotrebuje linku */
+.infusion-row:last-child { border-bottom: 0; }
+@media (min-width: 1024px) {
+  .infusion-row:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
+  .infusion-row:nth-child(odd) { border-right: 1px solid var(--c-border); }
+}
+
+.infusion-row__main { min-width: 0; }
+.infusion-row__head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.infusion-row__head h4 { margin: 0; }
+.infusion-row__volume { font-size: var(--fs-body-s); color: var(--c-text-muted); }
+.infusion-row__desc { font-size: var(--fs-body-s); line-height: 1.571; margin: 0; }
+
+.infusion-row__side {
+  flex: none;
+  text-align: right;
+  display: grid;
+  gap: 6px;
+  justify-items: end;
+}
+.infusion-row__price {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--c-navy);
+  white-space: nowrap;
+}
+.infusion-row__price s {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-body-s);
+  color: var(--c-text-muted);
+}
+
+/* Poznámka pod zoznamom */
+.infusions-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 18px;
+}
+
+/* ----- Štítok vybranej infúzie vo formulári ----- */
+.selected-infusion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 10px 10px 10px 16px;
+  border: 1.5px solid var(--c-blue);
+  border-radius: var(--r-sm);
+  background: var(--c-cyan-light);
+  font-size: var(--fs-body-s);
+  color: var(--c-navy);
+}
+.selected-infusion[hidden] { display: none; }
+.selected-infusion b { font-family: var(--font-head); font-weight: 700; }
+.selected-infusion__clear {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--c-navy);
+  cursor: pointer;
+}
+.selected-infusion__clear:hover { background: rgba(20, 41, 71, .1); }
+.selected-infusion__clear .ico { width: 16px; height: 16px; }

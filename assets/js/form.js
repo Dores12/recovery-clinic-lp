@@ -123,6 +123,11 @@
 
   var attribution = captureAttribution();
 
+  /** Používateľ si v systéme vypol animácie – rešpektujeme to. */
+  function reduceMotion() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
   /** Stav marketingového súhlasu v čase odoslania (zapisuje ho consent.js). */
   function consentAds() {
     try {
@@ -288,7 +293,82 @@
 
 
   /* ======================================================================
-     4. Zostavenie payloadu
+     4. Vybraná infúzia („Mám záujem" pri kartách a v zozname)
+
+     Názov infúzie ide LEN do Google Sheetu. Do dataLayeru posielame
+     samostatnú udalosť infusion_interest, nikdy nie do leadu.
+     ====================================================================== */
+
+  var infusionField = document.getElementById('f-infusion');
+  var infusionTag = form.querySelector('[data-selected-infusion]');
+  var infusionName = form.querySelector('[data-selected-infusion-name]');
+
+  function setInfusion(nazov) {
+    if (!infusionField) return;
+    infusionField.value = nazov || '';
+    if (!infusionTag || !infusionName) return;
+
+    if (nazov) {
+      infusionName.textContent = nazov;
+      infusionTag.hidden = false;
+    } else {
+      infusionTag.hidden = true;
+    }
+  }
+
+  /** Prvé prázdne povinné pole – tam dáme kurzor po skoku na formulár. */
+  function firstEmptyField() {
+    var poradie = [fields.name, fields.phone, fields.email];
+    for (var i = 0; i < poradie.length; i++) {
+      if (poradie[i] && !poradie[i].value.trim()) return poradie[i];
+    }
+    return fields.name;
+  }
+
+  document.addEventListener('click', function (event) {
+    var trigger = event.target.closest('[data-interest]');
+    if (!trigger) return;
+
+    event.preventDefault();
+    var nazov = trigger.getAttribute('data-item') || '';
+    setInfusion(nazov);
+
+    /* Chip podľa kategórie infúzie */
+    var data = window.RC_INFUSIONS;
+    if (data && data.zoznam) {
+      var infuzia = null;
+      for (var i = 0; i < data.zoznam.length; i++) {
+        if (data.zoznam[i].nazov === nazov) { infuzia = data.zoznam[i]; break; }
+      }
+      var chipValue = infuzia && data.chipPodlaKategorie
+        ? data.chipPodlaKategorie[infuzia.kategoria]
+        : '';
+      if (chipValue) {
+        var chip = form.querySelector('.chip input[value="' + chipValue + '"]');
+        if (chip) chip.checked = true;
+      }
+    }
+
+    pushEvent('infusion_interest', { item_name: nazov });
+
+    var cielovePole = firstEmptyField();
+    form.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' });
+    window.setTimeout(function () {
+      if (cielovePole) cielovePole.focus({ preventScroll: true });
+    }, reduceMotion() ? 0 : 600);
+  });
+
+  if (infusionTag) {
+    infusionTag.querySelector('[data-clear-infusion]').addEventListener('click', function () {
+      setInfusion('');
+      var cielovePole = firstEmptyField();
+      if (cielovePole) cielovePole.focus({ preventScroll: true });
+    });
+  }
+
+
+  /* ======================================================================
+     5. Zostavenie payloadu
      ====================================================================== */
 
   function collectInterests() {
@@ -305,6 +385,7 @@
       phone: values.phone,
       email: values.email,
       interest: collectInterests(),
+      infusion: infusionField ? infusionField.value : '',
       discount: (discount.percent || 20) + ' % prvá infúzia',
       lp_variant: (function () {
         try { return window.sessionStorage.getItem('lp_variant') || CONFIG.defaultVariant || 'a'; }
@@ -330,7 +411,7 @@
 
 
   /* ======================================================================
-     5. Stavy tlačidla a chybový box
+     6. Stavy tlačidla a chybový box
      ====================================================================== */
 
   function setBusy(busy) {
@@ -367,7 +448,7 @@
 
 
   /* ======================================================================
-     6. Stav Úspech – nahradí obsah karty
+     7. Stav Úspech – nahradí obsah karty
      ====================================================================== */
 
   function showSuccess(firstName) {
@@ -399,7 +480,7 @@
 
 
   /* ======================================================================
-     7. Odoslanie
+     8. Odoslanie
      ====================================================================== */
 
   /** fetch s časovým limitom 12 s (AbortSignal.timeout nemajú staršie Safari). */
@@ -520,7 +601,7 @@
 
 
   /* ======================================================================
-     8. Testovací režim – žltý pruh nad formulárom
+     9. Testovací režim – žltý pruh nad formulárom
      ====================================================================== */
 
   if (!CONFIG.formEndpoint) {
