@@ -11,3 +11,6 @@ _input/
 # ===== Logy a dočasné súbory =====
 *.log
 .cache/
+
+# Lokálne nastavenia Claude Code (nepatria do repozitára)
+.claude/
