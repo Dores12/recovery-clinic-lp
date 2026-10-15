@@ -30,7 +30,7 @@ window.RC_CONFIG = {
      PRÁZDNE = testovací režim: formulár sa tvári, že odoslal, nič sa neuloží
      a nad formulárom sa zobrazí žltý pruh. Postup nasadenia:
      google-apps-script/README.md */
-  formEndpoint: '',
+  formEndpoint: 'https://script.google.com/macros/s/AKfycbyFLuWQSEKNP3e_ywqSgBWEOwSAZ8jvFv3mEfaWfc--J5WHQlB7f8MKfYdS8_HYAbAD1g/exec',
 
   /* ----- Odkazy ----------------------------------------------------------- */
   bookingUrl: 'https://recoveryclinicbratislava.myapponio.com/#reservation',
