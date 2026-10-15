@@ -28,6 +28,14 @@ http://localhost:8080/?v=b&utm_source=test&gclid=TEST123
 
 > **Vždy si vynucuj tvrdé obnovenie** (`Cmd/Ctrl + Shift + R`). Prehliadač si
 > drží CSS a JS v cache a inak budeš hľadať chybu, ktorá je už opravená.
+> Python `http.server` neposiela cache hlavičky, takže si prehliadač myslí,
+> že staré súbory stále platia. Keď to nepomôže, zastav server (`Ctrl+C`)
+> a spusti ho znova.
+
+> **Otvorenie `index.html` dvojklikom cez Finder** (adresa `file://`) je fajn na
+> rýchly vizuálny pohľad, ale **neotestuješ tak formulár ani meranie** –
+> odoslanie na Apps Script aj GTM sa z `file://` správajú inak než zo servera.
+> Na tie veci vždy použi `http://localhost:8080`.
 
 ---
 

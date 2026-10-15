@@ -12,7 +12,13 @@ Potom `http://localhost:8080/?v=b&utm_source=test&gclid=TEST123`.
 
 > **Pri testovaní CSS a JS si vynucuj tvrdé obnovenie** (`Cmd/Ctrl + Shift + R`).
 > Prehliadač si štýly drží v cache a inak uvidíš starú verziu – stalo sa mi to
-> pri vývoji a chvíľu som hľadal chybu, ktorá tam už nebola.
+> pri vývoji a chvíľu som hľadal chybu, ktorá tam už nebola. Keď to nepomôže,
+> zastav server (`Ctrl+C`) a spusti ho znova.
+
+> **Otvorenie `index.html` dvojklikom cez Finder** (adresa `file://`) je fajn na
+> rýchly vizuálny pohľad, ale **neotestuješ tak formulár ani meranie** –
+> odoslanie na Apps Script aj GTM sa z `file://` správajú inak než zo servera.
+> Na tie veci vždy použi `http://localhost:8080`.
 
 ---
 

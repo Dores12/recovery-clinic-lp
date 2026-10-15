@@ -106,7 +106,13 @@ python3 -m http.server 8080
 ```
 
 Prehliadač si tvrdo cachuje `styles.css` a `app.js` – pri testovaní vždy
-`Cmd/Ctrl + Shift + R`, inak uvidíš starú verziu.
+`Cmd/Ctrl + Shift + R`, inak uvidíš starú verziu. Python `http.server`
+neposiela cache hlavičky, takže sa to stáva ľahko; keď to nepomôže, reštartuj
+server. Pri hlásení „obrázok sa nezobrazuje" to over ako prvé – raz to už
+bolo ono.
+
+Otvorenie cez `file://` je dobré na vizuálnu kontrolu, ale formulár ani
+meranie sa tak testovať nedajú.
 
 Lighthouse meraj **až na nasadenej stránke**, nie na localhoste: lokálny server
 nevie gzip ani cache hlavičky a skóre vyjde o 8 bodov nižšie.
