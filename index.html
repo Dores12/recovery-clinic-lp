@@ -7,8 +7,56 @@
   <title>IV infúzie Bratislava – zľava 20 % na prvú | Recovery Clinic</title>
   <meta name="description" content="Vitamínové IV infúzie v masážnom kresle, pod dohľadom lekára. Na prvú infúziu máte zľavu 20 % – pri rezervácii online aj cez formulár. Prievozská 4/A.">
 
-  <!-- TODO (fáza 4): sem príde inline Consent Mode v2 default + GTM snippet. -->
   <!-- TODO (fáza 5): canonical, robots, OG/Twitter, JSON-LD MedicalClinic, apple-touch-icon. -->
+
+  <!-- config.js sa načítava synchrónne a ako prvý: GTM snippet nižšie z neho
+       berie ID kontajnera, takže sa mení len na jednom mieste. -->
+  <script src="assets/js/config.js"></script>
+
+  <!-- ===== Consent Mode v2 – predvolený stav =============================
+       Musí byť PRED GTM, inak by sa prvé hity odoslali bez súhlasu.
+       Všetko okrem nevyhnutných cookies je zakázané, kým návštevník
+       nerozhodne. wait_for_update dá GTM 500 ms na uloženú voľbu. -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    gtag('set', 'url_passthrough', true);
+
+    // Ak už návštevník rozhodol, aplikuj jeho voľbu HNEĎ – ešte pred GTM.
+    try {
+      var rcConsent = JSON.parse(localStorage.getItem('rc_consent_v1'));
+      if (rcConsent) {
+        gtag('consent', 'update', {
+          analytics_storage: rcConsent.analytics ? 'granted' : 'denied',
+          ad_storage: rcConsent.marketing ? 'granted' : 'denied',
+          ad_user_data: rcConsent.marketing ? 'granted' : 'denied',
+          ad_personalization: rcConsent.marketing ? 'granted' : 'denied'
+        });
+      }
+    } catch (e) { /* poškodený záznam – ostane predvolené „denied" */ }
+  </script>
+
+  <!-- ===== Google Tag Manager =============================================
+       Existujúci kontajner kliniky (beží aj na WP webe a v Apponiu).
+       ID sa berie z config.js. Samotné tagy nastavuje Daniel v GTM
+       podľa docs/tracking-plan.md – v kóde stránky žiadne gtag ani fbq. -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+    var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+    j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer',(window.RC_CONFIG||{}).gtmId);
+  </script>
 
   <!-- Fonty hostujeme lokálne (GDPR + rýchlosť). Preload len tie dva rezy,
        ktoré sú vidno hneď v hero – zvyšok sa načíta bežne. -->
@@ -19,13 +67,16 @@
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#142947">
 
-  <script src="assets/js/config.js"></script>
+  <script src="assets/js/consent.js" defer></script>
   <script src="assets/js/app.js" defer></script>
   <script src="assets/js/form.js" defer></script>
 </head>
 <body>
 
-<!-- TODO (fáza 4): <noscript> iframe GTM patrí sem, hneď za <body>. -->
+<!-- Google Tag Manager (noscript) – musí byť hneď za <body>.
+     TODO: pri zmene kontajnera uprav ID aj tu (iframe nevie čítať config.js). -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P8RKNPB4"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <a class="skip-link" href="#formular">Preskočiť na formulár</a>
 
@@ -51,6 +102,7 @@
   <symbol id="i-badge-check" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
   <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-cookie" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/></symbol>
   <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
 </svg>
 
@@ -729,7 +781,7 @@
     <nav class="footer__links" aria-label="Právne informácie">
       <a href="#" data-privacy target="_blank" rel="noopener">Ochrana osobných údajov</a>
       <a href="#" data-terms target="_blank" rel="noopener">Obchodné podmienky</a>
-      <button type="button" data-cookie-settings>Nastavenie cookies</button>
+      <button type="button" data-cookie-settings-button>Nastavenie cookies</button>
     </nav>
   </div>
 </footer>
@@ -749,7 +801,69 @@
      data-track="booking_click" data-location="sticky">Rezervovať online</a>
 </div>
 
-<!-- TODO (fáza 4): cookie lišta (.cookie-bar) + consent.js -->
+<!-- ==========================================================================
+     COOKIE LIŠTA – obsluhuje consent.js
+     Neblokuje obsah stránky. Odkaz „Nastavenie cookies" v pätičke ju otvorí znova.
+     ========================================================================== -->
+<div class="cookie-bar" hidden data-cookie-bar role="dialog" aria-modal="false"
+     aria-labelledby="cookie-title">
+
+  <!-- Základný pohľad -->
+  <div data-cookie-main>
+    <p class="cookie-bar__head">
+      <svg class="ico" aria-hidden="true"><use href="#i-cookie"/></svg>
+      <span class="h4" id="cookie-title">Používame cookies</span>
+    </p>
+    <p class="body-s cookie-bar__text">
+      Pomáhajú nám merať návštevnosť a zlepšovať reklamy. Vyberte si, s čím
+      súhlasíte – rozhodnutie môžete kedykoľvek zmeniť v pätičke.
+    </p>
+    <div class="cookie-bar__actions">
+      <button class="btn btn--primary" type="button" data-cookie-accept>Prijať všetko</button>
+      <button class="btn btn--secondary" type="button" data-cookie-reject>Odmietnuť</button>
+    </div>
+    <button class="link-arrow cookie-bar__more" type="button" data-cookie-open-settings>
+      Nastaviť podrobne
+      <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+    </button>
+  </div>
+
+  <!-- Podrobné nastavenia -->
+  <div data-cookie-settings hidden>
+    <p class="cookie-bar__head">
+      <svg class="ico" aria-hidden="true"><use href="#i-cookie"/></svg>
+      <span class="h4">Nastavenie cookies</span>
+    </p>
+
+    <div class="cookie-opt">
+      <label class="cookie-opt__row">
+        <input type="checkbox" checked disabled>
+        <span class="cookie-opt__name">Nevyhnutné</span>
+      </label>
+      <p class="body-s muted">Potrebné na fungovanie stránky. Nedajú sa vypnúť.</p>
+    </div>
+
+    <div class="cookie-opt">
+      <label class="cookie-opt__row">
+        <input type="checkbox" data-cookie-analytics>
+        <span class="cookie-opt__name">Analytické</span>
+      </label>
+      <p class="body-s muted">Merajú návštevnosť, aby sme vedeli, čo na stránke funguje.</p>
+    </div>
+
+    <div class="cookie-opt">
+      <label class="cookie-opt__row">
+        <input type="checkbox" data-cookie-marketing>
+        <span class="cookie-opt__name">Marketingové</span>
+      </label>
+      <p class="body-s muted">Umožňujú merať účinnosť reklám a zobrazovať relevantnejšie.</p>
+    </div>
+
+    <div class="cookie-bar__actions">
+      <button class="btn btn--primary" type="button" data-cookie-save>Uložiť výber</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

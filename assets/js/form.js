@@ -423,6 +423,32 @@
     });
   }
 
+  /**
+   * Parametre udalosti generate_lead.
+   * user_data (pre rozšírené konverzie Google Ads a Meta advanced matching)
+   * posielame IBA pri marketingovom súhlase – bez neho by sme odosielali
+   * osobné údaje do reklamných systémov bez právneho základu.
+   */
+  function leadEventData(leadId, payload, values, testMode) {
+    var tracking = CONFIG.tracking || {};
+    var data = {
+      event_id: leadId,
+      lp_variant: payload.lp_variant,
+      value: tracking.leadValue || 0,
+      currency: tracking.currency || 'EUR'
+    };
+
+    if (payload.consent_ads === 'granted') {
+      data.user_data = {
+        email: values.email,
+        phone_number: values.phone
+      };
+    }
+    if (testMode) data.test_mode = true;
+
+    return data;
+  }
+
   form.addEventListener('submit', function (event) {
     event.preventDefault();
     if (isSubmitting) return;
@@ -468,13 +494,7 @@
     /* Testovací režim – endpoint ešte nie je nasadený */
     if (!endpoint) {
       window.setTimeout(function () {
-        pushEvent('generate_lead', {
-          event_id: leadId,
-          lp_variant: payload.lp_variant,
-          value: (CONFIG.tracking && CONFIG.tracking.leadValue) || 0,
-          currency: (CONFIG.tracking && CONFIG.tracking.currency) || 'EUR',
-          test_mode: true
-        });
+        pushEvent('generate_lead', leadEventData(leadId, payload, values, true));
         showSuccess(values.name.split(' ')[0]);
       }, 800);
       return;
@@ -484,12 +504,7 @@
       if (!data || data.ok !== true) throw new Error('server');
 
       /* Konverziu hlásime až teraz – po úspešnom zápise do Sheetu */
-      pushEvent('generate_lead', {
-        event_id: leadId,
-        lp_variant: payload.lp_variant,
-        value: (CONFIG.tracking && CONFIG.tracking.leadValue) || 0,
-        currency: (CONFIG.tracking && CONFIG.tracking.currency) || 'EUR'
-      });
+      pushEvent('generate_lead', leadEventData(leadId, payload, values, false));
 
       showSuccess(values.name.split(' ')[0]);
     }).catch(function (error) {

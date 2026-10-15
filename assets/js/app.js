@@ -233,7 +233,10 @@
     var blockersVisible = 0;
 
     function update() {
-      bar.classList.toggle('is-visible', !heroCtaVisible && blockersVisible === 0);
+      var visible = !heroCtaVisible && blockersVisible === 0;
+      bar.classList.toggle('is-visible', visible);
+      /* Cookie lišta sa podľa tejto triedy posunie nad sticky lištu */
+      document.body.classList.toggle('has-sticky-bar', visible);
     }
 
     new IntersectionObserver(function (entries) {
@@ -318,6 +321,124 @@
 
 
   /* ======================================================================
+     8. dataLayer – merateľné udalosti
+
+     Stránka len pushuje udalosti. Tagy (GA4, Google Ads, Meta) nastavuje
+     Daniel v GTM podľa docs/tracking-plan.md. Žiadne gtag ani fbq v kóde.
+
+     POZOR: do dataLayeru nikdy neposielame nič o zdraví. Hodnoty chipov
+     „Čo chcete riešiť?" a texty otázok vo FAQ ostávajú mimo – posielame
+     len poradové čísla. Meta má zdravotných inzerentov pod prísnym
+     dohľadom a vie zablokovať eventy celému účtu.
+     ====================================================================== */
+
+  function pushEvent(name, data) {
+    window.dataLayer = window.dataLayer || [];
+    var payload = { event: name, lead_source: 'lp' };
+    for (var key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) payload[key] = data[key];
+    }
+    window.dataLayer.push(payload);
+    if (CONFIG.debug) console.log('[RC] dataLayer →', payload);
+  }
+
+  /** Variant stránky – hneď po načítaní, nech vieme rozlíšiť reklamy. */
+  function trackVariantView() {
+    pushEvent('lp_variant_view', { lp_variant: currentVariant });
+  }
+
+  /**
+   * Kliky na rezerváciu a telefón.
+   * Riešime delegovane cez data-track, žiadne inline onclick.
+   */
+  function trackClicks() {
+    document.addEventListener('click', function (event) {
+      var target = event.target.closest('[data-track]');
+      if (!target) return;
+
+      var type = target.getAttribute('data-track');
+      var data = { link_location: target.getAttribute('data-location') || '' };
+
+      if (type === 'booking_click') {
+        data.lp_variant = currentVariant;
+        var item = target.getAttribute('data-item');
+        if (item) data.item_name = item;
+      }
+      pushEvent(type, data);
+    });
+  }
+
+  /** Prvý focus do ľubovoľného poľa formulára – raz za návštevu. */
+  function trackFormStart() {
+    var form = document.getElementById('lead-form');
+    if (!form) return;
+
+    var alreadySent = false;
+    try { alreadySent = window.sessionStorage.getItem('rc_form_start') === '1'; } catch (e) { /* ticho */ }
+    if (alreadySent) return;
+
+    function onFirstFocus() {
+      pushEvent('form_start', { lp_variant: currentVariant });
+      try { window.sessionStorage.setItem('rc_form_start', '1'); } catch (e) { /* ticho */ }
+      form.removeEventListener('focusin', onFirstFocus);
+    }
+    form.addEventListener('focusin', onFirstFocus);
+  }
+
+  /** Otvorenie otázky vo FAQ. Posielame poradové číslo, nikdy text otázky. */
+  function trackFaq() {
+    all('.faq-item').forEach(function (item, index) {
+      item.addEventListener('toggle', function () {
+        if (item.open) pushEvent('faq_open', { faq_index: index + 1 });
+      });
+    });
+  }
+
+  /** Hĺbka scrollu 25 / 50 / 75 / 90 %, každá hranica raz. */
+  function trackScrollDepth() {
+    var marks = [25, 50, 75, 90];
+    var reached = [];
+
+    function check() {
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) return;
+      var percent = (window.scrollY / docHeight) * 100;
+
+      marks.forEach(function (mark) {
+        if (percent >= mark && reached.indexOf(mark) === -1) {
+          reached.push(mark);
+          pushEvent('scroll_depth', { percent: mark });
+        }
+      });
+
+      if (reached.length === marks.length) {
+        window.removeEventListener('scroll', check);
+      }
+    }
+    window.addEventListener('scroll', check, { passive: true });
+    check();
+  }
+
+  /** Sekcia videná aspoň z 50 %, každá raz. */
+  function trackSectionView() {
+    if (!('IntersectionObserver' in window)) return;
+
+    var sections = all('[data-section]');
+    if (!sections.length) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        pushEvent('section_view', { section: entry.target.getAttribute('data-section') });
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.5 });
+
+    sections.forEach(function (section) { observer.observe(section); });
+  }
+
+
+  /* ======================================================================
      Štart
      ====================================================================== */
 
@@ -329,6 +450,13 @@
   initStickyBar();
   initFormScroll();
   initReveal();
+
+  trackVariantView();
+  trackClicks();
+  trackFormStart();
+  trackFaq();
+  trackScrollDepth();
+  trackSectionView();
 
   if (CONFIG.debug) {
     console.log('[RC] variant:', currentVariant);

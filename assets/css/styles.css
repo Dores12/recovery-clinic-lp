@@ -1516,3 +1516,82 @@ p:last-child { margin-bottom: 0; }
   line-height: 1.467;
   color: var(--c-navy);
 }
+
+
+/* ==========================================================================
+   11. COOKIE LIŠTA
+   Pozíciu má v kapitole 7.9, tu je obsah a podrobné nastavenia.
+   ========================================================================== */
+
+.cookie-bar__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+}
+.cookie-bar__head .ico {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  color: var(--c-blue-dark);
+}
+.cookie-bar__head .h4 { display: block; }
+
+.cookie-bar__text { margin-bottom: 18px; color: var(--c-text); }
+
+/* Tlačidlá sú zámerne rovnako výrazné – „Odmietnuť" nesmie byť schované */
+.cookie-bar__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.cookie-bar__actions .btn {
+  min-height: 48px;
+  padding: 12px 16px;
+  width: 100%;
+}
+.cookie-bar__actions:only-child,
+.cookie-bar__actions:last-child:first-of-type { grid-template-columns: 1fr; }
+
+/* Odkaz „Nastaviť podrobne" */
+.cookie-bar__more {
+  margin-top: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* ----- Podrobné nastavenia ----- */
+.cookie-opt { margin-bottom: 16px; }
+.cookie-opt__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  cursor: pointer;
+}
+.cookie-opt__row input {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  margin: 0;
+  border-radius: 6px;
+  accent-color: var(--c-navy);
+  cursor: pointer;
+}
+.cookie-opt__row input:disabled { cursor: not-allowed; opacity: .6; }
+.cookie-opt__name {
+  font-weight: 600;
+  font-size: var(--fs-label);
+  color: var(--c-navy);
+}
+.cookie-opt p { margin: 0 0 0 32px; }
+
+/* Keď je na mobile vysunutá sticky lišta, cookie lišta sa posunie nad ňu */
+@media (max-width: 1023px) {
+  .cookie-bar { bottom: calc(16px + env(safe-area-inset-bottom)); }
+  body.has-sticky-bar .cookie-bar {
+    bottom: calc(96px + env(safe-area-inset-bottom));
+  }
+}
