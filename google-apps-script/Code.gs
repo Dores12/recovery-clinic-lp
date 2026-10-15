@@ -421,7 +421,35 @@ function jsonResponse(object) {
    Dá sa spúšťať opakovane – existujúce dáta neprepíše, len doplní, čo chýba.
    =========================================================================== */
 
+/**
+ * Starý hárok sa volal „LP leady". Premenujeme ho skôr, než s ním
+ * čokoľvek urobíme – inak by vedľa neho vznikla nová prázdna karta
+ * a dáta by ostali v tej starej.
+ *
+ * Volá sa zo setupSheet() aj zo simplifySheet(), takže na poradí
+ * spúšťania nezáleží.
+ */
+function zjednotNazovKarty() {
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  var stara = spreadsheet.getSheetByName('LP leady');
+  if (!stara) return;
+
+  var nova = spreadsheet.getSheetByName(CONFIG.SHEET_NAME);
+  if (nova && nova.getLastRow() <= 1) {
+    /* Prázdnu kartu vytvoril predčasný setupSheet – zahodíme ju */
+    spreadsheet.deleteSheet(nova);
+    console.log('Odstránená prázdna karta "' + CONFIG.SHEET_NAME + '".');
+  } else if (nova) {
+    throw new Error('Existujú karty "LP leady" aj "' + CONFIG.SHEET_NAME
+      + '" a obe majú dáta. Zlúč ich ručne a skús znova.');
+  }
+
+  stara.setName(CONFIG.SHEET_NAME);
+  console.log('Karta "LP leady" premenovaná na "' + CONFIG.SHEET_NAME + '".');
+}
+
 function setupSheet() {
+  zjednotNazovKarty();
   pripravHarok(CONFIG.SHEET_NAME, COLUMNS, false);
 
   if (CONFIG.KEEP_TECH_SHEET) {
@@ -567,16 +595,12 @@ function zoradStlpce(sheet, stlpce) {
 function simplifySheet() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
-  /* Starý hárok sa mohol volať „LP leady" */
-  var sheet = spreadsheet.getSheetByName(CONFIG.SHEET_NAME)
-    || spreadsheet.getSheetByName('LP leady');
+  zjednotNazovKarty();
+
+  var sheet = spreadsheet.getSheetByName(CONFIG.SHEET_NAME);
   if (!sheet) {
     console.log('Žiadny hárok na zjednodušenie. Spusti setupSheet().');
     return;
-  }
-  if (sheet.getName() !== CONFIG.SHEET_NAME) {
-    sheet.setName(CONFIG.SHEET_NAME);
-    console.log('Karta premenovaná na "' + CONFIG.SHEET_NAME + '".');
   }
 
   var mapa = headerMap(sheet);
@@ -612,22 +636,36 @@ function simplifySheet() {
     }
   }
 
-  /* --- 2. Starý created_at rozdelíme na datum a cas -------------------- */
-  if (mapa.created_at !== undefined && mapa.datum === undefined) {
-    sheet.insertColumnAfter(mapa.created_at + 1);
-    sheet.insertColumnAfter(mapa.created_at + 1);
-    sheet.getRange(1, mapa.created_at + 2).setValue('datum');
-    sheet.getRange(1, mapa.created_at + 3).setValue('cas');
+  /* --- 2. Starý created_at rozdelíme na datum a cas --------------------
+     Stĺpce datum a cas už môžu existovať prázdne, keď sa predtým spustil
+     setupSheet. Preto sa neriadime tým, či existujú, ale tým, či sú
+     v danom riadku vyplnené. */
+  if (mapa.created_at !== undefined) {
+    ['datum', 'cas'].forEach(function (nazov) {
+      if (headerMap(sheet)[nazov] !== undefined) return;
+      var kam = headerMap(sheet).created_at + 1;
+      sheet.insertColumnAfter(kam);
+      sheet.getRange(1, kam + 1).setValue(nazov);
+    });
+    mapa = headerMap(sheet);
 
     if (poslednyRiadok > 1) {
-      var stare = sheet.getRange(2, mapa.created_at + 1, poslednyRiadok - 1, 1).getValues();
-      var rozdelene = stare.map(function (r) {
-        var casti = String(r[0]).split(' ');
-        return [naDatum(casti[0] || ''), (casti[1] || '').slice(0, 5)];
-      });
-      sheet.getRange(2, mapa.created_at + 2, rozdelene.length, 2).setValues(rozdelene);
+      var zdroj = sheet.getRange(2, mapa.created_at + 1, poslednyRiadok - 1, 1).getValues();
+      var ciel = sheet.getRange(2, mapa.datum + 1, poslednyRiadok - 1, 1).getValues();
+      var casCiel = sheet.getRange(2, mapa.cas + 1, poslednyRiadok - 1, 1).getValues();
+
+      var doplnene = 0;
+      for (var i = 0; i < zdroj.length; i++) {
+        if (ciel[i][0] !== '' && ciel[i][0] != null) continue;   // už vyplnené
+        var casti = String(zdroj[i][0]).split(' ');
+        ciel[i][0] = naDatum(casti[0] || '');
+        casCiel[i][0] = (casti[1] || '').slice(0, 5);
+        doplnene++;
+      }
+      sheet.getRange(2, mapa.datum + 1, ciel.length, 1).setValues(ciel);
+      sheet.getRange(2, mapa.cas + 1, casCiel.length, 1).setValues(casCiel);
+      console.log('created_at rozdelený na datum a cas v ' + doplnene + ' riadkoch.');
     }
-    console.log('created_at rozdelený na datum a cas.');
     mapa = headerMap(sheet);
   }
 
