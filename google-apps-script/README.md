@@ -105,31 +105,56 @@ prihlasovacej stránky, nasadenie nemá prístup **Ktokoľvek**.
 
 ---
 
-## Čo kam chodí
+## Dve karty v hárku
+
+| Karta | Pre koho | Čo v nej je |
+|---|---|---|
+| **Leady** | personál | dátum, čas, meno, telefón, e-mail, záujem, status |
+| **Technické údaje** | skrytá, pre teba | UTM, click ID, súhlas, zvolená cesta, infúzia, `booking_click_at` |
+
+Karta pre personál je zámerne holá – nič, čo netreba na objednanie. Technické
+údaje sú na druhej, **skrytej** karte, lebo bez `gclid` a `fbc` sa neskôr
+nedajú nahrať reálne rezervácie späť do Google Ads a Mety (pozri
+`docs/tracking-plan.md`, kapitolu o offline konverziách).
+
+Karty sa dajú spárovať cez **telefón** – je v oboch.
+
+Ak technické údaje nechceš vôbec, nastav v `CONFIG`:
+
+```js
+KEEP_TECH_SHEET: false,
+```
+
+### Čo chodí kam
 
 | Kam | Čo |
 |---|---|
-| Hárok `LP leady` | všetko vrátane UTM, click ID, súhlasu, zvolenej cesty a infúzie |
-| E-mail recepcii | meno, telefón, e-mail, ako chce pokračovať, vybraná infúzia, záujem, variant – **žiadne click ID** |
+| Karta Leady | len údaje potrebné na objednanie |
+| Karta Technické údaje | UTM, click ID, súhlas, cesta, infúzia, klik na rezerváciu |
+| E-mail recepcii | meno, telefón, e-mail, ako chce pokračovať, vybraná infúzia, záujem – **žiadne click ID** |
 | dataLayer / GTM | `generate_lead` s `event_id` a `lead_path`, **nikdy nič o záujme ani o infúzii** |
 
-### Nové stĺpce
+Hodnoty z „Čo chcete riešiť?" a názov infúzie sa zlúčia do stĺpca `zaujem`,
+nech to recepcia vidí na jednom mieste.
 
-| Stĺpec | Obsah |
-|---|---|
-| `pokracovanie` | `online` (vyberie si termín sám) alebo `call` (chce zavolať) |
-| `infuzia` | názov infúzie, ak klikol „Mám záujem"; inak prázdne |
-| `booking_click_at` | čas, kedy v stave Úspech klikol na rezerváciu |
+---
 
-`booking_click_at` ti povie, koľko leadov naozaj prešlo do rezervácie. Zapisuje
-sa **prvý** klik, ďalšie ho neprepíšu. Posiela sa cez `navigator.sendBeacon`,
-takže zápis prejde, aj keď človek v tej chvíli odchádza na Apponio.
+## Zjednodušenie staršieho hárku
 
-> **Zápis ide podľa názvov stĺpcov v hlavičke, nie podľa poradia.** Keď si
-> stĺpce presunieš alebo pridáš vlastný (napríklad poznámku), nič sa nerozbije.
+Ak už máš hárok s dvadsiatimi stĺpcami, prerob ho **raz** takto:
 
-Hodnoty z „Čo chcete riešiť?" sa môžu dotýkať údajov o zdraví, preto sú
-nepovinné a nejdú nikam okrem hárku.
+1. **Súbor → Vytvoriť kópiu** – mazanie stĺpcov sa nedá vrátiť späť
+2. V editore vyber funkciu **`simplifySheet`** → **Spustiť**
+
+Čo urobí:
+
+- premenuje kartu `LP leady` na `Leady`
+- prekopíruje technické hodnoty existujúcich riadkov na skrytú kartu
+- rozdelí `created_at` na `datum` (15.10.2026) a `cas` (18:30)
+- odstráni z karty pre personál stĺpce, ktoré tam už nepatria
+- zoradí zvyšné stĺpce do poradia dátum, čas, meno, telefón, e-mail, záujem, status
+
+Spúšťa sa len raz. Pri druhom spustení už nemá čo robiť.
 
 ---
 
@@ -182,7 +207,33 @@ formulára. Rozšír ho:
 | Formulár hlási „nepodarilo sa odoslať" | Otvor `/exec` v prehliadači. Ak nevráti JSON, web app nie je nasadený alebo má zlé oprávnenia. |
 | Riadok nepribudol, ale chyba sa nezobrazila | Odoslal si rýchlejšie ako 2,5 s, alebo je to duplicita do 10 minút. Skús o chvíľu s iným telefónom. |
 | Prázdne UTM stĺpce | Otvoril si stránku bez parametrov. Skús `?utm_source=test&gclid=TEST123`. |
-| Nechodia e-maily | Skontroluj `NOTIFY_EMAIL` a denný limit Apps Scriptu (100 e-mailov/deň pre bežný účet). V editore: **Spustenia** → pozri chyby. |
+| **Nechodia e-maily** | Najčastejšie chýba oprávnenie na odosielanie pošty – pozri postup hneď pod tabuľkou. |
 | Telefón sa v Sheete zobrazuje divne | Zapisujeme ho s apostrofom (`'+421…`), aby ho Sheets nebral ako číslo. To je správne. |
 
 Logy nájdeš v editore Apps Scriptu v sekcii **Spustenia**.
+
+---
+
+## Keď nechodia notifikačné e-maily
+
+Lead sa uloží do hárku aj vtedy, keď sa e-mail nepodarí odoslať – zápis je
+dôležitejší než upozornenie. Chyba teda nie je vidieť na stránke, len v logu.
+
+**Najčastejšia príčina:** keď si skript prvýkrát autorizoval spustením
+`setupSheet`, Google ti dal prístup k tabuľke, ale **nie k odosielaniu pošty**.
+Oprávnenie na `MailApp` sa pýta až vtedy, keď ho nejaká funkcia naozaj použije.
+
+Postup:
+
+1. V editore vyber funkciu **`testNotification`** → **Spustiť**
+2. Ak Google vypýta oprávnenia, **povoľ ich** (*Rozšírené → Prejsť na projekt → Povoliť*)
+3. Pozri výstup v **Denníku vykonávania** – vypíše:
+   - či je `SEND_NOTIFICATION` zapnuté a na akú adresu sa posiela
+   - koľko e-mailov ti dnes ešte zostáva z dennej kvóty
+   - **poslednú chybu pri odosielaní**, ak nejaká bola
+4. Skontroluj schránku **aj priečinok Spam**
+
+Keď testovací e-mail príde, notifikácie fungujú – nasaď novú verziu
+(*Nasadiť → Spravovať nasadenia → Nová verzia*) a odošli skúšobný lead.
+
+Ak test spadne na kvóte, bežný Gmail má limit 100 e-mailov denne.
