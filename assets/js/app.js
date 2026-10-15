@@ -145,7 +145,7 @@
       if (chip) chip.checked = true;
     }
 
-    /* TODO (fáza 4): dataLayer.push({ event: 'lp_variant_view', … }) */
+    /* Udalosť lp_variant_view posiela trackVariantView() nižšie. */
   }
 
 
