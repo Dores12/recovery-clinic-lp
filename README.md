@@ -9,7 +9,7 @@ Súbory sa nahrajú na hosting a stránka beží.
 | **Repozitár** | [Dores12/recovery-clinic-lp](https://github.com/Dores12/recovery-clinic-lp) |
 | **Vetvy** | `main` = produkcia · `dev` = vývoj |
 | **Hosting** | Netlify (postup nižšie) |
-| **Backend formulára** | Google Sheets + Apps Script |
+| **Backend formulára** | Google Sheets (karta *Leady* pre personál + skrytá *Technické údaje*) + Apps Script |
 | **Meranie** | vlastný GTM kontajner len pre LP – **TODO: doplniť ID** (teraz `GTM-XXXXXXX`) |
 
 ---
