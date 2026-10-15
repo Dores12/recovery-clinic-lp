@@ -985,16 +985,22 @@ p:last-child { margin-bottom: 0; }
   }
 }
 
-.hero__eyebrow { margin-bottom: 20px; }
-.hero h1 { margin-bottom: 18px; }
-.hero__sub { margin-bottom: 20px; color: var(--c-text); }
+.hero__eyebrow { margin-bottom: 18px; }
+.hero h1 { margin-bottom: 14px; }
+.hero__sub { margin-bottom: 18px; color: var(--c-text); }
+
+@media (min-width: 1024px) {
+  .hero__eyebrow { margin-bottom: 20px; }
+  .hero h1 { margin-bottom: 18px; }
+  .hero__sub { margin-bottom: 20px; }
+}
 
 /* Pilulka so zľavou – zľava platí pre každého nového klienta */
 .hero__discount {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 26px;
+  margin-bottom: 20px;
   padding: 12px 20px;
   border: 1.5px solid var(--c-blue);
   border-radius: var(--r-sm);
@@ -1008,7 +1014,7 @@ p:last-child { margin-bottom: 0; }
 
 /* Zoznam benefitov */
 .hero__benefits {
-  margin: 0 0 28px;
+  margin: 0 0 22px;
   padding: 0;
   list-style: none;
   display: grid;
