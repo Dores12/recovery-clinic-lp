@@ -37,6 +37,10 @@ Tento návod ťa prevedie nasadením. Celé to zaberie asi 15 minút.
 4. V Sheete pribudne karta **`LP leady`** s hlavičkou, rozbaľovacím zoznamom
    v stĺpci `status` a farebným zvýraznením.
 
+> `setupSheet()` sa dá spustiť aj opakovane. Na existujúcom hárku **doplní len
+> chýbajúce stĺpce** a existujúce dáta nechá tak – takto si doplníš nové stĺpce,
+> keď ich v kóde pribudne.
+
 ## 4. Nasaď web app
 
 1. Vpravo hore **Nasadiť → Nové nasadenie**.
@@ -78,14 +82,26 @@ formEndpoint: 'https://script.google.com/macros/s/AKfyc.../exec',
 
 ## Zmena kódu po nasadení
 
-Keď v `Code.gs` niečo upravíš:
+Keď v `Code.gs` niečo upravíš, **nasaď novú verziu existujúceho nasadenia** –
+nikdy nie nové nasadenie:
 
 **Nasadiť → Spravovať nasadenia** → ceruzka pri existujúcom nasadení →
 *Verzia:* `Nová verzia` → **Nasadiť**.
 
 URL ostane rovnaká, takže v `config.js` sa nič nemení.
-Ak namiesto toho urobíš „Nové nasadenie", dostaneš **inú URL** a formulár
-bude ďalej posielať na starú.
+
+> Ak namiesto toho urobíš **Nové nasadenie**, dostaneš **inú URL**. Formulár
+> bude ďalej posielať na starú, tá pobeží na starom kóde a ty budeš hľadať,
+> prečo sa zmena neprejavila. Stalo sa to aj pri prvom nasadení – pozor na to.
+
+Po každej zmene over, že endpoint stále odpovedá:
+
+```bash
+curl -sL "URL_KONCIACA_NA_EXEC"
+```
+
+Musí vrátiť `{"ok":true,"service":"recovery-lp"}`. Ak dostaneš HTML
+prihlasovacej stránky, nasadenie nemá prístup **Ktokoľvek**.
 
 ---
 
@@ -93,9 +109,24 @@ bude ďalej posielať na starú.
 
 | Kam | Čo |
 |---|---|
-| Hárok `LP leady` | všetko vrátane UTM, click ID a súhlasu |
-| E-mail recepcii | meno, telefón, e-mail, záujem, variant – **žiadne click ID** |
-| dataLayer / GTM | `generate_lead` s `event_id`, **nikdy nič o záujme** |
+| Hárok `LP leady` | všetko vrátane UTM, click ID, súhlasu, zvolenej cesty a infúzie |
+| E-mail recepcii | meno, telefón, e-mail, ako chce pokračovať, vybraná infúzia, záujem, variant – **žiadne click ID** |
+| dataLayer / GTM | `generate_lead` s `event_id` a `lead_path`, **nikdy nič o záujme ani o infúzii** |
+
+### Nové stĺpce
+
+| Stĺpec | Obsah |
+|---|---|
+| `pokracovanie` | `online` (vyberie si termín sám) alebo `call` (chce zavolať) |
+| `infuzia` | názov infúzie, ak klikol „Mám záujem"; inak prázdne |
+| `booking_click_at` | čas, kedy v stave Úspech klikol na rezerváciu |
+
+`booking_click_at` ti povie, koľko leadov naozaj prešlo do rezervácie. Zapisuje
+sa **prvý** klik, ďalšie ho neprepíšu. Posiela sa cez `navigator.sendBeacon`,
+takže zápis prejde, aj keď človek v tej chvíli odchádza na Apponio.
+
+> **Zápis ide podľa názvov stĺpcov v hlavičke, nie podľa poradia.** Keď si
+> stĺpce presunieš alebo pridáš vlastný (napríklad poznámku), nič sa nerozbije.
 
 Hodnoty z „Čo chcete riešiť?" sa môžu dotýkať údajov o zdraví, preto sú
 nepovinné a nejdú nikam okrem hárku.
