@@ -209,7 +209,7 @@ A tieto musia fungovať (**200**): `/`, `/404.html`, `/robots.txt`,
 Lighthouse, **mobil**, režim inkognito, **proti nasadenej stránke** (nie localhost
 – lokálny `http.server` nevie gzip ani cache hlavičky a výsledok podhodnotí).
 
-- [ ] Performance ≥ 95 (kolíše 93–95 podľa GTM – pusti 3× a ber medián)
+- [ ] Performance ≥ 95 (kolíše podľa GTM – pusti 3× a ber medián)
 - [ ] Accessibility ≥ 95
 - [ ] Best Practices ≥ 95
 - [ ] CLS < 0,05

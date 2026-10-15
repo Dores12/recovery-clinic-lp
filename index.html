@@ -571,15 +571,16 @@
     <!-- Fotka lounge. Pri výmene zachovaj pomer strán 13:16 (520×640, 1040×1280)
          a obe prípony – WebP je hlavné, JPG je záloha pre staré prehliadače.
 
-         Zámerne BEZ loading="lazy": je to jediná fotka na stránke (35 kB
-         vo WebP) a pri skoku na sekciu – napríklad z odkazu s kotvou –
-         sa odložené načítanie nemusí spustiť a ostal by prázdny rámček. -->
+         Zámerne BEZ loading="lazy": pri skoku na sekciu – napríklad z odkazu
+         s kotvou – sa odložené načítanie nemusí spustiť a ostal by prázdny
+         rámček. Namiesto toho fetchpriority="low", aby sa fotka nenačítavala
+         súbežne s CSS a fontmi a nezdržiavala prvé vykreslenie. -->
     <picture class="split__photo">
       <source type="image/webp"
               srcset="assets/img/lounge-520.webp 1x, assets/img/lounge-1040.webp 2x">
       <img src="assets/img/lounge-520.jpg"
            srcset="assets/img/lounge-520.jpg 1x, assets/img/lounge-1040.jpg 2x"
-           width="520" height="640" decoding="async"
+           width="520" height="640" decoding="async" fetchpriority="low"
            alt="Lounge kliniky – dve béžové masážne kreslá pri drevenej stene s podsvieteným logom Recovery Clinic a stojanmi na infúzie">
     </picture>
 
