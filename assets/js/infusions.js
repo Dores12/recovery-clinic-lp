@@ -26,7 +26,7 @@
    Zoznam konkrétnych zakázaných výrazov je v docs/qa-checklist.md
    (tá sa na web nenahráva).
 
-   TODO: overiť ceny v Apponiu (hlavne Double glutation).
+   TODO: overiť ceny v Apponiu.
    ========================================================================== */
 
 window.RC_INFUSIONS = {
@@ -99,11 +99,7 @@ window.RC_INFUSIONS = {
       popis: 'Antioxidant glutatión s vitamínom C pre vitalitu a zdravý vzhľad pleti.',
       preKoho: 'keď chcete podporiť pleť a vitalitu zvnútra',
       cena: '139 €',
-      cenaPovodna: '179 €',
-      hlavna: 3,
-      /* Zatiaľ nevieme, či sa 20 % sčítava s akciovou cenou – kým to
-         klinika nepotvrdí, karta ukazuje len 139 € (bežne 179 €). */
-      zlavaPlati: false
+      hlavna: 3
     },
     {
       nazov: 'Double glutation',

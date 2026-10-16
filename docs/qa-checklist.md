@@ -63,7 +63,7 @@ rg -i "pain killer|acute|pms|vertigo|tetánia|chronická únava|stop stress|bole
 - [ ] Filtre Všetky / Imunita / Energia / Beauty / Šport / Po oslave filtrujú
       správne a aktívny má tmavé pozadie
 - [ ] Filtre sa dajú prejsť klávesnicou
-- [ ] Glutation má prečiarknutú pôvodnú cenu 179 € a aktuálnu 139 €
+- [ ] Každá karta ukazuje prečiarknutú pôvodnú cenu a pod ňou cenu po zľave
 - [ ] Na mobile sa filtre dajú posunúť do strany a zoznam je v jednom stĺpci
 
 ## 5. „Mám záujem"
@@ -226,7 +226,7 @@ Lighthouse, **mobil**, režim inkognito, **proti nasadenej stránke** (nie local
 - [ ] `config.js` → `siteUrl` je skutočná doména
 - [ ] `index.html` → doména doplnená v **canonical, og:url a JSON-LD**
 - [ ] `og-image.jpg` nahradil dočasnú fotku z WP webu
-- [ ] Ceny v `infusions.js` overené v Apponiu (hlavne Double glutation)
+- [ ] Ceny v `infusions.js` overené v Apponiu
 - [ ] Doména je overená v Meta Business Manageri
 - [ ] Doména je v GA4 medzi cross-domain doménami
 - [ ] Stránka odoslaná z `dev` do `main` a Netlify ju nasadil

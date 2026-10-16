@@ -62,7 +62,7 @@ Základ stránky je dobrý. Ponuka je hneď hore, formulár je krátky, platí s
 | FAQ | bez otázok o príprave a parkovaní, návšteva vo dvojici áno | Sekcia 10. |
 | H1 challenger | ísť do testu | Fáza 2, test č. 1 (sekcia 15). |
 
-**Otvorené:** Sčítava sa 20 % s akciovou cenou Glutationu (139 € namiesto 179 €)? Kým klinika neodpovie, karta Glutationu ukazuje len „139 € (bežne 179 €)“ bez ďalšej ceny po zľave.
+~~**Otvorené:** Sčítava sa 20 % s akciovou cenou Glutationu?~~ **Vyriešené 16. 10. 2026:** 139 € je bežná cena, žiadna akcia neprebieha. Zľava 20 % na Glutation platí, karta ukazuje 111,20 €.
 
 > **Prečo je pravidlo „len cez formulár“ dobré pre konverziu:** formulár sa stáva jediným spôsobom, ako zľavu získať. To je najsilnejší motivátor na jeho vyplnenie. Zároveň Meta uvidí Lead pri každom, kto o zľavu stojí, a kampane sa učia na správnom signáli.
 > **Over mimo LP:** WP web ani Apponio nesmú sľubovať 20 % všetkým novým klientom. Inak si ponuka bude protirečiť naprieč webmi.
@@ -468,7 +468,6 @@ Ak to tak ešte nie je, nad formulárom zobraziť „Vybraná infúzia: Imunity 
 
 ## 16. Čo ešte potrebujem od kliniky
 
-- [ ] Sčítava sa 20 % s akciovou cenou Glutationu?
 - [ ] Hodnotenie a počet recenzií na Google a odkaz na profil
 - [ ] 2–3 ďalšie skutočné recenzie (s iniciálkou priezviska)
 - [ ] Sú masážne kreslo, Netflix a občerstvenie v cene?
