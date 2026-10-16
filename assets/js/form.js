@@ -5,7 +5,7 @@
 
    Dôležité pravidlá:
    - Konverzia sa meria AŽ po úspešnom zápise na serveri, nikdy po kliknutí.
-   - Hodnoty chipov („Čo chcete riešiť?") sú citlivé údaje – idú výhradne
+   - Hodnoty chipov („Čo vás zaujíma?") sú citlivé údaje – idú výhradne
      do Google Sheetu. Nikdy do dataLayeru, nikdy do URL.
    - Ak je v config.js prázdny formEndpoint, formulár beží v testovacom
      režime: nič sa neodosiela a nad formulárom svieti žltý pruh.
@@ -38,8 +38,7 @@
     email: document.getElementById('f-email'),
     /* Voľba „Ako chcete pokračovať?" je skupina dvoch rádiobutonov.
        V fields držíme prvý z nich – naň smeruje focus a aria-describedby. */
-    path: document.getElementById('p-online'),
-    consent: document.getElementById('f-consent')
+    path: document.getElementById('p-online')
   };
 
   var pathRadios = Array.prototype.slice.call(form.querySelectorAll('input[name="lead_path"]'));
@@ -54,6 +53,13 @@
   /* ======================================================================
      1. Pomocníci
      ====================================================================== */
+
+  /** Mená a e-maily vkladáme do innerHTML, preto ich ošetríme. */
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
 
   function errorBoxFor(input) {
     var id = input.getAttribute('aria-describedby');
@@ -266,19 +272,11 @@
     return { ok: true, value: selectedPath() };
   }
 
-  function validateConsent() {
-    if (!fields.consent.checked) {
-      return { ok: false, message: 'Na odoslanie potrebujeme váš súhlas.' };
-    }
-    return { ok: true, value: true };
-  }
-
   var VALIDATORS = {
     name: validateName,
     phone: validatePhone,
     email: validateEmail,
-    path: validatePath,
-    consent: validateConsent
+    path: validatePath
   };
 
   /** Skontroluje jedno pole a vypíše/zmaže chybu. */
@@ -303,9 +301,9 @@
   function submitLabelText() {
     var percent = (CONFIG.discount && CONFIG.discount.percent) || 20;
     var path = selectedPath();
-    if (path === 'online') return 'Získať zľavu a vybrať termín';
-    if (path === 'call') return 'Získať zľavu a konzultáciu';
-    return 'Získať zľavu ' + percent + ' %';
+    if (path === 'online') return 'Chcem zľavu a vybrať termín';
+    if (path === 'call') return 'Chcem zľavu a zavolajte mi';
+    return 'Chcem zľavu ' + percent + ' %';
   }
 
   function updateSubmitLabel() {
@@ -317,23 +315,29 @@
     var input = fields[key];
     if (key === 'path') return;   // rádiobutony riešime nižšie
 
-    var eventName = key === 'consent' ? 'change' : 'blur';
-    input.addEventListener(eventName, function () { checkField(key); });
-
-    if (key !== 'consent') {
-      input.addEventListener('input', function () {
-        if (input.getAttribute('aria-invalid') === 'true') checkField(key);
-      });
-    }
+    input.addEventListener('blur', function () { checkField(key); });
+    input.addEventListener('input', function () {
+      if (input.getAttribute('aria-invalid') === 'true') checkField(key);
+    });
   });
+
+  var sameEmailHint = form.querySelector('[data-same-email-hint]');
+
+  /** Pri voľbe „online" pripomenieme rovnaký e-mail – bez neho recepcia
+      rezerváciu nespáruje a zľavu nemá k čomu priradiť. */
+  function updateSameEmailHint() {
+    if (sameEmailHint) sameEmailHint.hidden = selectedPath() !== 'online';
+  }
 
   pathRadios.forEach(function (radio) {
     radio.addEventListener('change', function () {
       checkField('path');
       updateSubmitLabel();
+      updateSameEmailHint();
     });
   });
   updateSubmitLabel();
+  updateSameEmailHint();
 
 
   /* ======================================================================
@@ -440,7 +444,7 @@
       page_url: window.location.href,
       referrer: document.referrer || '',
       user_agent: navigator.userAgent,
-      company: form.querySelector('#f-company').value,   // honeypot
+      rc_hp: form.querySelector('#f-rc-hp').value,   // honeypot
       elapsed_ms: Date.now() - loadedAt
     };
 
@@ -497,37 +501,50 @@
      7. Stav Úspech – nahradí obsah karty
      ====================================================================== */
 
-  function showSuccess(firstName, leadPath, leadId) {
+  function showSuccess(firstName, leadPath, leadId, email) {
     var percent = (CONFIG.discount && CONFIG.discount.percent) || 20;
     var booking = CONFIG.bookingUrl || '#';
+    var telefon = CONFIG.phone || '';
+    var telefonText = CONFIG.phoneDisplay || telefon;
     var sipka = '<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>';
 
-    /* Poznámka je rovnaká pre obe cesty – bez nej by sme zľavu nevedeli priradiť */
-    var poznamka = '<p class="body-s muted form-success__note">Pri rezervácii použite rovnaký '
-      + 'e-mail alebo telefón, aby sme vám zľavu priradili. Zľavu uplatníte pri platbe '
-      + 'na prevádzke.</p>';
+    /* Veta o e-maile sa zobrazí, len kým scenár v Make naozaj beží.
+       Prázdne emailEta v configu ju vypne – sľubovať e-mail, ktorý nepríde,
+       je horšie než nesľúbiť nič. */
+    var eta = CONFIG.emailEta
+      ? 'Potvrdenie zľavy vám príde e-mailom ' + CONFIG.emailEta + '. '
+      : '';
 
-    var telo;
+    var nadpis, telo, poznamka;
+
     if (leadPath === 'online') {
-      /* Človek si chce vybrať termín sám – rezervácia je hlavné tlačidlo */
+      /* Človek si chce vybrať termín sám – rezervácia je hlavné tlačidlo.
+         Zopakovaný e-mail pomôže zadať v Apponiu rovnaké údaje a všimnúť
+         si prípadný preklep. */
+      nadpis = 'Hotovo, ' + firstName + '! Zľava ' + percent + ' % je zapísaná na vaše meno.';
       telo = ''
-        + '<p class="body-m form-success__text">Zľavu ' + percent + ' % na prvú infúziu máte '
-        +   'zapísanú. Teraz si vyberte termín, ktorý vám vyhovuje.</p>'
+        + '<p class="body-m form-success__text">Teraz si vyberte termín. Pri rezervácii '
+        +   'zadajte rovnaký e-mail (<b>' + escapeHtml(email) + '</b>) – podľa neho vám '
+        +   'zľavu odrátame pri platbe.</p>'
         + '<a class="btn btn--primary btn--block" href="' + booking + '" data-success-booking>'
-        +   '<span>Vybrať termín v rezervácii</span>' + sipka
-        + '</a>'
-        + poznamka;
+        +   '<span>Vybrať termín online</span>' + sipka
+        + '</a>';
+      poznamka = eta + 'Radšej telefonicky? Zavolajte <a href="tel:' + telefon + '">'
+        + telefonText + '</a>.';
     } else {
-      /* Človek chce, aby sme zavolali – rezervácia je len doplnková možnosť */
+      /* Ľudia často nezdvíhajú neznáme čísla – preto číslo ukážeme
+         a vyzveme, nech si ho uložia. */
+      nadpis = 'Ďakujeme, ' + firstName + '! Zľava ' + percent + ' % je zapísaná na vaše meno.';
       telo = ''
-        + '<p class="body-m form-success__text">Zdravotník sa vám ozve do 24 hodín. Zľavu '
-        +   percent + ' % na prvú infúziu máte zapísanú – uplatníte ju pri platbe na prevádzke.</p>'
+        + '<p class="body-m form-success__text">Ozveme sa vám z čísla '
+        +   '<b><a href="tel:' + telefon + '">' + telefonText + '</a></b>. '
+        +   'Uložte si ho, aby ste hovor nezmeškali.</p>'
         + '<div class="form-success__divider"></div>'
         + '<p class="form-success__nudge">Nechcete čakať?</p>'
         + '<a class="btn btn--secondary btn--block" href="' + booking + '" data-success-booking>'
         +   '<span>Vybrať termín online</span>' + sipka
-        + '</a>'
-        + poznamka;
+        + '</a>';
+      poznamka = eta + 'Otváracie hodiny: ' + (CONFIG.hours || '');
     }
 
     card.innerHTML =
@@ -535,8 +552,9 @@
         '<div class="form-success__icon" aria-hidden="true">' +
           '<svg class="ico"><use href="#i-check"/></svg>' +
         '</div>' +
-        '<h3 tabindex="-1" data-success-heading>Ďakujeme, ' + firstName + '!</h3>' +
+        '<h3 tabindex="-1" data-success-heading>' + escapeHtml(nadpis) + '</h3>' +
         telo +
+        '<p class="body-s muted form-success__note">' + poznamka + '</p>' +
       '</div>';
 
     /* Focus na nadpis, nech čítačka oznámi zmenu. URL nemeníme – zdravotné
@@ -633,7 +651,7 @@
     errorBox.hidden = true;
 
     /* --- Validácia všetkých polí --- */
-    var order = ['name', 'phone', 'email', 'path', 'consent'];
+    var order = ['name', 'phone', 'email', 'path'];
     var values = {};
     var firstInvalid = null;
     var errorCount = 0;
@@ -673,7 +691,7 @@
     if (!endpoint) {
       window.setTimeout(function () {
         pushEvent('generate_lead', leadEventData(leadId, payload, values, true));
-        showSuccess(values.name.split(' ')[0], payload.lead_path, leadId);
+        showSuccess(values.name.split(' ')[0], payload.lead_path, leadId, values.email);
       }, 800);
       return;
     }
@@ -684,7 +702,7 @@
       /* Konverziu hlásime až teraz – po úspešnom zápise do Sheetu */
       pushEvent('generate_lead', leadEventData(leadId, payload, values, false));
 
-      showSuccess(values.name.split(' ')[0], payload.lead_path, leadId);
+      showSuccess(values.name.split(' ')[0], payload.lead_path, leadId, values.email);
     }).catch(function (error) {
       isSubmitting = false;
       setBusy(false);

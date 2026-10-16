@@ -27,6 +27,10 @@ var CONFIG = {
   /** Skrytá karta s technickými údajmi. */
   TECH_SHEET_NAME: 'Technické údaje',
 
+  /** Karta, kam padá zachytený spam. Nikdy nie medzi skutočné leady –
+   *  Make by takému „leadu" poslal e-mail so zľavou. */
+  SPAM_SHEET_NAME: 'Spam',
+
   /**
    * false = technické údaje sa nikam nezapisujú.
    * Necháva sa true: bez gclid a fbc sa neskôr nedajú nahrať reálne
@@ -44,8 +48,10 @@ var CONFIG = {
   /** Rovnaký telefón alebo e-mail v tomto okne = duplicita, nezapíše sa. */
   DEDUPE_MINUTES: 10,
 
-  /** Odoslanie rýchlejšie ako toto je takmer isto robot. */
-  MIN_ELAPSED_MS: 2500,
+  /** Odoslanie rýchlejšie ako toto je takmer isto robot.
+   *  Vyššia hodnota už zahadzuje aj rýchlych ľudí, ktorí majú údaje
+   *  v automatickom vypĺňaní prehliadača. */
+  MIN_ELAPSED_MS: 2000,
 
   /** Časové pásmo pre dátum a čas. */
   TIMEZONE: 'Europe/Bratislava'
@@ -68,6 +74,9 @@ var COLUMNS = ['datum', 'cas', 'meno', 'telefon', 'email', 'zaujem', 'status'];
  * spoločné údaje s kartou pre personál, takže sa dá cez telefón spárovať,
  * ktorý lead skončil ako CONVERTED, a nahrať ho do reklamných systémov.
  */
+/** Stĺpce karty so spamom – len toľko, aby sa dalo overiť, čo sa zachytilo. */
+var SPAM_COLUMNS = ['datum', 'cas', 'dovod', 'meno', 'telefon', 'email', 'lead_id'];
+
 var TECH_COLUMNS = [
   'datum', 'cas', 'telefon', 'lead_id',
   'pokracovanie', 'infuzia', 'booking_click_at',
@@ -115,12 +124,12 @@ function doPost(e) {
     /* --- Pasce na roboty ---------------------------------------------------
        Keď sa chytí robot, tvárime sa, že všetko prebehlo v poriadku.
        Keby dostal chybu, skúsil by to inak. */
-    if (data.company) {
-      console.log('Honeypot vyplnený – zahadzujem, lead_id=' + data.lead_id);
+    if (data.rc_hp) {
+      zapisSpam(data, 'honeypot');
       return jsonResponse({ ok: true, lead_id: data.lead_id });
     }
     if (typeof data.elapsed_ms === 'number' && data.elapsed_ms < CONFIG.MIN_ELAPSED_MS) {
-      console.log('Príliš rýchle odoslanie (' + data.elapsed_ms + ' ms) – zahadzujem');
+      zapisSpam(data, 'rýchle odoslanie (' + data.elapsed_ms + ' ms)');
       return jsonResponse({ ok: true, lead_id: data.lead_id });
     }
 
@@ -243,6 +252,38 @@ function appendLead(data, name, phone, email) {
   });
 
   appendByHeader(getSheet(CONFIG.TECH_SHEET_NAME), tech);
+}
+
+/**
+ * Zachytený spam ide na vlastnú kartu, nikdy medzi leady.
+ * Keby skončil v karte Leady, Make by mu poslal e-mail so zľavou.
+ *
+ * Oplatí sa ju občas prejsť: keby tam pribúdali reálne vyzerajúce
+ * záznamy, znamená to, že pasca chytá aj ľudí.
+ */
+function zapisSpam(data, dovod) {
+  console.log('Spam (' + dovod + '), lead_id=' + data.lead_id);
+  try {
+    var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = spreadsheet.getSheetByName(CONFIG.SPAM_SHEET_NAME);
+    if (!sheet) {
+      sheet = pripravHarok(CONFIG.SPAM_SHEET_NAME, SPAM_COLUMNS, true);
+      sheet.hideSheet();
+    }
+    var teraz = new Date();
+    appendByHeader(sheet, {
+      datum: Utilities.formatDate(teraz, CONFIG.TIMEZONE, 'd.M.yyyy'),
+      cas: Utilities.formatDate(teraz, CONFIG.TIMEZONE, 'HH:mm'),
+      dovod: dovod,
+      meno: String(data.name || ''),
+      telefon: "'" + String(data.phone || ''),
+      email: String(data.email || ''),
+      lead_id: data.lead_id || ''
+    });
+  } catch (err) {
+    /* Zápis spamu nikdy nesmie zhodiť spracovanie – len zalogujeme */
+    console.error('Spam sa nepodarilo zapísať: ' + err);
+  }
 }
 
 /**
@@ -457,6 +498,9 @@ function setupSheet() {
     tech.hideSheet();
   }
 
+  var spam = pripravHarok(CONFIG.SPAM_SHEET_NAME, SPAM_COLUMNS, true);
+  spam.hideSheet();
+
   console.log('Hotovo. Ak máš starý hárok s technickými stĺpcami, '
     + 'spusti ešte simplifySheet().');
 }
@@ -539,7 +583,7 @@ function nastavStatus(sheet) {
 function nastavSirky(sheet, jeTechnicka) {
   var mapa = headerMap(sheet);
   var sirky = jeTechnicka
-    ? [['datum', 90], ['cas', 60], ['telefon', 130], ['lead_id', 280]]
+    ? [['datum', 90], ['cas', 60], ['telefon', 130], ['dovod', 200], ['lead_id', 280]]
     : [['datum', 100], ['cas', 70], ['meno', 190], ['telefon', 140],
        ['email', 230], ['zaujem', 260], ['status', 140]];
 

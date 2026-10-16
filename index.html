@@ -10,8 +10,9 @@
   <!-- ===== SEO a zdieľanie ================================================
        POZOR: meta tagy sa čítajú bez JavaScriptu, takže doménu sem treba
        doplniť RUČNE – nedá sa načítať z config.js.
-       TODO: domena – nahraď https://TODO-domena.sk skutočnou doménou
-       na všetkých 4 miestach nižšie (canonical, og:url, og:image, JSON-LD). -->
+       Zatiaľ je tu náhľadová doména z Netlify.
+       TODO: domena – po pripojení vlastnej domény ju nahraď na všetkých
+       4 miestach nižšie (canonical, og:url, og:image, JSON-LD). -->
 
   <!-- Stránka je čisto pre PPC. Organické pozície má vlastniť hlavný web
        bratislava.recovery-clinic.sk – indexovaná LP by s ním súperila
@@ -19,7 +20,7 @@
        Reklamné systémy (Google AdsBot, Meta) stránku prečítajú aj tak.
        Ak by sa klient rozhodol inak, zmeň na: content="index, follow". -->
   <meta name="robots" content="noindex, follow">
-  <link rel="canonical" href="https://TODO-domena.sk/">
+  <link rel="canonical" href="https://recoverybratislava.netlify.app/">
 
   <meta name="theme-color" content="#142947">
 
@@ -28,9 +29,9 @@
   <meta property="og:site_name" content="Recovery Clinic Bratislava">
   <meta property="og:title" content="Dobite si imunitu aj energiu – IV infúzie v Bratislave">
   <meta property="og:description" content="Poradíme s výberom infúzie a na prvú máte zľavu 20 % – aj pri rezervácii online. Masážne kreslo, Netflix a lekársky dohľad.">
-  <meta property="og:url" content="https://TODO-domena.sk/">
+  <meta property="og:url" content="https://recoverybratislava.netlify.app/">
   <!-- TODO: vyexportovať og-image.jpg 1200×630 z Figmy do assets/img/
-       a prepnúť na https://TODO-domena.sk/assets/img/og-image.jpg
+       a prepnúť na https://recoverybratislava.netlify.app/assets/img/og-image.jpg
        Dovtedy dočasne fotka z hlavného webu kliniky. -->
   <meta property="og:image" content="https://bratislava.recovery-clinic.sk/wp-content/uploads/2024/02/WhatsApp-Image-2024-02-21-at-17.47.06-1.jpeg">
   <meta property="og:image:alt" content="Recovery Clinic Bratislava – podávanie IV infúzie v masážnom kresle">
@@ -45,7 +46,7 @@
     "@context": "https://schema.org",
     "@type": "MedicalClinic",
     "name": "Recovery Clinic Bratislava",
-    "url": "https://TODO-domena.sk/",
+    "url": "https://recoverybratislava.netlify.app/",
     "telephone": "+421948375871",
     "email": "bratislava@recovery-clinic.sk",
     "priceRange": "59 € – 199 €",
@@ -216,7 +217,7 @@
 
       <!-- Len desktop – na mobile konverziu nesie sticky lišta dole -->
       <a class="btn btn--primary btn--sm header__book" href="#formular" data-scroll-form>
-        <span>Získať zľavu <span data-discount>20</span> %</span>
+        <span>Chcem zľavu <span data-discount>20</span> %</span>
       </a>
     </div>
   </div>
@@ -238,8 +239,8 @@
     <div class="hero__text">
       <p class="pill pill--white hero__eyebrow">
         <svg class="ico" aria-hidden="true"><use href="#i-droplet"/></svg>
-        <span class="is-desktop">IV terapia · Bratislava, Prievozská 4/A</span>
-        <span class="is-mobile">IV terapia · Bratislava</span>
+        <span class="is-desktop">Vitamínové infúzie · Prievozská 4/A, Bratislava</span>
+        <span class="is-mobile">Vitamínové infúzie · Bratislava</span>
       </p>
 
       <!-- H1 sa mení podľa ?v= v URL (varianty v config.js).
@@ -247,23 +248,36 @@
       <h1 data-h1>Dobite si <span class="hl">imunitu aj energiu</span> – pohodlne v kresle, pod dohľadom lekára</h1>
 
       <p class="body-l hero__sub" data-sub>
-        <span class="is-desktop">Vitamínové IV infúzie v Bratislave. Nechajte nám kontakt
-          a na prvú infúziu dostanete zľavu <span data-discount>20</span> % – termín si vyberiete
-          online, alebo vám zavoláme a poradíme.</span>
-        <span class="is-mobile">Vitamínové IV infúzie v Bratislave. Nechajte nám kontakt
-          a na prvú infúziu dostanete zľavu <span data-discount>20</span> %.</span>
+        <span class="is-desktop">Vitamíny a minerály priamo do krvi, kým oddychujete
+          v masážnom kresle pri Netflixe. Nechajte kontakt a ako nový klient získate
+          na prvú infúziu zľavu <span data-discount>20</span> % – termín si vyberiete
+          hneď online, alebo vám zavoláme.</span>
+        <span class="is-mobile">Vitamíny a minerály priamo do krvi, kým oddychujete
+          v masážnom kresle. Nechajte kontakt a na prvú infúziu získate zľavu
+          <span data-discount>20</span> %.</span>
       </p>
 
       <!-- Zľava platí pre každého nového klienta, nie je podmienená formulárom -->
+      <!-- Suma v eurách je hmatateľnejšia než percento. Rozpätie dopĺňa
+           infusions-ui.js z cien, aby sedelo aj po ich zmene.
+           Druhý riadok sa na nízkych displejoch skrýva, nech sa na prvú
+           obrazovku zmestia obe tlačidlá. -->
       <p class="hero__discount">
         <svg class="ico" aria-hidden="true"><use href="#i-badge-check"/></svg>
-        <span><b>−<span data-discount>20</span> % na prvú infúziu</b> · pre každého nového klienta</span>
+        <span>
+          <b>−<span data-discount>20</span> % na prvú infúziu</b>
+          <span class="hero__discount-sub">ušetríte <span data-savings-range>11,80 – 39,80 €</span> podľa infúzie</span>
+        </span>
       </p>
 
       <ul class="hero__benefits">
         <li>
           <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>
-          <span>Školený zdravotnícky personál</span>
+          <span>Infúziu podáva zdravotník pod dohľadom lekára</span>
+        </li>
+        <li>
+          <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>
+          <span>So zľavou od <span data-min-discounted>47,20 €</span> · platíte až na mieste, nič vopred</span>
         </li>
         <li>
           <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>
@@ -271,43 +285,39 @@
         </li>
         <li>
           <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>
-          <span>Infúzie od 59 € · platíte až na prevádzke</span>
+          <span>Otvorené aj cez víkend · parkovanie pre klientov</span>
         </li>
       </ul>
 
       <div class="hero__cta">
         <!-- Desktop aj mobil vedú na formulár – do Apponia sa dá dostať až
              zo stavu Úspech, aby každá rezervácia prešla cez lead. -->
-        <a class="btn btn--primary is-desktop-btn" href="#formular" data-scroll-form>
-          <span>Získať zľavu <span data-discount>20</span> %</span>
+        <!-- Jedna akcia = jeden text na celej stránke -->
+        <a class="btn btn--primary" href="#formular" data-scroll-form>
+          <span>Chcem zľavu <span data-discount>20</span> %</span>
           <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
         </a>
-        <a class="btn btn--primary is-mobile-btn" href="#formular" data-scroll-form>
-          <span>Získať zľavu <span data-discount>20</span> % a termín</span>
-          <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        <a class="btn btn--secondary" href="#infuzie">
+          Pozrieť infúzie a ceny
         </a>
 
-        <!-- Mobil: druhé tlačidlo vedie na ponuku infúzií -->
-        <a class="btn btn--secondary is-mobile-btn" href="#infuzie">
-          Pozrieť ponuku infúzií
-        </a>
-
-        <!-- Desktop: namiesto druhého tlačidla telefón -->
         <p class="hero__cta-note">
-          alebo zavolajte<br>
+          alebo zavolajte
           <a href="tel:+421948375871" data-phone-link data-track="phone_click" data-location="hero">
             <span data-phone-display>+421 948 375 871</span>
           </a>
+          <span class="hero__hours" data-hours>Po–Pi 10:00–18:00 · So–Ne 9:00–15:00</span>
         </p>
       </div>
 
-      <!-- Pás dôvery – mobilná verzia (pilulky). Desktopová je samostatná sekcia nižšie. -->
+      <!-- Dolný pás dôvery pri formulári: odstraňuje posledné „čo ak".
+           Mobilná verzia, desktopová je pod formulárom v samostatnej sekcii. -->
       <div class="hero__trust">
         <ul>
-          <li><svg class="ico" aria-hidden="true"><use href="#i-shield-check"/></svg>Lekársky dohľad</li>
-          <li><svg class="ico" aria-hidden="true"><use href="#i-wallet"/></svg>Platba na mieste</li>
+          <li><svg class="ico" aria-hidden="true"><use href="#i-wallet"/></svg>Platíte až na mieste</li>
+          <li><svg class="ico" aria-hidden="true"><use href="#i-shield-check"/></svg>Poradenstvo zdarma</li>
           <li><svg class="ico" aria-hidden="true"><use href="#i-square-parking"/></svg>Parkovanie</li>
-          <li><svg class="ico" aria-hidden="true"><use href="#i-hospital"/></svg>Zdravotnícke zariadenie</li>
+          <li hidden data-reschedule><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg><span data-reschedule-text></span></li>
         </ul>
       </div>
     </div>
@@ -321,12 +331,16 @@
           TESTOVACÍ REŽIM – údaje sa nikam neposlali
         </p>
 
-        <p class="pill form-card__badge">Zľava <span data-discount>20</span> % na prvú infúziu</p>
-        <h2 class="h3">Získajte zľavu a vyberte si termín</h2>
-        <p class="body-s muted form-card__intro">
-          Nechajte nám kontakt a na prvú infúziu dostanete zľavu <span data-discount>20</span> %.
-          Potom si vyberiete termín online, alebo vám zavoláme a poradíme.
-        </p>
+        <p class="pill form-card__badge">Zaberie to 30 sekúnd</p>
+        <h2 class="h3">Zľava <span data-discount>20</span> % na prvú infúziu – stačí meno a kontakt</h2>
+
+        <!-- Najväčšia brzda formulára je neistota, čo bude nasledovať.
+             Keď človek vidí celý postup, vypĺňa sa mu ľahšie. -->
+        <ol class="form-steps">
+          <li>Vyplníte meno a kontakt.</li>
+          <li>Zľavu vám zapíšeme na meno a pošleme potvrdenie e-mailom.</li>
+          <li>Termín si vyberiete hneď online, alebo vám zavoláme a poradíme s výberom.</li>
+        </ol>
 
         <form id="lead-form" novalidate>
           <div class="field">
@@ -339,16 +353,22 @@
           <div class="field-row">
             <div class="field">
               <label class="field__label" for="f-phone">Telefón <span class="field__req">*</span></label>
-              <input class="input" type="tel" id="f-phone" aria-describedby="e-phone" name="phone" inputmode="tel"
-                     autocomplete="tel" placeholder="09XX XXX XXX" required>
+              <input class="input" type="tel" id="f-phone" aria-describedby="e-phone f-phone-hint" name="phone" inputmode="tel"
+                     autocomplete="tel" placeholder="+421 9xx xxx xxx" required>
               <p class="field__error" id="e-phone"></p>
+              <p class="field__hint" id="f-phone-hint">Len kvôli termínu. Nevoláme s ponukami.</p>
             </div>
 
             <div class="field">
               <label class="field__label" for="f-email">E-mail <span class="field__req">*</span></label>
-              <input class="input" type="email" id="f-email" aria-describedby="e-email" name="email" autocomplete="email"
-                     placeholder="vas@email.sk" required>
+              <input class="input" type="email" id="f-email" aria-describedby="e-email f-email-hint" name="email" autocomplete="email"
+                     placeholder="jana@email.sk" required>
               <p class="field__error" id="e-email"></p>
+              <p class="field__hint" id="f-email-hint">Sem vám pošleme potvrdenie zľavy.</p>
+              <!-- Doplní form.js pri voľbe „Vyberiem si termín online" -->
+              <p class="field__hint field__hint--accent" hidden data-same-email-hint>
+                Pri rezervácii použite rovnaký e-mail – podľa neho vám zľavu odrátame.
+              </p>
             </div>
           </div>
 
@@ -363,6 +383,7 @@
                 <label for="p-online">
                   <svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg>
                   <span>Vyberiem si termín online</span>
+                  <small>voľné termíny uvidíte hneď po odoslaní</small>
                 </label>
               </span>
               <span class="segment">
@@ -371,6 +392,7 @@
                 <label for="p-call">
                   <svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>
                   <span>Zavolajte mi</span>
+                  <small>poradíme s výberom infúzie</small>
                 </label>
               </span>
             </div>
@@ -392,7 +414,7 @@
                Hodnoty sa posielajú LEN do Google Sheetu, nikdy do dataLayeru
                ani do URL (zdravotné údaje). -->
           <fieldset class="chips-wrap">
-            <legend class="field__label">Čo chcete riešiť? <span class="muted">(nepovinné)</span></legend>
+            <legend class="field__label">Čo vás zaujíma? <span class="muted">(nepovinné)</span></legend>
             <div class="chips">
               <span class="chip">
                 <input type="checkbox" id="c-imunita" name="interest" value="imunita">
@@ -400,7 +422,7 @@
               </span>
               <span class="chip">
                 <input type="checkbox" id="c-unava" name="interest" value="unava">
-                <label for="c-unava"><svg class="ico chip__check" aria-hidden="true"><use href="#i-check"/></svg>Únava a energia</label>
+                <label for="c-unava"><svg class="ico chip__check" aria-hidden="true"><use href="#i-check"/></svg>Energia</label>
               </span>
               <span class="chip">
                 <input type="checkbox" id="c-sport" name="interest" value="sport">
@@ -417,19 +439,13 @@
             </div>
           </fieldset>
 
-          <div class="consent">
-            <input type="checkbox" id="f-consent" name="consent" aria-describedby="e-consent" required>
-            <label for="f-consent">
-              Súhlasím so spracovaním osobných údajov na účel spätného kontaktu. <span class="field__req">*</span>
-              <a href="#" data-privacy target="_blank" rel="noopener">Viac informácií</a>
-            </label>
-          </div>
-          <p class="field__error" id="e-consent"></p>
-
-          <!-- Honeypot – pasca na roboty. Človek toto pole nikdy neuvidí. -->
+          <!-- Honeypot – pasca na roboty. Človek toto pole nikdy neuvidí.
+               Nesmie sa volať „company" ani „firma": prehliadač by ho mohol
+               automaticky vyplniť z profilu a skutočný lead by server
+               vyhodnotil ako spam. -->
           <div class="hp" aria-hidden="true">
-            <label for="f-company">Firma</label>
-            <input type="text" id="f-company" name="company" tabindex="-1" autocomplete="off">
+            <label for="f-rc-hp">Ponechajte prázdne</label>
+            <input type="text" id="f-rc-hp" name="rc_hp" tabindex="-1" autocomplete="off">
           </div>
 
           <!-- Chyba odoslania (sieť / server). Doplní ju form.js. -->
@@ -443,11 +459,27 @@
             <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
           </button>
 
+          <!-- Nahrádza povinný checkbox súhlasu: keď človek sám žiada
+               o kontakt, údaje sa spracúvajú na základe predzmluvných
+               vzťahov, nie súhlasu. Checkbox bol len krok navyše. -->
           <p class="form-card__secure">
             <svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg>
-            <span>Údaje použijeme len na spätný kontakt a priradenie zľavy.
-              <span data-discount-terms></span></span>
+            <span>Nič neplatíte vopred. Údaje použijeme len na vybavenie zľavy a termínu.
+              <a href="#" data-privacy target="_blank" rel="noopener">Viac o ochrane údajov</a></span>
           </p>
+
+          <!-- Sociálny dôkaz presne v momente rozhodovania -->
+          <figure class="form-quote">
+            <div class="form-quote__stars" role="img" aria-label="Hodnotenie 5 z 5">
+              <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
+              <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
+              <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
+              <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
+              <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
+            </div>
+            <blockquote>„Pani doktorka so sestričkou boli profesionálne, nápomocné, milé a ľudské.“</blockquote>
+            <figcaption>Zuzana · Google recenzia</figcaption>
+          </figure>
         </form>
 
         <noscript>
@@ -464,15 +496,23 @@
 </section>
 
 
-<!-- ===== PÁS DÔVERY (desktop) ===== -->
+<!-- ===== PÁS DÔVERY (desktop) =================================================
+     Dva pásy majú rôznu úlohu. Tento prvý nesie DÔKAZY – má presvedčiť,
+     že ide o profesionálov. Druhý stojí pri formulári a odstraňuje riziko.
+
+     Hodnotenie z Google sa zobrazí, až keď bude v config.js vyplnené
+     googleRating aj googleReviewCount. Vymyslené číslo na web nepatrí.
+     ============================================================================ -->
 <section class="trust" data-section="dovera">
   <div class="container">
     <ul>
-      <li><svg class="ico" aria-hidden="true"><use href="#i-shield-check"/></svg>Lekársky dohľad</li>
+      <li hidden data-google-rating-wrap>
+        <svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>
+        <span><b data-google-rating></b> na Google · <span data-google-review-count></span> recenzií</span>
+      </li>
+      <li><svg class="ico" aria-hidden="true"><use href="#i-shield-check"/></svg>Pod lekárskym dohľadom</li>
       <li><svg class="ico" aria-hidden="true"><use href="#i-hospital"/></svg>Zdravotnícke zariadenie</li>
-      <li><svg class="ico" aria-hidden="true"><use href="#i-wallet"/></svg>Platba až na prevádzke</li>
-      <li><svg class="ico" aria-hidden="true"><use href="#i-square-parking"/></svg>Parkovanie pre klientov</li>
-      <li><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>Overené recenzie klientov</li>
+      <li><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>Otvorené aj cez víkend</li>
     </ul>
   </div>
 </section>
@@ -492,17 +532,17 @@
       <div class="step">
         <div class="step__badge" aria-hidden="true">1</div>
         <h3>Ozvete sa nám</h3>
-        <p class="body-m">Vyplníte krátky formulár alebo si rovno rezervujete termín online. Zaberie to minútu.</p>
+        <p class="body-m">Nechajte kontakt – zaberie to 30 sekúnd. Zľavu vám zapíšeme na meno a termín si vyberiete hneď online, alebo vám zavoláme.</p>
       </div>
       <div class="step">
         <div class="step__badge" aria-hidden="true">2</div>
         <h3>Poradíme vám</h3>
-        <p class="body-m">Zdravotník sa opýta, čo riešite, a odporučí vhodnú infúziu. Na želanie aj rozbor krvi z kvapky – výsledok do 12 minút.</p>
+        <p class="body-m">Zdravotník sa s vami krátko porozpráva a odporučí infúziu, ktorá sa vám hodí.</p>
       </div>
       <div class="step">
         <div class="step__badge" aria-hidden="true">3</div>
         <h3>Oddychujete</h3>
-        <p class="body-m">Infúziu dostanete v masážnom kresle pri Netflixe a s občerstvením. Počítajte približne s hodinou a pol.</p>
+        <p class="body-m">Infúziu dostanete v masážnom kresle pri Netflixe a s občerstvením. Celá návšteva trvá približne hodinu a pol – väčšinu z toho len oddychujete.</p>
       </div>
     </div>
   </div>
@@ -611,12 +651,12 @@
         <div class="card-usp">
           <div class="card-usp__icon"><svg class="ico" aria-hidden="true"><use href="#i-wind"/></svg></div>
           <h3 class="h4">Oxygenoterapia</h3>
-          <p>Doplnková kyslíková terapia s 90 – 95 % kyslíka.</p>
+          <p>Doplnková kyslíková terapia s 90 – 95 % kyslíka.<span hidden data-oxygen-price></span></p>
         </div>
         <div class="card-usp">
-          <div class="card-usp__icon"><svg class="ico" aria-hidden="true"><use href="#i-test-tube"/></svg></div>
-          <h3 class="h4">Biochémia krvi z kvapky</h3>
-          <p>Výsledok do 12 minút – zistíte, čo telu chýba.</p>
+          <div class="card-usp__icon"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg></div>
+          <h3 class="h4">Otvorené aj cez víkend</h3>
+          <p>Po–Pi 10:00–18:00 · So–Ne 9:00–15:00</p>
         </div>
         <div class="card-usp">
           <div class="card-usp__icon"><svg class="ico" aria-hidden="true"><use href="#i-square-parking"/></svg></div>
@@ -724,39 +764,84 @@
     </div>
 
     <div class="faq__list">
+      <!-- Poradie: najprv peniaze a postup, potom obavy. FAQ otvárajú ľudia
+           tesne pred rozhodnutím a najčastejšie hľadajú „koľko a ako". -->
+
       <details class="faq-item" open>
-        <summary><span>Bolí podanie infúzie?</span></summary>
-        <div class="faq-item__body body-m">Pocítite len krátky vpich, podobne ako pri odbere krvi. Potom už len oddychujete v masážnom kresle.</div>
-      </details>
-
-      <details class="faq-item">
-        <summary><span>Ako dlho návšteva trvá?</span></summary>
-        <div class="faq-item__body body-m">Počítajte približne s hodinou a pol vrátane krátkej konzultácie. Samotná infúzia trvá podľa typu a objemu.</div>
-      </details>
-
-      <details class="faq-item">
-        <summary><span>Je IV terapia bezpečná?</span></summary>
-        <div class="faq-item__body body-m">Infúzie podáva vyškolený zdravotnícky personál pod dohľadom lekára. Pred podaním sa vás opýtame na zdravotný stav.</div>
-      </details>
-
-      <details class="faq-item">
-        <summary><span>Ako uplatním zľavu <span data-discount>20</span> %?</span></summary>
-        <div class="faq-item__body body-m">Vyplňte formulár na tejto stránke. Zľavu máte zapísanú na meno – pri rezervácii použite rovnaký e-mail alebo telefón a zľavu uplatníte pri platbe na prevádzke.</div>
-      </details>
-
-      <details class="faq-item">
-        <summary><span>Potrebujem odporúčanie od lekára?</span></summary>
-        <div class="faq-item__body body-m">Nie. Stačí nám nechať kontakt – termín si vyberiete online alebo vám s výberom poradíme telefonicky.</div>
+        <summary><span>Ako získam zľavu <span data-discount>20</span> %?</span></summary>
+        <div class="faq-item__body body-m">
+          Vyplňte formulár na tejto stránke – zľavu vám zapíšeme na meno a pošleme
+          potvrdenie e-mailom. Pri rezervácii použite rovnaký e-mail alebo telefón
+          a zľavu vám odrátame pri platbe na prevádzke. Platí na prvú infúziu
+          a na všetky infúzie z ponuky. Na darčekové poukážky sa nevzťahuje.
+        </div>
       </details>
 
       <details class="faq-item">
         <summary><span>Ako a kedy zaplatím?</span></summary>
-        <div class="faq-item__body body-m">Platíte až na prevádzke, po rezervácii nič neplatíte vopred.</div>
+        <div class="faq-item__body body-m">
+          Až na prevádzke, vopred neplatíte nič.<span hidden data-payment-methods></span>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary><span>Je podanie infúzie nepríjemné?</span></summary>
+        <div class="faq-item__body body-m">
+          Pocítite len krátky vpich, podobne ako pri odbere krvi. Potom už len
+          oddychujete v masážnom kresle.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary><span>Je IV terapia bezpečná?</span></summary>
+        <div class="faq-item__body body-m">
+          Infúzie podáva vyškolený zdravotnícky personál pod dohľadom lekára.
+          Pred infúziou sa vás opýtame na zdravotný stav a lieky, ktoré
+          užívate.<span hidden data-not-suitable></span>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary><span>Ako dlho návšteva trvá?</span></summary>
+        <div class="faq-item__body body-m">
+          Približne hodinu a pol vrátane krátkej konzultácie – väčšinu času
+          oddychujete v masážnom kresle.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary><span>Prečo infúzia, a nie vitamíny v tabletkách?</span></summary>
+        <div class="faq-item__body body-m">
+          Pri infúzii idú vitamíny a minerály priamo do krvi a neprechádzajú
+          tráviacim traktom. Preto sa dajú podať aj dávky, ktoré by ste
+          v tabletkách neprijali. Ktorá infúzia a dávka sa vám hodí, odporučí
+          zdravotník.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary><span>Potrebujem odporúčanie od lekára?</span></summary>
+        <div class="faq-item__body body-m">
+          Nie. Stačí nám nechať kontakt – termín si vyberiete online alebo vám
+          s výberom poradíme telefonicky.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary><span>Môžeme prísť vo dvojici?</span></summary>
+        <div class="faq-item__body body-m">
+          Áno, pokojne prídite spolu. Zľavu <span data-discount>20</span> % získa
+          každý, kto vyplní formulár, takže ho vyplňte každý zvlášť.
+        </div>
       </details>
 
       <details class="faq-item">
         <summary><span>Môžem infúziu niekomu darovať?</span></summary>
-        <div class="faq-item__body body-m">Áno. Ponúkame darčekové poukážky v hodnote 50 €, 100 € a 150 €. Viac vám povieme telefonicky alebo na prevádzke.</div>
+        <div class="faq-item__body body-m">
+          Áno. Ponúkame darčekové poukážky v hodnote 50 €, 100 € a 150 €. Viac
+          vám povieme telefonicky alebo na prevádzke. Zľava
+          <span data-discount>20</span> % sa na poukážky nevzťahuje.
+        </div>
       </details>
     </div>
   </div>
@@ -769,15 +854,22 @@
 <section class="section final" id="zaver" data-section="zaver">
   <div class="container">
     <img class="final__drop" src="assets/img/favicon.svg" alt="" aria-hidden="true" width="54" height="54" loading="lazy">
-    <h2>Doprajte si chvíľu pre seba.<br>Telo sa vám poďakuje.</h2>
+    <p class="eyebrow eyebrow--on-dark final__eyebrow">Doprajte si chvíľu pre seba</p>
+    <h2>Vaša zľava <span data-discount>20</span> % na prvú infúziu čaká</h2>
     <p class="body-l on-dark-soft final__sub">
-      Nechajte nám kontakt, získajte zľavu <span data-discount>20</span> % na prvú infúziu
-      a vyberte si termín, ktorý vám vyhovuje.
+      Vyplnenie trvá 30 sekúnd. Termín si vyberiete online, alebo vám zavoláme.
+      Platíte až na mieste.
     </p>
+
+    <ul class="final__checks">
+      <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>pod dohľadom lekára</li>
+      <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>masážne kreslo a Netflix</li>
+      <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>otvorené aj cez víkend</li>
+    </ul>
 
     <div class="final__cta">
       <a class="btn btn--on-dark" href="#formular" data-scroll-form>
-        <span>Získať zľavu <span data-discount>20</span> %</span>
+        <span>Chcem zľavu <span data-discount>20</span> %</span>
         <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
       </a>
       <a class="btn btn--outline-dark" href="tel:+421948375871" data-phone-link
@@ -837,7 +929,7 @@
     Zavolať
   </a>
   <a class="btn btn--primary sticky-bar__book" href="#formular" data-scroll-form>
-    <span>Získať zľavu <span data-discount>20</span> %</span>
+    <span>Chcem zľavu <span data-discount>20</span> %</span>
   </a>
 </div>
 
