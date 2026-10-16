@@ -82,7 +82,7 @@ window.RC_CONFIG = {
   emailEta: 'do 2 hodín',
 
   extras: {
-    oxygenPrice: '',          // napr. 'v cene' alebo 'za 15 €'
+    oxygenPrice: 'za 20 €',   // doplnková služba, potvrdené klinikou
     includedInPrice: false,   // true = kreslo, Netflix a občerstvenie sú v cene
     paymentMethods: '',       // napr. 'kartou aj v hotovosti'
     rescheduleText: '',       // napr. 'Termín zmeníte jedným telefonátom'

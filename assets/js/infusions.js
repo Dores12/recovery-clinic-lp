@@ -46,6 +46,16 @@ window.RC_INFUSIONS = {
 
   zoznam: [
     {
+      nazov: 'Vitamín C Max',
+      kategoria: 'Imunita',
+      objem: '500 ml',
+      popis: 'Vysoká dávka vitamínu C na podporu imunity a dodanie energie.',
+      preKoho: 'keď chcete IV terapiu vyskúšať alebo si rýchlo doplniť vitamín C',
+      cena: '59 €',
+      hlavna: 1,
+      popular: true
+    },
+    {
       nazov: 'Imunity Booster',
       kategoria: 'Imunita',
       objem: '500 ml',
@@ -60,16 +70,6 @@ window.RC_INFUSIONS = {
       objem: '500 ml',
       popis: 'Vitamín C, vitamíny skupiny B a vápnik pre silnú imunitu a hydratáciu.',
       cena: '99 €'
-    },
-    {
-      nazov: 'Vitamín C Max',
-      kategoria: 'Imunita',
-      objem: '500 ml',
-      popis: 'Vysoká dávka vitamínu C na podporu imunity a dodanie energie.',
-      preKoho: 'keď chcete IV terapiu vyskúšať alebo si rýchlo doplniť vitamín C',
-      cena: '59 €',
-      hlavna: 1,
-      popular: true
     },
     {
       nazov: 'Life Elixir',
