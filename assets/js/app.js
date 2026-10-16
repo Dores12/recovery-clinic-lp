@@ -99,6 +99,64 @@
     }
 
     setText('[data-year]', new Date().getFullYear());
+
+    applyPendingData();
+  }
+
+
+  /* ======================================================================
+     1b. Údaje, ktoré ešte musí potvrdiť klinika
+
+     Platí jedno pravidlo: kým je hodnota v config.js prázdna, prvok sa
+     NEVYKRESLÍ. Nikdy nedopĺňame odhady – vymyslené číslo na webe je
+     horšie než žiadne.
+     ====================================================================== */
+
+  function applyPendingData() {
+    var extras = CONFIG.extras || {};
+
+    /* Hodnotenie na Google – potrebujeme obe hodnoty naraz */
+    if (CONFIG.googleRating && CONFIG.googleReviewCount) {
+      setText('[data-google-rating]', CONFIG.googleRating);
+      setText('[data-google-review-count]', CONFIG.googleReviewCount);
+      all('[data-google-rating-wrap]').forEach(function (el) { el.hidden = false; });
+    }
+
+    /* Podmienky zmeny termínu – do pásu dôvery pri formulári */
+    if (extras.rescheduleText) {
+      setText('[data-reschedule-text]', extras.rescheduleText);
+      all('[data-reschedule]').forEach(function (el) { el.hidden = false; });
+    }
+
+    /* Doplnkové vety vo FAQ */
+    if (extras.paymentMethods) {
+      all('[data-payment-methods]').forEach(function (el) {
+        el.textContent = ' Platiť môžete ' + extras.paymentMethods + '.';
+        el.hidden = false;
+      });
+    }
+    if (extras.notSuitableNoCharge) {
+      all('[data-not-suitable]').forEach(function (el) {
+        el.textContent = ' Ak by infúzia pre vás nebola vhodná, povieme vám to a nič neplatíte.';
+        el.hidden = false;
+      });
+    }
+
+    /* Cena oxygenoterapie v lounge */
+    if (extras.oxygenPrice) {
+      all('[data-oxygen-price]').forEach(function (el) {
+        el.textContent = ' (' + extras.oxygenPrice + ')';
+        el.hidden = false;
+      });
+    }
+
+    /* Či sú kreslo, Netflix a občerstvenie v cene */
+    if (extras.includedInPrice) {
+      all('[data-included]').forEach(function (el) {
+        el.textContent = ' v cene';
+        el.hidden = false;
+      });
+    }
   }
 
 
@@ -335,7 +393,7 @@
      Daniel v GTM podľa docs/tracking-plan.md. Žiadne gtag ani fbq v kóde.
 
      POZOR: do dataLayeru nikdy neposielame nič o zdraví. Hodnoty chipov
-     „Čo chcete riešiť?" a texty otázok vo FAQ ostávajú mimo – posielame
+     „Čo vás zaujíma?" a texty otázok vo FAQ ostávajú mimo – posielame
      len poradové čísla. Meta má zdravotných inzerentov pod prísnym
      dohľadom a vie zablokovať eventy celému účtu.
      ====================================================================== */

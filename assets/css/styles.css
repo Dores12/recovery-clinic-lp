@@ -133,7 +133,8 @@
 
   /* ----- Text ----- */
   --c-text: #3D4A5C;          /* bežný text */
-  --c-text-muted: #6B7787;    /* pomocný text */
+  --c-text-muted: #6B7787;    /* pomocný text na bielej – AA tesne (4,55:1) */
+  --c-text-muted-deep: #5A6678; /* pomocný text na sivom pozadí – #6B7787 tam má len 4,27:1 */
 
   /* ----- Stavy ----- */
   --c-success: #1E9E6A;
@@ -606,7 +607,7 @@ p:last-child { margin-bottom: 0; }
   .field-row { grid-template-columns: 1fr 1fr; gap: 0 16px; }
 }
 
-/* ----- 6.5 Chipy (multiselect „Čo chcete riešiť?") -------------------------
+/* ----- 6.5 Chipy (multiselect „Čo vás zaujíma?") ---------------------------
    Technicky checkbox + label, takže fungujú klávesnicou aj bez JS. */
 
 .chips {
@@ -714,10 +715,12 @@ p:last-child { margin-bottom: 0; }
 .card-infusion__name { margin-bottom: 4px; }
 .card-infusion__volume { margin-bottom: 12px; }
 .card-infusion__desc { flex: 1 0 auto; margin-bottom: 20px; }
+/* Cena a odkaz sú pod sebou: po pridaní ceny po zľave a dlhšieho textu
+   odkazu sa vedľa seba nezmestili a lámali sa na viac riadkov. */
 .card-infusion__foot {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 12px;
   padding-top: 18px;
   border-top: 1px solid var(--c-border);
@@ -986,7 +989,7 @@ p:last-child { margin-bottom: 0; }
   position: relative;
   overflow: hidden;
   background: var(--grad-hero);
-  padding-block: 40px 48px;
+  padding-block: 32px 48px;
 }
 .hero__inner { position: relative; z-index: 1; }
 
@@ -1005,9 +1008,12 @@ p:last-child { margin-bottom: 0; }
 .hero__sub { margin-bottom: 18px; color: var(--c-text); }
 
 @media (min-width: 1024px) {
+  .hero { padding-block: 72px 88px; }
   .hero__eyebrow { margin-bottom: 20px; }
   .hero h1 { margin-bottom: 18px; }
   .hero__sub { margin-bottom: 20px; }
+  .hero__discount { margin-bottom: 22px; }
+  .hero__benefits { margin-bottom: 26px; }
 }
 
 /* Pilulka so zľavou – zľava platí pre každého nového klienta */
@@ -1015,7 +1021,7 @@ p:last-child { margin-bottom: 0; }
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   padding: 12px 20px;
   border: 1.5px solid var(--c-blue);
   border-radius: var(--r-sm);
@@ -1029,7 +1035,7 @@ p:last-child { margin-bottom: 0; }
 
 /* Zoznam benefitov */
 .hero__benefits {
-  margin: 0 0 22px;
+  margin: 0 0 16px;
   padding: 0;
   list-style: none;
   display: grid;
@@ -1713,6 +1719,7 @@ p:last-child { margin-bottom: 0; }
   display: grid;
   gap: 6px;
   justify-items: end;
+  white-space: nowrap;
 }
 .infusion-row__price {
   font-family: var(--font-head);
@@ -1849,3 +1856,218 @@ p:last-child { margin-bottom: 0; }
 
 /* Poznámka v stave Úspech (ako priradíme zľavu) */
 .form-success__note { margin-top: 14px; }
+
+
+/* ==========================================================================
+   14. CRO ÚPRAVY – ceny po zľave, dôkazy, pomocné texty
+   ========================================================================== */
+
+/* ----- Badge v hero: druhý riadok s úsporou ----- */
+.hero__discount-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-body-s);
+  color: var(--c-text-muted);
+}
+
+/* Nízke displeje (iPhone SE, 375 × 667) ------------------------------------
+   Prvá obrazovka musí ukázať eyebrow, H1, badge a primárne tlačidlo.
+   Pri štyroch odrážkach medzi badgeom a tlačidlom to nevychádza o 145 px,
+   preto na týchto displejoch odrážky presunieme pod tlačidlá a vypustíme
+   druhý riadok badge. Poradie v HTML ostáva logické, mení sa len zobrazenie. */
+@media (max-height: 700px) and (max-width: 1023px) {
+  .hero__discount-sub { display: none; }
+
+  .hero__text { display: flex; flex-direction: column; }
+  .hero__eyebrow  { order: 1; }
+  .hero h1        { order: 2; }
+  .hero__sub      { order: 3; }
+  .hero__discount { order: 4; margin-bottom: 14px; }
+  .hero__cta      { order: 5; }
+  .hero__benefits { order: 6; margin: 22px 0 0; }
+  .hero__trust    { order: 7; }
+}
+
+/* ----- Hodiny pri telefóne v hero ----- */
+.hero__cta-note .hero__hours {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-body-s);
+  color: var(--c-text-muted);
+}
+
+/* ----- Karta infúzie: cena po zľave ----- */
+.price--discounted {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.price--discounted s {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-body-s);
+  color: var(--c-text-muted);
+}
+.price--discounted b {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: var(--fs-price);
+  color: var(--c-navy);
+  white-space: nowrap;
+}
+.price--discounted s { white-space: nowrap; }
+.price { white-space: nowrap; }
+.card-infusion__note {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--c-text-muted);
+}
+
+/* ----- Odznak „Najobľúbenejšia" ----- */
+.card-infusion { position: relative; }
+.card-infusion--popular { border-color: var(--c-blue); }
+.card-infusion__badge {
+  position: absolute;
+  top: -11px;
+  left: 20px;
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  background: var(--c-navy);
+  color: var(--c-white);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.card-infusion__first {
+  margin: 0 0 14px;
+  font-weight: 600;
+  font-size: var(--fs-body-s);
+  color: var(--c-blue-dark);
+}
+
+/* ----- Riadok „Pre koho" ----- */
+.card-infusion__for {
+  margin: 0 0 14px;
+  font-size: var(--fs-body-s);
+  line-height: 1.5;
+  color: var(--c-text);
+}
+.card-infusion__for b { color: var(--c-navy); }
+
+/* Cena v zozname: po zľave hore, pôvodná prečiarknutá pod ňou */
+.infusion-row__price s {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-body-s);
+  color: var(--c-text-muted);
+}
+
+/* ----- Formulár: tri mini kroky ----- */
+.form-steps {
+  margin: 0 0 22px;
+  padding: 0;
+  list-style: none;
+  counter-reset: krok;
+  display: grid;
+  gap: 8px;
+}
+.form-steps li {
+  counter-increment: krok;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: var(--fs-body-s);
+  line-height: 1.5;
+  color: var(--c-text);
+}
+.form-steps li::before {
+  content: counter(krok);
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: var(--c-cyan-light);
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--c-navy);
+}
+
+/* ----- Pomocné texty pod poľami ----- */
+.field__hint {
+  margin: 6px 0 0;
+  font-size: var(--fs-body-s);
+  line-height: 1.5;
+  color: var(--c-text-muted);
+}
+.field__hint[hidden] { display: none; }
+.field__hint--accent { color: var(--c-blue-dark); font-weight: 600; }
+
+/* ----- Popisky pri voľbe „Ako chcete pokračovať?" ----- */
+.segment label small {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--c-text-muted);
+}
+.segment input:checked + label small { color: var(--c-blue-dark); }
+
+/* ----- Recenzia pod tlačidlom formulára ----- */
+.form-quote {
+  margin: 18px 0 0;
+  padding: 14px 16px;
+  border-radius: var(--r-sm);
+  background: var(--c-gray-50);
+}
+.form-quote__stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 6px;
+  color: var(--c-star);
+}
+.form-quote__stars .ico { width: 14px; height: 14px; fill: currentColor; stroke: none; }
+.form-quote blockquote {
+  margin: 0 0 6px;
+  font-size: var(--fs-body-s);
+  line-height: 1.5;
+  color: var(--c-text);
+}
+.form-quote figcaption {
+  font-size: var(--fs-body-s);
+  /* Stojí na gray-50, kde by bežný muted nemal dosť kontrastu */
+  color: var(--c-text-muted-deep);
+}
+
+/* ----- Pás dôvery: hodnotenie z Google ----- */
+.trust li[hidden] { display: none; }
+.trust b { font-family: var(--font-head); font-weight: 800; }
+.hero__trust li[hidden] { display: none; }
+
+/* ----- Záverečná výzva: eyebrow a tri fajky ----- */
+.final__eyebrow { margin-bottom: 12px; }
+.final__checks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 24px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+.final__checks li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-body-s);
+  color: rgba(255, 255, 255, .78);
+}
+.final__checks .ico { width: 16px; height: 16px; flex: none; color: var(--c-cyan); }
+
+/* ----- Stav po odoslaní: poznámka pod obsahom ----- */
+.form-success__note a { color: var(--c-blue-dark); font-weight: 600; }

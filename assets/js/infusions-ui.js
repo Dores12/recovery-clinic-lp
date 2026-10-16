@@ -35,14 +35,52 @@
       .replace(/"/g, '&quot;');
   }
 
+  /* ----- Ceny po zľave ----------------------------------------------------
+     Počítajú sa z discount.percent v config.js, nikdy sa nepíšu do dát.
+     Vďaka tomu zmena zľavy prepočíta všetky ceny naraz. */
+
+  var PERCENTO = ((window.RC_CONFIG || {}).discount || {}).percent || 0;
+
+  /** '159 €' → 159 */
+  function cenaCislo(text) {
+    var cislo = parseFloat(String(text).replace(/[^\d.,]/g, '').replace(',', '.'));
+    return isNaN(cislo) ? null : cislo;
+  }
+
+  /** 127.2 → '127,20 €' */
+  function formatCeny(cislo) {
+    return cislo.toFixed(2).replace('.', ',') + ' €';
+  }
+
+  /** Platí na túto infúziu zľava? Predvolene áno. */
+  function maZlavu(infuzia) {
+    return infuzia.zlavaPlati !== false && PERCENTO > 0;
+  }
+
+  /** Cena po zľave ako text, alebo null keď sa zľava neuplatní. */
+  function cenaSoZlavou(infuzia) {
+    if (!maZlavu(infuzia)) return null;
+    var zaklad = cenaCislo(infuzia.cena);
+    return zaklad === null ? null : formatCeny(zaklad * (1 - PERCENTO / 100));
+  }
+
+  /** Koľko na tejto infúzii ušetríte, v eurách. */
+  function usporaCislo(infuzia) {
+    if (!maZlavu(infuzia)) return null;
+    var zaklad = cenaCislo(infuzia.cena);
+    return zaklad === null ? null : zaklad * (PERCENTO / 100);
+  }
+
+
   function sipka() {
     return '<svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>';
   }
 
-  /** Odkaz „Mám záujem" – rovnaký na kartách aj v zozname. */
-  function odkazZaujem(infuzia) {
+  /** Odkaz na kartách aj v zozname. Pripomína benefit, nie len akciu. */
+  function odkazZaujem(infuzia, kratky) {
     return '<a class="link-arrow" href="#formular" data-interest data-item="'
-      + escapeHtml(infuzia.nazov) + '">Mám záujem ' + sipka() + '</a>';
+      + escapeHtml(infuzia.nazov) + '">'
+      + (kratky ? 'Chcem so zľavou ' : 'Chcem túto so zľavou ') + sipka() + '</a>';
   }
 
 
@@ -63,8 +101,35 @@
       if (infuzia.cenaPovodna) {
         objem += ' · bežne <s>' + escapeHtml(infuzia.cenaPovodna) + '</s>';
       }
+
+      var zlavnena = cenaSoZlavou(infuzia);
+      var cenaBlok = zlavnena
+        ? '<span class="price price--discounted">'
+          +   '<s>' + escapeHtml(infuzia.cena) + '</s>'
+          +   '<b>' + zlavnena + '</b>'
+          + '</span>'
+        : '<span class="price">' + escapeHtml(infuzia.cena) + '</span>';
+
+      var poznamka = zlavnena
+        ? '<p class="card-infusion__note">so zľavou ' + PERCENTO + ' % na prvú infúziu</p>'
+        : '';
+
+      /* Najobľúbenejšia infúzia je zároveň najlacnejšia – pre nerozhodnutých
+         je to bezpečná voľba a nízka bariéra prvej návštevy. */
+      var odznak = infuzia.popular
+        ? '<span class="card-infusion__badge">Najobľúbenejšia</span>'
+        : '';
+      var prvykrat = infuzia.popular && zlavnena
+        ? '<p class="card-infusion__first">Prvýkrát? So zľavou len za ' + zlavnena + '.</p>'
+        : '';
+
+      var preKoho = infuzia.preKoho
+        ? '<p class="card-infusion__for"><b>Pre koho:</b> ' + escapeHtml(infuzia.preKoho) + '</p>'
+        : '';
+
       return ''
-        + '<article class="card-infusion">'
+        + '<article class="card-infusion' + (infuzia.popular ? ' card-infusion--popular' : '') + '">'
+        +   odznak
         +   '<div class="card-infusion__top">'
         +     '<span class="tag">' + escapeHtml(infuzia.kategoria) + '</span>'
         +     '<svg class="ico card-infusion__drop" aria-hidden="true"><use href="#i-droplet"/></svg>'
@@ -72,8 +137,10 @@
         +   '<h3 class="card-infusion__name">' + escapeHtml(infuzia.nazov) + '</h3>'
         +   '<p class="body-s muted card-infusion__volume">' + objem + '</p>'
         +   '<p class="body-s card-infusion__desc">' + escapeHtml(infuzia.popis) + '</p>'
+        +   preKoho
+        +   prvykrat
         +   '<div class="card-infusion__foot">'
-        +     '<span class="price">' + escapeHtml(infuzia.cena) + '</span>'
+        +     '<span>' + cenaBlok + poznamka + '</span>'
         +     odkazZaujem(infuzia)
         +   '</div>'
         + '</article>';
@@ -120,11 +187,16 @@
       : zoznam.filter(function (i) { return i.kategoria === aktivnyFilter; });
 
     obal.innerHTML = vybrane.map(function (infuzia) {
-      var cena = '<span class="infusion-row__price">' + escapeHtml(infuzia.cena);
-      if (infuzia.cenaPovodna) {
-        cena += '<s>' + escapeHtml(infuzia.cenaPovodna) + '</s>';
+      var zlavnena = cenaSoZlavou(infuzia);
+      var cena;
+      if (zlavnena) {
+        cena = '<span class="infusion-row__price">' + zlavnena
+          + '<s>' + escapeHtml(infuzia.cena) + '</s></span>';
+      } else {
+        cena = '<span class="infusion-row__price">' + escapeHtml(infuzia.cena);
+        if (infuzia.cenaPovodna) cena += '<s>bežne ' + escapeHtml(infuzia.cenaPovodna) + '</s>';
+        cena += '</span>';
       }
-      cena += '</span>';
 
       return ''
         + '<div class="infusion-row">'
@@ -135,7 +207,7 @@
         +     '</div>'
         +     '<p class="infusion-row__desc">' + escapeHtml(infuzia.popis) + '</p>'
         +   '</div>'
-        +   '<div class="infusion-row__side">' + cena + odkazZaujem(infuzia) + '</div>'
+        +   '<div class="infusion-row__side">' + cena + odkazZaujem(infuzia, true) + '</div>'
         + '</div>';
     }).join('');
   }
@@ -175,7 +247,32 @@
      Štart
      ====================================================================== */
 
+  /**
+   * Doplní do hero najnižšiu cenu po zľave a rozpätie úspory.
+   * Počíta sa z dát, nie natvrdo – po zmene cien sedí bez zásahu.
+   */
+  function dopInoCenyVHero() {
+    var usspory = zoznam.map(usporaCislo).filter(function (u) { return u !== null; });
+    var zlavnene = zoznam.map(function (i) {
+      var z = cenaSoZlavou(i);
+      return z === null ? null : cenaCislo(i.cena) * (1 - PERCENTO / 100);
+    }).filter(function (c) { return c !== null; });
+
+    if (zlavnene.length) {
+      var najnizsia = formatCeny(Math.min.apply(null, zlavnene));
+      Array.prototype.forEach.call(document.querySelectorAll('[data-min-discounted]'),
+        function (el) { el.textContent = najnizsia; });
+    }
+    if (usspory.length) {
+      var rozpatie = formatCeny(Math.min.apply(null, usspory)).replace(' €', '')
+        + ' – ' + formatCeny(Math.max.apply(null, usspory));
+      Array.prototype.forEach.call(document.querySelectorAll('[data-savings-range]'),
+        function (el) { el.textContent = rozpatie; });
+    }
+  }
+
   vykresliKarty();
+  dopInoCenyVHero();
   vykresliFiltre();
   vykresliZoznam();
   initRozbalenie();

@@ -13,7 +13,7 @@ window.RC_CONFIG = {
      TODO: Daniel doplní pri hostingu. Pozor – meta tagy (canonical, og:url,
      og:image) sa čítajú bez JS, takže doménu treba prepísať AJ priamo
      v index.html. Miesta sú tam označené komentárom <!-- TODO: doména -->. */
-  siteUrl: 'https://TODO-domena.sk',
+  siteUrl: 'https://recoverybratislava.netlify.app',
 
   /* ----- Google Tag Manager ----------------------------------------------
      VLASTNÝ kontajner len pre túto landing page. Zámerne NIE ten, ktorý
@@ -54,15 +54,39 @@ window.RC_CONFIG = {
   hours: 'Po–Pi 10:00–18:00 · So–Ne 9:00–15:00',
 
   /* ----- Zľava -----------------------------------------------------------
-     Percento sa do textov vkladá cez <span data-discount>20</span>,
-     takže zmena čísla tu ho prepíše na celej stránke naraz.
+     Percento sa do textov vkladá cez <span data-discount>20</span>
+     a ceny po zľave sa z neho počítajú v JS – zmena čísla tu sa prejaví
+     na celej stránke aj na všetkých kartách infúzií.
 
-     POZOR: zľava platí pre KAŽDÉHO nového klienta – aj pri priamej
-     rezervácii cez Apponio, nielen po vyplnení formulára. Texty na stránke
-     sú tomu prispôsobené (formulár predáva bezplatnú konzultáciu). */
+     POZOR: zľavu dostane LEN ten, kto vyplní formulár. Nie je to ponuka
+     pre každého nového klienta – formulár je jediná cesta, ako ju získať,
+     a to je zároveň hlavný dôvod, prečo ho ľudia vyplnia.
+     Platí na prvú infúziu, na všetky infúzie z ponuky, bez lehoty.
+     Na darčekové poukážky sa nevzťahuje. */
   discount: {
     percent: 20,
-    terms: 'Zľava 20 % platí na prvú infúziu pre nových klientov – pri rezervácii online aj cez formulár. Odrátame vám ju pri platbe na prevádzke.'
+    terms: 'Zľava 20 % platí na prvú infúziu po vyplnení formulára. Vzťahuje sa na všetky infúzie z ponuky, nie na darčekové poukážky. Odrátame vám ju pri platbe na prevádzke.'
+  },
+
+  /* ----- Údaje, ktoré ešte musí potvrdiť klinika -------------------------
+     Kým je hodnota prázdna, prvok sa na stránke NEVYKRESLÍ. Nikdy sem
+     nepíš odhady – vymyslené číslo na webe je horšie než žiadne. */
+
+  /* Hodnotenie na Google, napr. '4,9' a '128'. Obe musia byť vyplnené,
+     inak sa riadok s hodnotením nezobrazí. */
+  googleRating: '',
+  googleReviewCount: '',
+
+  /* Za aký čas príde potvrdenie zľavy e-mailom. Zodpovedá intervalu,
+     v ktorom Make kontroluje Sheet. Prázdne = veta o e-maile sa nezobrazí. */
+  emailEta: 'do 2 hodín',
+
+  extras: {
+    oxygenPrice: 'za 20 €',   // doplnková služba, potvrdené klinikou
+    includedInPrice: false,   // true = kreslo, Netflix a občerstvenie sú v cene
+    paymentMethods: '',       // napr. 'kartou aj v hotovosti'
+    rescheduleText: '',       // napr. 'Termín zmeníte jedným telefonátom'
+    notSuitableNoCharge: false // true = ak infúzia nie je vhodná, klient neplatí
   },
 
   /* ----- Tracking --------------------------------------------------------
