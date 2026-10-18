@@ -2071,3 +2071,123 @@ p:last-child { margin-bottom: 0; }
 
 /* ----- Stav po odoslaní: poznámka pod obsahom ----- */
 .form-success__note a { color: var(--c-blue-dark); font-weight: 600; }
+
+
+/* ==========================================================================
+   15. SEKCIA „ČO JE IV TERAPIA"
+   Vysvetľuje službu studenému publiku. Používa existujúce tokeny
+   a komponenty, žiadny nový vizuálny štýl.
+   ========================================================================== */
+
+.section-head .body-l { max-width: 760px; margin-inline: auto; margin-top: 14px; }
+
+/* ----- Tri karty ----- */
+.iv-cards {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 44px;
+}
+@media (min-width: 768px) {
+  .iv-cards { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+}
+
+.iv-card {
+  padding: 26px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-card);
+  background: var(--c-white);
+  box-shadow: var(--shadow-card);
+}
+.iv-card__icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+  background: var(--c-cyan-light);
+  color: var(--c-blue-dark);
+}
+.iv-card__icon .ico { width: 22px; height: 22px; }
+.iv-card h3 { margin-bottom: 8px; }
+.iv-card p { margin: 0; }
+
+/* ----- Na čo si ju klienti vyberajú ----- */
+.iv-benefits__title { margin-bottom: 16px; }
+
+.iv-benefits {
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-card);
+  background: var(--c-white);
+  overflow: hidden;
+}
+.iv-benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--c-border);
+}
+.iv-benefits li:last-child { border-bottom: 0; }
+.iv-benefits > li > .ico {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  color: var(--c-blue-dark);
+}
+.iv-benefits div { flex: 1; min-width: 0; }
+.iv-benefits b {
+  display: block;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: var(--fs-h4);
+  line-height: 1.444;
+  color: var(--c-navy);
+}
+.iv-benefits span {
+  font-size: var(--fs-body-s);
+  line-height: 1.571;
+  color: var(--c-text);
+}
+.iv-benefits .link-arrow { flex: none; white-space: nowrap; }
+
+/* Na úzkych displejoch ide odkaz pod text, inak by riadok pretekal */
+@media (max-width: 767px) {
+  .iv-benefits li { flex-wrap: wrap; }
+  /* Šírka ikony (22 px) aj medzery (14 px) – text tak vyplní prvý riadok */
+  .iv-benefits div { flex-basis: calc(100% - 36px); }
+  .iv-benefits .link-arrow { margin-left: 36px; }
+}
+
+/* ----- Poznámka „Úprimne…" ----- */
+.iv-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 24px;
+  padding: 16px 18px;
+  border-radius: var(--r-sm);
+  background: var(--c-gray-50);
+  font-size: var(--fs-body-s);
+  line-height: 1.571;
+  /* Na sivom pozadí by bežný muted nemal dosť kontrastu */
+  color: var(--c-text-muted-deep);
+}
+.iv-note .ico { flex: none; width: 18px; height: 18px; margin-top: 2px; }
+
+/* ----- Rozbaľovacia časť ----- */
+.iv-more {
+  border-top: 1px solid var(--c-border);
+  margin-bottom: 36px;
+}
+.iv-more .faq-item__body { padding-right: 0; }
+.iv-more h4 { margin: 18px 0 6px; }
+.iv-more h4:first-child { margin-top: 0; }
+
+/* ----- Výzva na konci sekcie ----- */
+.iv-cta { text-align: center; }
+.iv-cta .btn { margin-bottom: 12px; }
