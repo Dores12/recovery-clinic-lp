@@ -10,7 +10,7 @@ Súbory sa nahrajú na hosting a stránka beží.
 | **Vetvy** | `main` = produkcia · `dev` = vývoj |
 | **Hosting** | Netlify (postup nižšie) |
 | **Backend formulára** | Google Sheets (karta *Leady* pre personál + skrytá *Technické údaje*) + Apps Script |
-| **Meranie** | vlastný GTM kontajner len pre LP – **TODO: doplniť ID** (teraz `GTM-XXXXXXX`) |
+| **Meranie** | vlastný GTM kontajner len pre LP: `GTM-TR78PWKK` |
 
 ---
 
@@ -236,8 +236,8 @@ Lighthouse, mobil, proti hostingu s gzipom a cache hlavičkami:
 | CLS | **0** | < 0,05 ✅ |
 | LCP | **2,5 s** | < 2,0 s ❌ |
 
-S reálnym GTM kontajnerom počítaj asi o 2 body menej – zatiaľ je v kóde
-neexistujúce `GTM-XXXXXXX`, takže sa nič tretej strany nenačíta.
+Merané ešte s neexistujúcim kontajnerom. Odkedy v ňom sú tagy, počítaj
+asi o 2 body menej – GTM a Meta pixel si svoje vezmú.
 
 **SEO skóre bude okolo 69 a je to správne** – stránka má zámerne `noindex`.
 
@@ -276,9 +276,8 @@ drôte 11 kB CSS a 16 kB JS, takže na výkon to vplyv nemá.
 
 ### Čaká na teba
 
-- [ ] **Vytvoriť nový GTM kontajner** len pre túto LP a doplniť ID na troch
-      miestach (teraz `GTM-XXXXXXX`): snippet v `<head>`, `<noscript>` iframe
-      za `<body>` a `gtmId` v `config.js`
+- [ ] **Nastaviť tagy v GTM** `GTM-TR78PWKK` podľa `docs/tracking-plan.md`
+      (kontajner je už v kóde zapojený)
 - [ ] **Doplniť Meta PIXEL_ID** z Konverzky do tagov v GTM
 - [ ] **Nasadiť novú verziu Apps Scriptu** (nie nové nasadenie!) a spustiť
       `setupSheet()`, nech sa doplnia stĺpce `pokracovanie`, `infuzia`

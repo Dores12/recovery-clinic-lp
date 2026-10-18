@@ -22,16 +22,16 @@ window.RC_CONFIG = {
 
      POZOR: toto je len evidencia. Skutočný snippet má ID natvrdo
      v index.html (inak by config.js musel blokovať vykreslenie stránky).
-     TODO: nové GTM ID – uprav na troch miestach: tu, v <head>
+     Pri zmene kontajnera uprav ID na troch miestach: tu, v <head>
      a v <noscript> iframe za <body>. */
-  gtmId: 'GTM-XXXXXXX',
+  gtmId: 'GTM-TR78PWKK',
 
   /* ----- Backend formulára -----------------------------------------------
      URL nasadeného Google Apps Script web appu (končí na /exec).
      PRÁZDNE = testovací režim: formulár sa tvári, že odoslal, nič sa neuloží
      a nad formulárom sa zobrazí žltý pruh. Postup nasadenia:
      google-apps-script/README.md */
-  formEndpoint: 'https://script.google.com/macros/s/AKfycbx-15gBJ91bKAqIbu1UeM2wdph9JerCv-ageHnjUcXtizrBjO80sZ-7ODoZYFXu3sB3xQ/exec',
+  formEndpoint: 'https://script.google.com/macros/s/AKfycbxPEo9XK7ElQ1j9t6OkCSBfuBOOnMdJL5KIG5A-Phy2WA0ZXh1XcA60Y6QbxVGkV6M5aQ/exec',
 
   /* ----- Odkazy ----------------------------------------------------------- */
   bookingUrl: 'https://recoveryclinicbratislava.myapponio.com/#reservation',

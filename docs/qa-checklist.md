@@ -140,8 +140,7 @@ Postup nasadenia: [`google-apps-script/README.md`](../google-apps-script/README.
 
 Podrobnosti: [`docs/tracking-plan.md`](tracking-plan.md)
 
-- [ ] Nové GTM ID je doplnené na **troch** miestach (head, noscript, `config.js`)
-- [ ] Nikde v kóde už nie je `GTM-XXXXXXX` ani staré `GTM-P8RKNPB4`
+- [ ] V kóde je `GTM-TR78PWKK` na troch miestach a nikde staré `GTM-P8RKNPB4`
 - [ ] GTM Preview sa pripojí
 - [ ] `generate_lead` príde **len raz**, **len po úspechu**, s `event_id`
       aj `lead_path`
