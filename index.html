@@ -517,6 +517,159 @@
 
 
 <!-- ==========================================================================
+     ČO JE IV TERAPIA
+     Pre studené publikum z Mety, ktoré službu nepozná. Stojí ZA formulárom
+     zámerne: kto IV terapiu pozná, vyplní formulár hneď a dlhý text pred ním
+     by ho len zdržal. Kto ju nepozná, nájde vysvetlenie o kúsok nižšie
+     a tlačidlo ho vráti späť k formuláru.
+
+     Väčšina textu je skrytá v <details>, nech sa stránka nenafukuje
+     pre tých, ktorí čítať nechcú.
+     ========================================================================== -->
+<section class="section" id="iv-terapia" data-section="iv-terapia">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">IV terapia v skratke</span>
+      <h2>Čo je IV terapia a prečo ju ľudia skúšajú</h2>
+      <p class="body-l">
+        Pri IV terapii idú vitamíny, minerály a tekutiny priamo do krvi cez tenkú
+        kanylu v žile. Nemusia prejsť cez tráviaci trakt, a tak sa dajú podať aj
+        dávky, ktoré by ste v tabletkách neprijali.
+      </p>
+    </div>
+
+    <div class="iv-cards">
+      <!-- TODO: fotka – keď klinika dodá zábery infúzie počas podávania,
+           nahraď ikonu za <picture> s assets/img/iv-infuzia.webp
+           (WebP, ~800 px, loading="lazy"). Dovtedy je tu ikona. -->
+      <article class="iv-card">
+        <div class="iv-card__icon"><svg class="ico" aria-hidden="true"><use href="#i-droplet"/></svg></div>
+        <h3 class="h4">Ako to funguje</h3>
+        <p class="body-s">
+          Zdravotník vám zavedie tenkú kanylu do žily na ruke. Pocítite len krátky
+          vpich, podobne ako pri odbere krvi. Potom sedíte v masážnom kresle, kým
+          infúzia dokvapká.
+        </p>
+      </article>
+
+      <article class="iv-card">
+        <div class="iv-card__icon"><svg class="ico" aria-hidden="true"><use href="#i-test-tube"/></svg></div>
+        <h3 class="h4">Prečo nie tabletky</h3>
+        <p class="body-s">
+          Pri tabletkách sa časť látok stratí cestou cez tráviaci trakt a niektoré
+          sa vo vyššej dávke ani nevstrebú. Infúzia ide priamo do krvi, preto sa dá
+          podať napríklad aj vyššia dávka vitamínu C.
+        </p>
+      </article>
+
+      <article class="iv-card">
+        <div class="iv-card__icon"><svg class="ico" aria-hidden="true"><use href="#i-armchair"/></svg></div>
+        <h3 class="h4">Pre koho je</h3>
+        <p class="body-s">
+          Pre ľudí, ktorí majú za sebou náročné obdobie, chcú sa pripraviť na zimu,
+          pravidelne trénujú alebo sa starajú o pleť. A pre každého, kto si chce
+          na chvíľu vydýchnuť.
+        </p>
+      </article>
+    </div>
+
+    <h3 class="h4 iv-benefits__title">Na čo si ju klienti vyberajú</h3>
+
+    <!-- Každý riadok zapne filter danej kategórie v ponuke infúzií.
+         Obsluhuje to infusions-ui.js cez data-category. -->
+    <ul class="iv-benefits">
+      <li>
+        <svg class="ico" aria-hidden="true"><use href="#i-shield-check"/></svg>
+        <div>
+          <b>Imunita</b>
+          <span>Vitamín C a vitamíny skupiny B na podporu obranyschopnosti, hlavne na jeseň a v zime.</span>
+        </div>
+        <a class="link-arrow" href="#infuzie" data-category="Imunita">
+          Pozrieť infúzie <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </li>
+      <li>
+        <svg class="ico" aria-hidden="true"><use href="#i-badge-check"/></svg>
+        <div>
+          <b>Energia</b>
+          <span>Vitamíny skupiny B a minerály, keď máte za sebou náročné týždne.</span>
+        </div>
+        <a class="link-arrow" href="#infuzie" data-category="Energia">
+          Pozrieť infúzie <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </li>
+      <li>
+        <svg class="ico" aria-hidden="true"><use href="#i-wind"/></svg>
+        <div>
+          <b>Regenerácia po športe</b>
+          <span>Horčík, elektrolyty a tekutiny po tréningu, zápase alebo pretekoch.</span>
+        </div>
+        <a class="link-arrow" href="#infuzie" data-category="Šport">
+          Pozrieť infúzie <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </li>
+      <li>
+        <svg class="ico" aria-hidden="true"><use href="#i-droplet"/></svg>
+        <div>
+          <b>Pleť</b>
+          <span>Glutatión a vitamín C na podporu pleti a vitality zvnútra.</span>
+        </div>
+        <a class="link-arrow" href="#infuzie" data-category="Beauty">
+          Pozrieť infúzie <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Pri službe, ktorú človek nepozná, vyvoláva nedôveru skôr prehnaný
+         sľub než opatrnosť. Táto veta zvyšuje dôveryhodnosť zvyšku textu. -->
+    <p class="iv-note">
+      <svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg>
+      <span>Úprimne: infúzia nenahradí spánok, pohyb ani pestrú stravu. Je to doplnok,
+      ktorý vám podá vyškolený zdravotnícky personál v pohodlí masážneho kresla.</span>
+    </p>
+
+    <details class="faq-item iv-more">
+      <summary><span>Prečítajte si viac o IV terapii</span></summary>
+      <div class="faq-item__body body-m">
+        <h4>Odkiaľ IV terapia pochádza</h4>
+        <p>
+          Kombinácia vitamínov a minerálov v infúzii je známa ako „Myersov koktejl“.
+          Pomenovali ju podľa Američana Johna Myersa, ktorý ju začal podávať ako
+          jeden z prvých. Vychádza z nej aj naša infúzia Life Elixir a v rôznych
+          podobách ju dnes ponúkajú kliniky po celom svete.
+        </p>
+
+        <h4>Ako často na infúziu chodiť</h4>
+        <p>
+          To vám odporučí zdravotník podľa toho, čo od infúzie očakávate. Niektorí
+          klienti prídu pred náročným obdobím, iní si z nej spravia pravidelnú
+          chvíľu pre seba.
+        </p>
+
+        <h4>Neviete, ktorú infúziu si vybrať?</h4>
+        <p>
+          Nemusíte to vedieť vopred. Vo formulári zaškrtnite „Neviem, poraďte“
+          a zdravotník vám pred infúziou odporučí tú, ktorá sa vám hodí. Krátka
+          konzultácia je súčasťou každej návštevy.
+        </p>
+      </div>
+    </details>
+
+    <div class="iv-cta">
+      <a class="btn btn--primary" href="#formular" data-scroll-form>
+        <span>Chcem zľavu <span data-discount>20</span> %</span>
+        <svg class="ico" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+      </a>
+      <p class="body-s muted">
+        Zľava <span data-discount>20</span> % na prvú infúziu po vyplnení formulára
+        · platíte až na mieste
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
      AKO TO PREBIEHA
      ========================================================================== -->
 <section class="section section--gray" id="ako-to-prebieha" data-section="ako-to-prebieha">
@@ -804,16 +957,6 @@
         <div class="faq-item__body body-m">
           Približne hodinu a pol vrátane krátkej konzultácie – väčšinu času
           oddychujete v masážnom kresle.
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary><span>Prečo infúzia, a nie vitamíny v tabletkách?</span></summary>
-        <div class="faq-item__body body-m">
-          Pri infúzii idú vitamíny a minerály priamo do krvi a neprechádzajú
-          tráviacim traktom. Preto sa dajú podať aj dávky, ktoré by ste
-          v tabletkách neprijali. Ktorá infúzia a dávka sa vám hodí, odporučí
-          zdravotník.
         </div>
       </details>
 

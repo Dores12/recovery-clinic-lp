@@ -171,6 +171,20 @@
         vykresliZoznam();
       });
     });
+
+    posunNaAktivnyFilter(obal);
+  }
+
+
+  /* Pás filtrov sa na mobile posúva do strany. Keď filter zapne odkaz
+     zo sekcie „Čo je IV terapia", aktívny čip býva mimo obrazovky –
+     doposunieme ho, nech je vidieť, podľa čoho je zoznam zúžený. */
+  function posunNaAktivnyFilter(obal) {
+    var aktivny = obal.querySelector('[aria-pressed="true"]');
+    if (!aktivny || obal.scrollWidth <= obal.clientWidth) return;
+
+    var ciel = aktivny.offsetLeft - (obal.clientWidth - aktivny.offsetWidth) / 2;
+    obal.scrollLeft = Math.max(0, ciel);
   }
 
 
@@ -217,27 +231,64 @@
      4. Rozbalenie a zbalenie ponuky
      ====================================================================== */
 
-  function initRozbalenie() {
+  /** Otvorí alebo zatvorí panel s celou ponukou. */
+  function prepniPanel(otvorit) {
     var tlacidlo = document.querySelector('[data-infusions-toggle]');
     var panel = document.getElementById('vsetky-infuzie');
     var popis = document.querySelector('[data-infusions-toggle-label]');
     if (!tlacidlo || !panel || !popis) return;
 
-    var pocet = zoznam.length;
-    popis.textContent = 'Zobraziť všetky infúzie (' + pocet + ')';
+    tlacidlo.setAttribute('aria-expanded', otvorit ? 'true' : 'false');
+    panel.hidden = !otvorit;
+    popis.textContent = otvorit
+      ? 'Skryť ponuku'
+      : 'Zobraziť všetky infúzie (' + zoznam.length + ')';
+  }
+
+  function initRozbalenie() {
+    var tlacidlo = document.querySelector('[data-infusions-toggle]');
+    if (!tlacidlo) return;
+
+    prepniPanel(false);   // nastaví aj text tlačidla podľa počtu infúzií
 
     tlacidlo.addEventListener('click', function () {
       var otvorene = tlacidlo.getAttribute('aria-expanded') === 'true';
-
-      tlacidlo.setAttribute('aria-expanded', otvorene ? 'false' : 'true');
-      panel.hidden = otvorene;
-      popis.textContent = otvorene
-        ? 'Zobraziť všetky infúzie (' + pocet + ')'
-        : 'Skryť ponuku';
+      prepniPanel(!otvorene);
 
       if (!otvorene) {
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({ event: 'infusions_expand', lead_source: 'lp' });
+      }
+    });
+  }
+
+
+  /* ======================================================================
+     5. Odkazy zo sekcie „Čo je IV terapia"
+
+     Riadok kategórie otvorí ponuku, zapne príslušný filter a posunie
+     na sekciu infúzií – človek rovno vidí, čo do tej kategórie patrí.
+     ====================================================================== */
+
+  function initOdkazyKategorii() {
+    document.addEventListener('click', function (event) {
+      var odkaz = event.target.closest('[data-category]');
+      if (!odkaz) return;
+
+      var kategoria = odkaz.getAttribute('data-category');
+      if ((DATA.kategorie || []).indexOf(kategoria) === -1) return;
+
+      event.preventDefault();
+
+      aktivnyFilter = kategoria;
+      prepniPanel(true);
+      vykresliFiltre();
+      vykresliZoznam();
+
+      var sekcia = document.getElementById('infuzie');
+      if (sekcia) {
+        var plynule = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        sekcia.scrollIntoView({ behavior: plynule ? 'smooth' : 'auto', block: 'start' });
       }
     });
   }
@@ -276,4 +327,5 @@
   vykresliFiltre();
   vykresliZoznam();
   initRozbalenie();
+  initOdkazyKategorii();
 })();

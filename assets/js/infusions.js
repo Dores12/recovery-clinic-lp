@@ -20,8 +20,8 @@
    v config.js, aby sa pri zmene zľavy prepočítali všade naraz.
 
    POZOR – na tejto stránke beží Meta pixel, ktorý NIE JE v zdravotnej
-   kategórii. Nepíš sem preto názvy ani popisy zdravotných ťažkostí
-   a zdravotných stavov; Meta by podľa nich mohla účet preklasifikovať. Klinika
+   kategórii. Nepíš sem preto názvy ani popisy zdravotných stavov;
+   Meta by podľa nich mohla účet preklasifikovať. Klinika
    takéto infúzie ponúka, ale odporučí ich zdravotník pri konzultácii.
    Zoznam konkrétnych zakázaných výrazov je v docs/qa-checklist.md
    (tá sa na web nenahráva).

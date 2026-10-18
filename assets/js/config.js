@@ -115,7 +115,7 @@ window.RC_CONFIG = {
       h1: 'Dobite si <b>imunitu aj energiu</b> – pohodlne v kresle, pod dohľadom zdravotníkov',
       chip: 'imunita'
     },
-    // Únava
+    // Energia
     b: {
       h1: 'Ráno bez energie? Doplňte telu <b>vitamíny a minerály</b> priamo do krvi',
       chip: 'unava'
