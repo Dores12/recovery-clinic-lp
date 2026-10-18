@@ -230,14 +230,15 @@ Lighthouse, mobil, proti hostingu s gzipom a cache hlavičkami:
 
 | | Nameraný | Cieľ |
 |---|---|---|
-| Performance | **96** (medián z 3 behov, bez GTM) | ≥ 95 ✅ |
+| Performance | **94** (medián z 3 behov, s GTM) | ≥ 95 ❌ |
 | Accessibility | **100** | ≥ 95 ✅ |
 | Best Practices | **100** | ≥ 95 ✅ |
 | CLS | **0** | < 0,05 ✅ |
 | LCP | **2,5 s** | < 2,0 s ❌ |
 
-Merané ešte s neexistujúcim kontajnerom. Odkedy v ňom sú tagy, počítaj
-asi o 2 body menej – GTM a Meta pixel si svoje vezmú.
+Merané už so zapojeným kontajnerom `GTM-TR78PWKK`. Bez neho vychádza 96 –
+tie dva body stojí samotný GTM (TBT 158 ms namiesto 0). Keď v kontajneri
+pribudnú tagy GA4 a Meta, počítaj s ďalším poklesom.
 
 **SEO skóre bude okolo 69 a je to správne** – stránka má zámerne `noindex`.
 

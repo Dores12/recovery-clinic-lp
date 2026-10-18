@@ -112,7 +112,7 @@ window.RC_CONFIG = {
   variants: {
     // Imunita (default – jeseň, hlavná téma)
     a: {
-      h1: 'Dobite si <b>imunitu aj energiu</b> – pohodlne v kresle, pod dohľadom lekára',
+      h1: 'Dobite si <b>imunitu aj energiu</b> – pohodlne v kresle, pod dohľadom zdravotníkov',
       chip: 'imunita'
     },
     // Únava
