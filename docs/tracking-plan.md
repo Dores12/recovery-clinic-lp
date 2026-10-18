@@ -7,9 +7,9 @@ Stránka sama **nič nemeria**. Len pushuje udalosti do `dataLayer`. Všetky tag
 > na WP webe a v Apponiu. Meta pixel na tejto stránke nesmie byť v zdravotnej
 > kategórii, a to sa dá udržať len vtedy, keď je meranie oddelené.
 >
-> **TODO: nové GTM ID** treba doplniť na troch miestach: snippet v `<head>`,
-> `<noscript>` iframe za `<body>` a `gtmId` v `config.js` (tam len ako evidencia).
-> Všade je zatiaľ `GTM-XXXXXXX`.
+> Kontajner **`GTM-TR78PWKK`** je už zapojený v `<head>`, v `<noscript>`
+> iframe za `<body>` a evidovaný v `config.js`. Zostáva v ňom nastaviť tagy
+> podľa tohto dokumentu.
 
 V kóde stránky nie sú **žiadne `gtag` ani `fbq` volania** okrem Consent Mode
 defaultu. Meta pixel aj GA4 nastavíš celé v GTM.
