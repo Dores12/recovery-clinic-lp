@@ -989,7 +989,7 @@ p:last-child { margin-bottom: 0; }
   position: relative;
   overflow: hidden;
   background: var(--grad-hero);
-  padding-block: 32px 48px;
+  padding-block: 24px 48px;
 }
 .hero__inner { position: relative; z-index: 1; }
 
@@ -1003,9 +1003,9 @@ p:last-child { margin-bottom: 0; }
   }
 }
 
-.hero__eyebrow { margin-bottom: 18px; }
-.hero h1 { margin-bottom: 14px; }
-.hero__sub { margin-bottom: 18px; color: var(--c-text); }
+.hero__eyebrow { margin-bottom: 16px; }
+.hero h1 { margin-bottom: 10px; }
+.hero__sub { margin-bottom: 14px; color: var(--c-text); }
 
 @media (min-width: 1024px) {
   .hero { padding-block: 72px 88px; }
@@ -1021,7 +1021,7 @@ p:last-child { margin-bottom: 0; }
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   padding: 12px 20px;
   border: 1.5px solid var(--c-blue);
   border-radius: var(--r-sm);
@@ -1035,7 +1035,7 @@ p:last-child { margin-bottom: 0; }
 
 /* Zoznam benefitov */
 .hero__benefits {
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   padding: 0;
   list-style: none;
   display: grid;
