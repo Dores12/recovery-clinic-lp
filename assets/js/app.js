@@ -150,7 +150,7 @@
       });
     }
 
-    /* Či sú kreslo, Netflix a občerstvenie v cene */
+    /* Či sú kreslo a Netflix v cene */
     if (extras.includedInPrice) {
       all('[data-included]').forEach(function (el) {
         el.textContent = ' v cene';

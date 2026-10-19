@@ -83,7 +83,7 @@ window.RC_CONFIG = {
 
   extras: {
     oxygenPrice: 'za 20 €',   // doplnková služba, potvrdené klinikou
-    includedInPrice: false,   // true = kreslo, Netflix a občerstvenie sú v cene
+    includedInPrice: false,   // true = kreslo a Netflix sú v cene
     paymentMethods: '',       // napr. 'kartou aj v hotovosti'
     rescheduleText: '',       // napr. 'Termín zmeníte jedným telefonátom'
     notSuitableNoCharge: false // true = ak infúzia nie je vhodná, klient neplatí
