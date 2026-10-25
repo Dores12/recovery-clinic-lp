@@ -200,27 +200,34 @@ Prejdi [`docs/qa-checklist.md`](docs/qa-checklist.md).
 
 ---
 
-## Keď dostaneš doménu
+## Doména
 
-Doménu treba doplniť na **piatich miestach** – meta tagy sa čítajú bez
-JavaScriptu, takže sa nedajú načítať z configu:
+Stránka beží na **https://recoverybratislava.sk** (od 25. 10. 2026, predtým
+`recoverybratislava.netlify.app`).
 
-- [ ] `assets/js/config.js` → `siteUrl`
-- [ ] `index.html` → `<link rel="canonical">`
-- [ ] `index.html` → `<meta property="og:url">`
-- [ ] `index.html` → JSON-LD `"url"`
-- [ ] `robots.txt` → riadok `Sitemap` (odkomentuj)
+Doména je v kóde na **štyroch miestach**. Meta tagy sa čítajú bez
+JavaScriptu, takže sa nedajú načítať z configu – pri ďalšej zmene ich treba
+prepísať všetky:
 
-V kóde sú označené `TODO: domena`, nájdeš ich takto:
+- [x] `assets/js/config.js` → `siteUrl`
+- [x] `index.html` → `<link rel="canonical">`
+- [x] `index.html` → `<meta property="og:url">`
+- [x] `index.html` → JSON-LD `"url"`
+
+Nájdeš ich takto:
 
 ```bash
-grep -rn "TODO-domena" .
+grep -rn "recoverybratislava" index.html assets/
 ```
 
-Potom ešte:
+Mimo repozitára (robí sa v administrácii, nie v kóde):
 
+- [ ] nastaviť doménu v Netlify ako **primárnu** – starú `netlify.app`
+      adresu potom Netlify sám presmeruje cez 301
 - [ ] overiť doménu v **Meta Business Manageri**
 - [ ] pridať doménu do **GA4** medzi cross-domain domény
+- [ ] prepísať cieľové URL v **Google Ads a v Mete**, nech reklamy nevedú
+      na starú adresu
 
 ---
 
