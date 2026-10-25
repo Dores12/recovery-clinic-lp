@@ -10,10 +10,10 @@
 window.RC_CONFIG = {
 
   /* ----- Doména ----------------------------------------------------------
-     TODO: Daniel doplní pri hostingu. Pozor – meta tagy (canonical, og:url,
-     og:image) sa čítajú bez JS, takže doménu treba prepísať AJ priamo
-     v index.html. Miesta sú tam označené komentárom <!-- TODO: doména -->. */
-  siteUrl: 'https://recoverybratislava.netlify.app',
+     Pozor – meta tagy (canonical, og:url, og:image) sa čítajú bez JS, takže
+     doménu treba prepísať AJ priamo v index.html, nestačí ju zmeniť tu.
+     Miesta sú tri: canonical, og:url a "url" v JSON-LD. */
+  siteUrl: 'https://recoverybratislava.sk',
 
   /* ----- Google Tag Manager ----------------------------------------------
      VLASTNÝ kontajner len pre túto landing page. Zámerne NIE ten, ktorý

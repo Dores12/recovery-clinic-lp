@@ -13,5 +13,7 @@
 User-agent: *
 Allow: /
 
-# TODO: domena – po pripojení domény odkomentuj a doplň
-# Sitemap: https://TODO-domena.sk/sitemap.xml
+# Sitemap zámerne nemáme. Je to jedna stránka s noindexom, takže by
+# vyhľadávaču nepovedala nič, čo by sa nedozvedel z odkazu v reklame.
+# Keby raz pribudli ďalšie stránky, patrí sem:
+# Sitemap: https://recoverybratislava.sk/sitemap.xml
